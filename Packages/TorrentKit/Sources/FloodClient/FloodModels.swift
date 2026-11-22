@@ -118,7 +118,7 @@ struct FloodTorrent: Sendable, Equatable {
         isPrivate = j["isPrivate"] as? Bool
     }
 
-    /// 选中要下的大小，和 qB 的 size、TR 的 sizeWhenDone 一个口径：辅种是按「同名同大小」认的，口径必须一致
+    /// 选中要下的大小，和 qB 的 size、TR 的 sizeWhenDone 一个口径：各处显示和统计的口径必须一致
     var wantedSize: Int64 {
         if let s = selectedSize, s > 0 { return s }
         return size

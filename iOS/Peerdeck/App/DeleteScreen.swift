@@ -11,6 +11,7 @@ struct DeleteScreen: View {
     var body: some View {
         let store = model.store
         let all = refs.compactMap { store.torrent($0) }
+        let blockers = model.fileCheckBlockers
         let shared = store.sharedWithKept(all)
         let cross = all.filter { shared.contains($0.ref) }
         let size = all.filter { !shared.contains($0.ref) }.reduce(0) { $0 + $1.totalSize }
@@ -28,7 +29,11 @@ struct DeleteScreen: View {
                             .font(.footnote).foregroundStyle(.secondary)
                             .padding(.horizontal, 20).padding(.top, 12)
                     }
-                    if size > 0 {
+                    if size > 0, !blockers.isEmpty {
+                        Text(L("Files can’t be deleted while \(blockers.joined(separator: L(", "))) is unavailable: its torrents might use the same files."))
+                            .font(.footnote).foregroundStyle(.secondary)
+                            .padding(.horizontal, 20).padding(.top, 12)
+                    } else if size > 0 {
                         Toggle(isOn: $keepFiles) {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Keep Files").font(.subheadline)
@@ -54,7 +59,7 @@ struct DeleteScreen: View {
                 VStack(spacing: 8) {
                     Button {
                         let refs = all.map(\.ref)
-                        let data: Set<TorrentRef> = !keepFiles && size > 0 ? Set(all.filter { !shared.contains($0.ref) }.map(\.ref)) : []
+                        let data: Set<TorrentRef> = !keepFiles && blockers.isEmpty && size > 0 ? Set(all.filter { !shared.contains($0.ref) }.map(\.ref)) : []
                         let what = Fmt.torrents(refs.count)
                         model.scheduleDelete(refs, deleteDataFor: data, label: data.isEmpty ? L("\(what) (keeping files)") : L("\(what) (with files)"))
                         store.selection = []

@@ -142,7 +142,7 @@ func mirror(_ delta: SyncDelta) async -> [String: Torrent] {
         let list = try JSONDecoder().decode(TREnvelope<TRTorrentList>.self, from: fixture("tr41-torrent-get")).arguments
         var t: [String: Torrent] = [:]
         for raw in list.torrents {
-            var torrent = Torrent(ref: TorrentRef(server: ServerID("tr"), id: String(raw.id)))
+            var torrent = Torrent(ref: TorrentRef(server: ServerID("tr"), id: raw.hashString ?? ""))
             torrent.apply(raw.patch())
             t[torrent.name] = torrent
         }

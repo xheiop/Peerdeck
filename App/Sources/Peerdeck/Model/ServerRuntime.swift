@@ -31,6 +31,8 @@ final class ServerRuntime: Identifiable {
     @ObservationIgnored private weak var store: TorrentStore?
     @ObservationIgnored private let interval: @MainActor () -> Duration
     @ObservationIgnored private var wakeToken = 0
+    /// 最近一次成功同步是什么时候**发起**的。删除前用它确认看到的是最新的
+    @ObservationIgnored private(set) var syncedAt: ContinuousClock.Instant?
     @ObservationIgnored var onStatusChange: (() -> Void)?
 
     init(config: ServerConfig, store: TorrentStore?, interval: @escaping @MainActor () -> Duration) {
@@ -56,6 +58,7 @@ final class ServerRuntime: Identifiable {
         loop = nil
         client = nil
         loaded = false
+        syncedAt = nil
         status = .stopped
     }
 
@@ -113,6 +116,7 @@ final class ServerRuntime: Identifiable {
                     stats = await sync.stats
                     store?.apply(server: serverID, changeSet: cs, changed: changed)
                     if !loaded { loaded = true }
+                    syncedAt = t0
                     if cs.isFull {
                         Log.info("\(config.name) 全量 \(changed.count) 个种子，\(ContinuousClock.now - t0)")
                     }

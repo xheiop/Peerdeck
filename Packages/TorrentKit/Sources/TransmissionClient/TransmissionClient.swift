@@ -7,6 +7,8 @@ import TorrentKit
 /// - 第一次请求 409，带 X-Transmission-Session-Id；4.1.4 还多一个 X-Transmission-Rpc-Version: 6.0.1
 /// - 4.1.4 的旧协议仍然返回 kebab/camelCase 字段，可以不切 JSON-RPC 2.0
 /// - 种子级 error=2 + errorString 就带 tracker 的报错原文（Unregistered torrent），一次 torrent-get 拿全
+/// - **数字 id 只在一次运行里有效**：TR 重启后会重排（4.0.6、4.1.4 实测）。种子一律用 hashString 定位，
+///   所有 RPC 的 ids 都传 hash；数字 id 只用来读懂 recently-active 的 removed。拿数字 id 删会删错种子和数据
 public actor TransmissionClient: TorrentClient {
     public nonisolated let serverID: ServerID
     public nonisolated let kind: ClientKind = .transmission
@@ -15,6 +17,13 @@ public actor TransmissionClient: TorrentClient {
     private let credentials: Credentials
     private var sessionID = ""
     private var synced = false
+    /// session id 变了（TR 重启过，或者它定期轮换）：数字 id 和增量都不能再信，下次同步拿全量
+    private var needsResync = false
+    /// 这次运行里的数字 id → hash
+    private var hashByID: [Int: String] = [:]
+    private var lastList: ContinuousClock.Instant?
+    /// recently-active 只含最近 60 秒的变化：隔久了（app 被挂起、睡眠、60 秒的后台间隔）必须拿全量。留 10 秒余量，30 秒的间隔仍走增量
+    private static let incrementalWindow: Duration = .seconds(50)
     private var rpcVersion = 0
     /// 剩余空间不用每次轮询都查：记下上次的值和时间
     private var freeSpace: Int64?
@@ -61,6 +70,7 @@ public actor TransmissionClient: TorrentClient {
                 guard let sid = resp.value(forHTTPHeaderField: "X-Transmission-Session-Id") else {
                     throw ClientError.unexpectedResponse(String(localized: "409 without a session id"))
                 }
+                if !sessionID.isEmpty, sid != sessionID { needsResync = true }
                 sessionID = sid
             case 401:
                 if let realm = HTTPTransport.authRealm(resp), realm != "Transmission" {
@@ -100,15 +110,6 @@ public actor TransmissionClient: TorrentClient {
     public func resetSync() { synced = false }
 
     public func fetchChanges() async throws -> SyncDelta {
-        var args: [String: Any] = ["fields": Self.listFields]
-        let full = !synced
-        if !full { args["ids"] = "recently-active" }
-        let list = try decode(TRTorrentList.self, try await call("torrent-get", args))
-        var upserts: [String: TorrentPatch] = [:]
-        upserts.reserveCapacity(list.torrents.count)
-        for t in list.torrents { upserts[String(t.id)] = t.patch() }
-        let removed = Set((list.removed ?? []).map(String.init))
-
         let stats = try decode(TRSessionStats.self, try await call("session-stats"))
         let session = try decode(TRSessionInfo.self, try await call("session-get", ["fields": ["alt-speed-enabled", "version", "download-dir"]]))
         var sp = ServerStatsPatch()
@@ -124,8 +125,63 @@ public actor TransmissionClient: TorrentClient {
         }
         sp.freeSpace = freeSpace
 
+        // 列表放在最后拿：拿到以后到更新本地状态之间不再有请求，中途出错也不会吞掉这批变化
+        let started = ContinuousClock.now
+        if let last = lastList, started - last > Self.incrementalWindow { needsResync = true }
+        var wholeList = !synced || needsResync
+        var list = try await torrentList(whole: wholeList)
+        // 请求途中发现换了 session，或者同一个数字 id 指向了另一个种子：这次增量作废
+        if !wholeList, needsResync || Self.idsConflict(list.torrents, known: hashByID) {
+            wholeList = true
+            list = try await torrentList(whole: true)
+        }
+        if wholeList { needsResync = false }
+        let merged = Self.merge(list, whole: wholeList, known: hashByID)
+        hashByID = merged.known
+        lastList = started
+        let first = !synced
         synced = true
-        return SyncDelta(isFullUpdate: full, upserts: upserts, removed: removed, stats: sp)
+        // 中途补的全量按增量交出去（缺的算 removed）：TR 每小时轮换 session，不能每次都让列表整个重载、吞掉完成通知
+        return SyncDelta(isFullUpdate: first, upserts: merged.upserts, removed: merged.removed, stats: sp)
+    }
+
+    private func torrentList(whole: Bool) async throws -> TRTorrentList {
+        var args: [String: Any] = ["fields": Self.listFields]
+        if !whole { args["ids"] = "recently-active" }
+        return try decode(TRTorrentList.self, try await call("torrent-get", args))
+    }
+
+    static func idsConflict(_ torrents: [TRTorrent], known: [Int: String]) -> Bool {
+        torrents.contains { t in
+            guard let old = known[t.id], let hash = t.hashString?.lowercased() else { return false }
+            return old != hash
+        }
+    }
+
+    static func merge(_ list: TRTorrentList, whole: Bool, known: [Int: String]) -> (upserts: [String: TorrentPatch], removed: Set<String>, known: [Int: String]) {
+        var upserts = [String: TorrentPatch](minimumCapacity: list.torrents.count)
+        var next = whole ? [:] : known
+        var removed = Set<String>()
+        for id in list.removed ?? [] where !whole {
+            if let hash = next.removeValue(forKey: id) { removed.insert(hash) }
+        }
+        for t in list.torrents {
+            guard let hash = t.hashString?.lowercased(), !hash.isEmpty else { continue }
+            upserts[hash] = t.patch()
+            next[t.id] = hash
+        }
+        if whole { removed = Set(known.values) }
+        // 删了又马上加回来：同一个 hash 两边都有，以还在为准（合并时 removed 是后执行的）
+        removed.subtract(upserts.keys)
+        return (upserts, removed, next)
+    }
+
+    /// 只接受完整的 hash。数字、空数组、"recently-active" 这些在 TR 里都有别的意思，绝不能发出去
+    static func hashes(_ ids: [String]) throws -> [String] {
+        guard ids.allSatisfy({ $0.count == 40 && $0.allSatisfy(\.isHexDigit) }) else {
+            throw ClientError.unexpectedResponse(String(localized: "Invalid torrent hash"))
+        }
+        return ids
     }
 
     /// 目录还不存在时（比如还没有种子下完，complete 目录没建）TR 返回错误，逐级往上查
@@ -143,14 +199,14 @@ public actor TransmissionClient: TorrentClient {
     // MARK: - 操作
 
     public func perform(_ action: TorrentAction, on ids: [String]) async throws {
-        let nums = ids.compactMap(Int.init)
-        guard !nums.isEmpty else { return }
+        let targets = try Self.hashes(ids)
+        guard !targets.isEmpty else { return }
         switch action {
-        case .start: _ = try await call("torrent-start", ["ids": nums])
-        case .stop: _ = try await call("torrent-stop", ["ids": nums])
-        case .recheck: _ = try await call("torrent-verify", ["ids": nums])
-        case .reannounce: _ = try await call("torrent-reannounce", ["ids": nums])
-        case .delete(let withData): _ = try await call("torrent-remove", ["ids": nums, "delete-local-data": withData])
+        case .start: _ = try await call("torrent-start", ["ids": targets])
+        case .stop: _ = try await call("torrent-stop", ["ids": targets])
+        case .recheck: _ = try await call("torrent-verify", ["ids": targets])
+        case .reannounce: _ = try await call("torrent-reannounce", ["ids": targets])
+        case .delete(let withData): _ = try await call("torrent-remove", ["ids": targets, "delete-local-data": withData])
         }
     }
 
@@ -166,21 +222,21 @@ public actor TransmissionClient: TorrentClient {
     }
 
     public func trackers(of id: String) async throws -> [Tracker] {
-        guard let n = Int(id) else { return [] }
+        let target = try Self.hashes([id])
         let list = try decode(TRTrackerStatsList.self, try await call("torrent-get", [
-            "ids": [n], "fields": ["id", "trackerStats"],
+            "ids": target, "fields": ["id", "trackerStats"],
         ]))
         return (list.torrents.first?.trackerStats ?? []).map { $0.model() }
     }
 
     public func files(of id: String) async throws -> [ContentFile] {
-        guard let n = Int(id) else { return [] }
-        return try decode(TRFileList.self, try await call("torrent-get", ["ids": [n], "fields": ["id", "files", "fileStats"]])).model()
+        let target = try Self.hashes([id])
+        return try decode(TRFileList.self, try await call("torrent-get", ["ids": target, "fields": ["id", "files", "fileStats"]])).model()
     }
 
     public func setFilePriority(_ priority: FilePriority, files indices: [Int], of id: String) async throws {
-        guard let n = Int(id), !indices.isEmpty else { return }
-        var args: [String: Any] = ["ids": [n]]
+        guard !indices.isEmpty else { return }
+        var args: [String: Any] = ["ids": try Self.hashes([id])]
         switch priority {
         case .skip: args["files-unwanted"] = indices
         case .low: args["files-wanted"] = indices; args["priority-low"] = indices
@@ -198,30 +254,30 @@ public actor TransmissionClient: TorrentClient {
 
     public func updateTags(_ changes: [TagChange]) async throws {
         // TR 的 labels 是整体设置：按最终结果分组
-        var groups: [[String]: [Int]] = [:]
+        var groups: [[String]: [String]] = [:]
         for c in changes where Set(c.final) != Set(c.current) {
-            if let n = Int(c.id) { groups[c.final.sorted(), default: []].append(n) }
+            groups[c.final.sorted(), default: []].append(contentsOf: try Self.hashes([c.id]))
         }
         for (labels, ids) in groups { _ = try await call("torrent-set", ["ids": ids, "labels": labels]) }
     }
 
     public func setUploadLimit(_ bytesPerSecond: Int64, on ids: [String]) async throws {
-        let nums = ids.compactMap(Int.init)
-        guard !nums.isEmpty else { return }
-        var args: [String: Any] = ["ids": nums, "uploadLimited": bytesPerSecond > 0]
+        let targets = try Self.hashes(ids)
+        guard !targets.isEmpty else { return }
+        var args: [String: Any] = ["ids": targets, "uploadLimited": bytesPerSecond > 0]
         if bytesPerSecond > 0 { args["uploadLimit"] = max(1, bytesPerSecond / 1024) } // TR 的单位是 KB/s
         _ = try await call("torrent-set", args)
     }
 
     public func setLocation(_ path: String, moveFiles: Bool, on ids: [String]) async throws {
-        let nums = ids.compactMap(Int.init)
-        guard !nums.isEmpty else { return }
-        _ = try await call("torrent-set-location", ["ids": nums, "location": path, "move": moveFiles])
+        let targets = try Self.hashes(ids)
+        guard !targets.isEmpty else { return }
+        _ = try await call("torrent-set-location", ["ids": targets, "location": path, "move": moveFiles])
     }
 
     public func replaceTrackerURL(on id: String, from old: String, to new: String) async throws {
-        guard let n = Int(id) else { return }
-        let list = try decode(TRTorrentList.self, try await call("torrent-get", ["ids": [n], "fields": ["id", "trackers"]]))
+        let target = try Self.hashes([id])
+        let list = try decode(TRTorrentList.self, try await call("torrent-get", ["ids": target, "fields": ["id", "trackers"]]))
         let trackers = list.torrents.first?.trackers ?? []
         guard trackers.contains(where: { $0.announce == old }) else {
             throw ClientError.unexpectedResponse(String(localized: "The torrent doesn’t have this tracker: \(old)"))
@@ -230,9 +286,9 @@ public actor TransmissionClient: TorrentClient {
             // 4.0+：trackerList 整体替换，tier 之间空一行
             let tiers = Dictionary(grouping: trackers, by: { $0.tier ?? 0 }).sorted { $0.key < $1.key }
             let text = tiers.map { $0.value.map { $0.announce == old ? new : $0.announce }.joined(separator: "\n") }.joined(separator: "\n\n")
-            _ = try await call("torrent-set", ["ids": [n], "trackerList": text])
+            _ = try await call("torrent-set", ["ids": target, "trackerList": text])
         } else if let tid = trackers.first(where: { $0.announce == old })?.id {
-            _ = try await call("torrent-set", ["ids": [n], "trackerReplace": [tid, new]])
+            _ = try await call("torrent-set", ["ids": target, "trackerReplace": [tid, new]])
         }
     }
 

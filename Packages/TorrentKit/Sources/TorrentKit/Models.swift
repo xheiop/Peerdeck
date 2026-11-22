@@ -42,7 +42,7 @@ public enum ClientKind: String, Sendable, Codable {
     public var canReplaceTrackers: Bool { self != .flood }
 }
 
-/// 种子在全局的唯一标识：服务器 + 服务端自己的 id（qB 用 hash，TR 用数字 id 的字符串形式）。
+/// 种子在全局的唯一标识：服务器 + hash。不能用服务端的序号：TR 的数字 id 重启后会指向别的种子。
 public struct TorrentRef: Hashable, Sendable, CustomStringConvertible {
     public let server: ServerID
     public let id: String

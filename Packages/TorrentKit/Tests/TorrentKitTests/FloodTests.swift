@@ -84,7 +84,7 @@ import Testing
     @Test func patchMatchesDirectAdapters() throws {
         let multi = try #require(list("rt")["rt-multi"])
         let p = multi.patch(backend: .rTorrent, announceURL: "http://tracker.alpha.test/")
-        // 辅种保护按小写 v1 hash、同名同大小认：要和直连一致
+        // 辅种保护按小写 v1 hash 和名字认，大小也要和直连一个口径
         #expect(p.infoHashV1 == multi.hash.lowercased())
         #expect(p.totalSize == 2048)
         #expect(p.savePath == "/data/seed/rt")

@@ -16,6 +16,7 @@ struct CleanupScreen: View {
 
     var body: some View {
         let n = plan.removable.count
+        let blockers = model.fileCheckBlockers
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
@@ -29,14 +30,20 @@ struct CleanupScreen: View {
                         if !plan.groups.isEmpty { LedgerSeparator(digits: digits, small: true) }
                         keptRow
                     }
-                    Toggle(isOn: $keepFiles) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Keep Files").font(.subheadline)
-                            Text("Only remove from the client; files on disk stay").font(.footnote).foregroundStyle(.secondary)
+                    if blockers.isEmpty {
+                        Toggle(isOn: $keepFiles) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Keep Files").font(.subheadline)
+                                Text("Only remove from the client; files on disk stay").font(.footnote).foregroundStyle(.secondary)
+                            }
                         }
+                        .tint(Color.ink)
+                        .padding(.horizontal, 20).padding(.vertical, 12).padding(.top, 12)
+                    } else {
+                        Text(L("Files can’t be deleted while \(blockers.joined(separator: L(", "))) is unavailable: its torrents might use the same files."))
+                            .font(.footnote).foregroundStyle(.secondary)
+                            .padding(.horizontal, 20).padding(.top, 24)
                     }
-                    .tint(Color.ink)
-                    .padding(.horizontal, 20).padding(.vertical, 12).padding(.top, 12)
                 }
                 .padding(.bottom, 16)
             }
@@ -143,11 +150,18 @@ struct CleanupScreen: View {
     }
 
     private func confirm() {
-        let refs = plan.removable
-        guard !refs.isEmpty else { return }
+        // 面板是打开那一刻的快照：确认时只删现在仍然符合的，也不会多删没给用户看过的
+        let current = Set(model.cleanupPlan().removable)
+        let refs = plan.removable.filter(current.contains)
+        guard !refs.isEmpty else {
+            model.showToast(L("Nothing to clean up right now."))
+            dismiss()
+            return
+        }
+        let withFiles = !keepFiles && model.fileCheckBlockers.isEmpty
         let what = Fmt.torrents(refs.count)
-        model.scheduleDelete(refs, deleteDataFor: keepFiles ? [] : Set(refs),
-                             label: keepFiles ? L("\(what) (keeping files)") : L("\(what) (with files)"),
+        model.scheduleDelete(refs, deleteDataFor: withFiles ? Set(refs) : [],
+                             label: withFiles ? L("\(what) (with files)") : L("\(what) (keeping files)"),
                              keep: plan.kept, cleanup: true)
         dismiss()
     }

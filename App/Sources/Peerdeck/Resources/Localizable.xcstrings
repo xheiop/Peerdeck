@@ -204,6 +204,16 @@
         }
       }
     },
+    "%@ weren’t deleted and are back in the list: they have recovered or couldn’t be checked again.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@没有删，已放回列表：它们已经恢复正常，或者没能重新核对。"
+          }
+        }
+      }
+    },
     "%@ · %@": {
       "shouldTranslate": false
     },
@@ -2135,6 +2145,26 @@
         }
       }
     },
+    "Files can’t be deleted while %@ is unavailable: its torrents might use the same files.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 现在没法核对，不能连文件一起删：它上面的种子可能在用同一份文件。"
+          }
+        }
+      }
+    },
+    "Files of %@ were kept: other torrents may use them, or not every server could be checked.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@的文件保留了：可能有别的种子在用，或者有下载器没能核对。"
+          }
+        }
+      }
+    },
     "Fill in the fields above to see which torrents will change": {
       "localizations": {
         "zh-Hans": {
@@ -2461,6 +2491,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "数据不完整"
+          }
+        }
+      }
+    },
+    "Invalid torrent hash": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "种子的 hash 无效"
           }
         }
       }
@@ -4709,12 +4749,12 @@
         }
       }
     },
-    "Their data is also used by torrents outside this cleanup (same infohash, or same name and size). Kept by default: they can keep seeding on other sites.": {
+    "Their data is also used by torrents outside this cleanup (same infohash or same name). Kept by default: they can keep seeding on other sites.": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "这些种子的数据还被不在清理范围里的种子使用（同 infohash，或同名同大小）。默认不删：它们在别的站还能继续做种。"
+            "value": "这些种子的数据还被不在清理范围里的种子使用（同 infohash，或同名）。默认不删：它们在别的站还能继续做种。"
           }
         }
       }

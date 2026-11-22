@@ -421,17 +421,58 @@ final class AppModel {
         toast = Toast(text: L("Deleting \(p.label) in \(p.secondsLeft) s"), undo: true)
     }
 
+    /// 现在没法核对数据有没有被共用的下载器（离线、停用、还没载入完）。有的话只能保留文件
+    var fileCheckBlockers: [String] {
+        servers.filter { !$0.status.isOnline || !$0.loaded }.map(\.config.name)
+    }
+
+    /// 让这些下载器马上再同步一次，返回确实同步成功的。连不上的不等
+    private func freshlySynced(_ ids: Set<ServerID>) async -> Set<ServerID> {
+        let asked = ContinuousClock.now
+        let deadline = asked + .seconds(15)
+        while true {
+            var fresh = Set<ServerID>()
+            var waiting = false
+            for rt in servers where ids.contains(rt.serverID) {
+                if rt.status.isOnline, let at = rt.syncedAt, at >= asked {
+                    fresh.insert(rt.serverID)
+                } else if rt.status.isOnline || rt.status == .connecting {
+                    waiting = true
+                    rt.refreshNow()
+                }
+            }
+            if !waiting || ContinuousClock.now >= deadline { return fresh }
+            try? await Task.sleep(for: .milliseconds(250))
+        }
+    }
+
     /// 撤销窗口结束（或者又发起了一次删除）：真正发请求
     private func commitPending() {
         pendingTask?.cancel()
         guard let p = pending else { return }
         pending = nil
-        let keep = p.refs.filter { !p.dataRefs.contains($0) }
         Task {
+            // 10 秒里（app 被挂起时可能是几小时）什么都可能变：连文件删、清理都要先重新同步，按现在的情况再核对一次
+            var fresh = Set<ServerID>()
+            if !p.dataRefs.isEmpty {
+                fresh = await freshlySynced(Set(servers.map(\.serverID)))
+            } else if p.cleanup {
+                fresh = await freshlySynced(Set(p.refs.map(\.server)))
+            }
+            let rules = store.rules
+            let plan = DeletionDecision.resolve(
+                // 只删种子、不动文件时不用核对（按 hash 删，不会删到别的种子），fresh 是空的：
+                // 还在的照删；已经不在列表里的（比如刚改了服务器配置）算没删，不能报成功
+                refs: p.refs, wantsData: p.dataRefs, torrents: store.all, fresh: fresh,
+                allServers: Set(servers.map(\.serverID)),
+                stillEligible: p.cleanup ? { rules.isUnregistered($0) } : nil
+            )
+            let keep = plan.remove.filter { !plan.removeData.contains($0) }
+
             // 等请求结果再提示；没删掉的（服务器不在线、请求失败）放回列表，不然会一直藏着
             var failed: [TorrentRef] = []
             var errors: [String] = []
-            for (withData, refs) in [(false, keep), (true, Array(p.dataRefs))] where !refs.isEmpty {
+            for (withData, refs) in [(false, keep), (true, Array(plan.removeData))] where !refs.isEmpty {
                 let groups = grouped(refs)
                 let reachable = Set(groups.flatMap { $0.2 })
                 failed += refs.filter { !reachable.contains($0) }
@@ -445,11 +486,22 @@ final class AppModel {
                     }
                 }
             }
-            if failed.isEmpty {
+            if !plan.skipped.isEmpty || !failed.isEmpty { store.unhide(plan.skipped + failed) }
+
+            var notes: [String] = []
+            if !failed.isEmpty {
+                notes.append(L("\(Fmt.torrents(failed.count)) couldn’t be deleted and are back in the list.") + (errors.isEmpty ? L("Their servers are offline.") : "\n" + errors.joined(separator: "\n")))
+            }
+            if !plan.skipped.isEmpty {
+                notes.append(L("\(Fmt.torrents(plan.skipped.count)) weren’t deleted and are back in the list: they have recovered or couldn’t be checked again."))
+            }
+            if plan.filesKept > 0 {
+                notes.append(L("Files of \(Fmt.torrents(plan.filesKept)) were kept: other torrents may use them, or not every server could be checked."))
+            }
+            if notes.isEmpty {
                 showToast(L("Deleted \(p.label)"))
             } else {
-                store.unhide(failed)
-                alert = L("\(Fmt.torrents(failed.count)) couldn’t be deleted and are back in the list.") + (errors.isEmpty ? L("Their servers are offline.") : "\n" + errors.joined(separator: "\n"))
+                alert = notes.joined(separator: "\n\n")
             }
         }
     }
@@ -621,12 +673,11 @@ extension AppModel {
             return CleanupPlan.Group(message: msg, refs: ts.map(\.ref), sites: sites.sorted { ($0.value, $1.key) > ($1.value, $0.key) })
         }.sorted { $0.refs.count > $1.refs.count }
         // 保留的那些：它们的数据还在哪些别的站做种
-        let keptKeys = Set(kept.flatMap { t in (t.infoHashV1.isEmpty ? [] : ["h:" + t.infoHashV1]) + ["n:\(t.name)\u{1}\(t.totalSize)"] })
+        let keptNames = Set(kept.map(\.name)), keptHashes = Set(kept.map(\.infoHashV1)).subtracting([""])
         let keptSet = Set(kept.map(\.ref))
         var elsewhere = Set<String>()
         for t in store.all.values where !keptSet.contains(t.ref) {
-            let k = (t.infoHashV1.isEmpty ? [] : ["h:" + t.infoHashV1]) + ["n:\(t.name)\u{1}\(t.totalSize)"]
-            if k.contains(where: keptKeys.contains), !rules.isRejected(t) { elsewhere.insert(siteName(store.siteID(of: t))) }
+            if keptNames.contains(t.name) || keptHashes.contains(t.infoHashV1), !rules.isRejected(t) { elsewhere.insert(siteName(store.siteID(of: t))) }
         }
         return CleanupPlan(groups: groups, kept: kept.map(\.ref), keptElsewhere: elsewhere.sorted())
     }

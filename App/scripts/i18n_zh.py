@@ -389,7 +389,6 @@ ZH = {
     'The site deleted or replaced this torrent. Seeding it no longer counts toward your upload.': '站点已经删除或替换了这个种子，继续做种也不会计入上传。',
     'The site rejected the account, client or torrent.': '账号、客户端或种子被站点拒绝。',
     'The torrent doesn’t have this tracker: %@': '种子里没有这个 tracker：%@',
-    'Their data is also used by torrents outside this cleanup (same infohash, or same name and size). Kept by default: they can keep seeding on other sites.': '这些种子的数据还被不在清理范围里的种子使用（同 infohash，或同名同大小）。默认不删：它们在别的站还能继续做种。',
     'Their servers are offline.': '它们所在的服务器不在线。',
     'These torrents were deleted or replaced by their sites. Seeding them no longer counts toward your upload.': '这些种子已经被站点删除或替换，继续做种不会计入上传。',
     'This data is also used by %lld other torrents, so files are kept when deleting.': '这份数据还被另外 %lld 个种子使用，删除时会保留文件。',
@@ -538,6 +537,11 @@ ZH = {
     'skipped %lld (only qBittorrent has categories)': '跳过 %lld 个（只有 qBittorrent 有分类）',
     'skipped %lld (the client always moves files when changing the path)': '跳过 %lld 个（下载器改路径时总会移动文件）',
     '✗ No reliable tracker status through Flood with this client. For cleanup, connect to the client directly.': '✗ 经 Flood 拿不到这种下载器可靠的 tracker 状态。要用清理，请直连下载器。',
+    'Their data is also used by torrents outside this cleanup (same infohash or same name). Kept by default: they can keep seeding on other sites.': '这些种子的数据还被不在清理范围里的种子使用（同 infohash，或同名）。默认不删：它们在别的站还能继续做种。',
+    'Files can’t be deleted while %@ is unavailable: its torrents might use the same files.': '%@ 现在没法核对，不能连文件一起删：它上面的种子可能在用同一份文件。',
+    '%@ weren’t deleted and are back in the list: they have recovered or couldn’t be checked again.': '%@没有删，已放回列表：它们已经恢复正常，或者没能重新核对。',
+    'Files of %@ were kept: other torrents may use them, or not every server could be checked.': '%@的文件保留了：可能有别的种子在用，或者有下载器没能核对。',
+    'Invalid torrent hash': '种子的 hash 无效',
 }
 
 # 其他字符串表：同一句英文在别的语境要不同中文时用（目前是分组标题）

@@ -313,7 +313,7 @@ final class TorrentStore {
         let r = ctx.rules
         let site = { (t: Torrent) in ctx.hostToSite[t.trackerHost] ?? t.trackerHost }
         var c = SidebarCounts()
-        var byHash: [String: Int] = [:], byNameSize: [String: Int] = [:]
+        var byHash: [String: Int] = [:], byName: [String: Int] = [:]
         var sum: SiteSummary?
         if case .site(let sid) = ctx.sidebar { sum = SiteSummary(siteID: sid) }
         var hostsSeen = Set<String>()
@@ -338,7 +338,7 @@ final class TorrentStore {
             if !t.category.isEmpty { c.categories[t.category, default: 0] += 1 }
             for tag in t.tags where !tag.isEmpty { c.tags[tag, default: 0] += 1 }
             if !t.infoHashV1.isEmpty { byHash[t.infoHashV1, default: 0] += 1 }
-            byNameSize["\(t.name)\u{1}\(t.totalSize)", default: 0] += 1
+            if !t.name.isEmpty { byName[t.name, default: 0] += 1 }
             if sum != nil, s == sum!.siteID {
                 sum!.total += 1
                 if StateGroup.of(t.state) == .seeding { sum!.seeding += 1 }
@@ -352,13 +352,13 @@ final class TorrentStore {
         }
         sum?.hosts = hostsSeen.sorted()
 
-        // 辅种：同 infohash（跨服务器同一个种子），或者同名同大小（不同站的同一份数据）
+        // 辅种：同 infohash（跨服务器同一个种子），或者同名（不同站的同一份数据；不看大小，见 SharedData）
         var cross: [TorrentRef: Int] = [:]
         var tri = Triage()
         // 待清理的疑似未注册：它们之间互为辅种不算，要有清理范围以外的种子共用数据才会被保留（同 sharedWithKept）
         var unreg: [Torrent] = []
         for t in all.values where !ctx.hidden.contains(t.ref) {
-            let n = max(byHash[t.infoHashV1] ?? 1, byNameSize["\(t.name)\u{1}\(t.totalSize)"] ?? 1) - 1
+            let n = max(byHash[t.infoHashV1] ?? 1, byName[t.name] ?? 1) - 1
             if n > 0 { cross[t.ref] = n }
             // 总览：只算在线的下载器
             guard !ctx.offlineServers.contains(t.ref.server.rawValue) else { continue }
@@ -391,15 +391,14 @@ final class TorrentStore {
                 }
             }
         }
-        var unregHash: [String: Int] = [:], unregNameSize: [String: Int] = [:]
+        var unregHash: [String: Int] = [:], unregName: [String: Int] = [:]
         for t in unreg {
             if !t.infoHashV1.isEmpty { unregHash[t.infoHashV1, default: 0] += 1 }
-            unregNameSize["\(t.name)\u{1}\(t.totalSize)", default: 0] += 1
+            unregName[t.name, default: 0] += 1
         }
         tri.unregistered.crossSeeded = unreg.filter { t in
-            let k = "\(t.name)\u{1}\(t.totalSize)"
             let outsideByHash = !t.infoHashV1.isEmpty && (byHash[t.infoHashV1] ?? 0) > (unregHash[t.infoHashV1] ?? 0)
-            return outsideByHash || (byNameSize[k] ?? 0) > (unregNameSize[k] ?? 0)
+            return outsideByHash || (byName[t.name] ?? 0) > (unregName[t.name] ?? 0)
         }.count
 
         let q = ctx.search.trimmingCharacters(in: .whitespaces)
@@ -505,14 +504,7 @@ extension TorrentStore {
     /// 和「删除范围之外」的种子共用数据的那些。
     /// 同一个种子在另一台下载器上的副本如果也在删除范围里，就不算（它本来也要一起清理）
     func sharedWithKept(_ ts: [Torrent]) -> Set<TorrentRef> {
-        let inSet = Set(ts.map(\.ref))
-        func key(_ t: Torrent) -> [String] { (t.infoHashV1.isEmpty ? [] : ["h:" + t.infoHashV1]) + ["n:\(t.name)\u{1}\(t.totalSize)"] }
-        let wanted = Set(ts.filter { cross[$0.ref] != nil }.flatMap(key))
-        guard !wanted.isEmpty else { return [] }
-        var keptKeys = Set<String>()
-        for t in all.values where !inSet.contains(t.ref) {
-            for k in key(t) where wanted.contains(k) { keptKeys.insert(k) }
-        }
-        return Set(ts.filter { key($0).contains(where: keptKeys.contains) }.map(\.ref))
+        // 不看 cross：它是后台算出来的缓存，刚加进来的辅种还不在里面
+        SharedData.protected(ts, among: all.values)
     }
 }

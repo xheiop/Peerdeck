@@ -35,14 +35,14 @@ It's a remote: it connects straight to the clients you already run, with no serv
 ### Deal with tracker problems
 
 - See rejected, likely unregistered and long-unreachable torrents, grouped by the tracker's own message.
-- Clean up unregistered torrents in one step. Torrents that share data with others are kept.
+- Clean up unregistered torrents in one step. Torrents that share data with others are kept, and each one is checked again before it's removed.
 - Change your mind: deletes wait 10 seconds before they run.
 - On the Mac, replace tracker domains or passkeys in bulk, with undo.
 
 ### Manage torrents
 
 - Filter by state, activity, server, site, category or tag, or search by name.
-- Add magnet links, `.torrent` files and URLs, choose files, and set a default server for each site.
+- Add magnet links, `.torrent` files and URLs, set a default server for each site, and choose which files to download once they're added.
 - See problems, uploaded, downloaded and total size for each site.
 - On the Mac, check speeds and problems from the menu bar, and get notified when downloads finish.
 
@@ -51,6 +51,9 @@ It's a remote: it connects straight to the clients you already run, with no serv
 - Give a server several routes (LAN, overlay network, DDNS, reverse proxy) in order of priority.
 - Trust self-signed certificates by fingerprint. Credentials are stored in the Keychain.
 - Use it in English or Simplified Chinese. On iOS 26 it uses Liquid Glass, with a fallback for earlier versions.
+
+> [!WARNING]
+> Deleting files can't be undone after the 10-second window. Peerdeck recognizes shared data by infohash or name, so it **can't detect renamed cross-seeds, torrents that share only some files, or clients you haven't added**. It keeps files whenever one of your servers is offline, turned off or can't be checked.
 
 Tested with qBittorrent 4.6 and 5.3, and Transmission 4.0 and 4.1, with up to 20,000 torrents on one server.
 

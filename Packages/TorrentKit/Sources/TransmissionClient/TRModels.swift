@@ -128,7 +128,7 @@ struct TRTorrent: Decodable {
     func patch() -> TorrentPatch {
         var p = TorrentPatch()
         p.name = name
-        p.infoHashV1 = hashString
+        p.infoHashV1 = hashString?.lowercased()
         let state = TRState.map(status: status ?? -1, error: error ?? 0, stalled: isStalled ?? false)
         p.state = state
         p.rawState = "status=\(status ?? -1) error=\(error ?? 0)"

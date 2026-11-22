@@ -12,7 +12,9 @@ struct DeleteSheet: View {
 
     var body: some View {
         let store = model.store
-        let all = refs.compactMap { store.torrent($0) }
+        // 清理：面板开着时已经恢复的不再算进来
+        let all = refs.compactMap { store.torrent($0) }.filter { !cleanup || store.rules.isUnregistered($0) }
+        let blockers = model.fileCheckBlockers
         let shared = store.sharedWithKept(all)
         let cross = all.filter { shared.contains($0.ref) }
         let targets = cleanup && !includeCross ? all.filter { !shared.contains($0.ref) } : all
@@ -36,7 +38,7 @@ struct DeleteSheet: View {
                 Toggle(isOn: $includeCross) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Also delete cross-seeds (\(Fmt.count(cross.count)))")
-                        Text("Their data is also used by torrents outside this cleanup (same infohash, or same name and size). Kept by default: they can keep seeding on other sites.")
+                        Text("Their data is also used by torrents outside this cleanup (same infohash or same name). Kept by default: they can keep seeding on other sites.")
                             .font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -54,7 +56,10 @@ struct DeleteSheet: View {
                 // 全是辅种时下面会单独说明，这里不重复
                 if !cross.isEmpty && size > 0 { Text("\(cross.count) of them are cross-seeded; their files will always be kept.").font(.callout).foregroundStyle(.secondary) }
             }
-            if size > 0 {
+            if size > 0, !blockers.isEmpty {
+                Label(L("Files can’t be deleted while \(blockers.joined(separator: L(", "))) is unavailable: its torrents might use the same files."), systemImage: "info.circle")
+                    .font(.callout).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+            } else if size > 0 {
                 Picker("", selection: $deleteFiles) {
                     Text("Delete torrents only, keep files").tag(false)
                     Text("Delete files too (\(Fmt.bytes(size)), can’t be undone; files shared with other torrents are kept)").tag(true)
@@ -71,9 +76,9 @@ struct DeleteSheet: View {
                 Button("Cancel") { dismiss() }.keyboardShortcut(.cancelAction)
                 Button("Delete \(Fmt.torrents(targets.count))", role: .destructive) {
                     let refs = targets.map(\.ref)
-                    let data = deleteFiles && size > 0 ? Set(targets.filter { !shared.contains($0.ref) }.map(\.ref)) : []
+                    let data = deleteFiles && blockers.isEmpty && size > 0 ? Set(targets.filter { !shared.contains($0.ref) }.map(\.ref)) : []
                     let what = !cleanup ? Fmt.torrents(refs.count) : refs.count == 1 ? L("1 unregistered torrent") : L("\(Fmt.count(refs.count)) unregistered torrents")
-                    model.scheduleDelete(refs, deleteDataFor: data, label: data.isEmpty ? L("\(what) (keeping files)") : L("\(what) (with files)"))
+                    model.scheduleDelete(refs, deleteDataFor: data, label: data.isEmpty ? L("\(what) (keeping files)") : L("\(what) (with files)"), cleanup: cleanup)
                     dismiss()
                 }
                 .keyboardShortcut(.defaultAction)

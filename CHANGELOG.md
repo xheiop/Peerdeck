@@ -9,18 +9,20 @@ so a tag can only be released after its section is written.
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-11-22
+## [0.1.0] - Unreleased
 
 First preview release.
+
+**Before deleting files:** Peerdeck recognizes shared data by infohash or name. It can't detect renamed cross-seeds, torrents that share only some files, or clients you haven't added. If any of your servers is offline, turned off or can't be checked, only the torrent is removed and its files are kept.
 
 ### macOS
 
 - One list for every torrent across several qBittorrent, Transmission and Flood servers, tested with 20,000 torrents per server.
 - Sidebar views by state, server, site, category and tag, with live counts.
 - Problem views for torrents the tracker rejects, likely unregistered torrents, and trackers unreachable for a long time.
-- Clean up likely unregistered torrents in one step; torrents whose data is shared with a cross-seed are kept.
+- Clean up likely unregistered torrents in one step; torrents whose data is shared with a cross-seed are kept, and each one is checked again before it is removed.
 - Deletes wait 10 seconds and can be undone.
-- Add torrents from magnet links, `.torrent` files or URLs, with file selection and a per-site default server.
+- Add torrents from magnet links, `.torrent` files or URLs, with a per-site default server; choose which files to download once added.
 - Replace tracker URLs in bulk, with undo.
 - Menu bar panel with current speeds and problems; notifications for finished downloads.
 
