@@ -1,0 +1,154 @@
+# iOS 工程（M2）。用 XcodeGen 生成：cd iOS && xcodegen
+# 生成的 Peerdeck.xcodeproj 不进 git，以这个文件为准。
+#
+# 代码组织：
+# - ../App/Sources/Peerdeck/Model、Support/Format.swift、Support/Notifier.swift、Views/ServerRow.swift
+#   和 mac 共用，直接编进 iOS 的 target（没有拆成单独的 Swift 包，这样 Model 层不用全改成 public）
+# - Peerdeck/Shared：iOS app 和 Share Extension 共用的界面
+# - Peerdeck/App：只有 app 用的界面
+# 最低 iOS 17：iOS 18 / 26 的新 API 都包在 Peerdeck/Shared/Compat.swift 里，用 #available 降级。
+# 目前只在模拟器上跑，没有配 Team；上真机要填 DEVELOPMENT_TEAM，并在开发者账号里登记 App Group。
+name: Peerdeck
+options:
+  bundleIdPrefix: dev.peerdeck
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+packages:
+  TorrentKit:
+    path: ../Packages/TorrentKit
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    # 版本号：发布时由 scripts/build-ipa.sh 按 tag 覆盖（xcodebuild MARKETING_VERSION=… CURRENT_PROJECT_VERSION=…）
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: ""
+    TARGETED_DEVICE_FAMILY: "1,2"
+    SWIFT_EMIT_LOC_STRINGS: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+targetTemplates:
+  Shared:
+    sources:
+      - path: ../App/Sources/Peerdeck/Model
+        group: Shared (mac + iOS)
+      - path: ../App/Sources/Peerdeck/Support/Format.swift
+        group: Shared (mac + iOS)
+      - path: ../App/Sources/Peerdeck/Support/Notifier.swift
+        group: Shared (mac + iOS)
+      - path: ../App/Sources/Peerdeck/Views/ServerRow.swift
+        group: Shared (mac + iOS)
+      - path: ../App/Sources/Peerdeck/Resources/Localizable.xcstrings
+        group: Shared (mac + iOS)
+      - path: ../App/Sources/Peerdeck/Resources/Groups.xcstrings
+        group: Shared (mac + iOS)
+      - path: Peerdeck/Shared
+    dependencies:
+      - package: TorrentKit
+        product: TorrentKit
+      - package: TorrentKit
+        product: QBittorrentClient
+      - package: TorrentKit
+        product: TransmissionClient
+      - package: TorrentKit
+        product: SyncEngine
+targets:
+  Peerdeck:
+    type: application
+    platform: iOS
+    templates: [Shared]
+    sources:
+      - path: Peerdeck/App
+      # 图标源文件（Icon Composer 格式），和 mac 共用一份
+      - path: ../App/AppIcon.icon
+        type: file
+        buildPhase: resources
+    dependencies:
+      - target: PeerdeckShare
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.peerdeck.ios
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    entitlements:
+      path: Peerdeck/Peerdeck.entitlements
+      properties:
+        com.apple.security.application-groups: [group.dev.peerdeck]
+        # 第一个 access group 是默认组：KeychainConfigStore 不指定组，app 和扩展就都读写这一组
+        keychain-access-groups: ["$(AppIdentifierPrefix)dev.peerdeck.shared"]
+    info:
+      path: Peerdeck/Info.plist
+      properties:
+        CFBundleDisplayName: Peerdeck
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, zh-Hans]
+        UILaunchScreen: {}
+        UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        UISupportedInterfaceOrientations~ipad: [UIInterfaceOrientationPortrait, UIInterfaceOrientationPortraitUpsideDown, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        NSLocalNetworkUsageDescription: Peerdeck connects to the qBittorrent and Transmission servers on your local network.
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+          NSAllowsLocalNetworking: true
+        CFBundleURLTypes:
+          - CFBundleURLName: Magnet Link
+            CFBundleTypeRole: Viewer
+            CFBundleURLSchemes: [magnet]
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: BitTorrent Document
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [org.bittorrent.torrent]
+        LSSupportsOpeningDocumentsInPlace: false
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: org.bittorrent.torrent
+            UTTypeDescription: BitTorrent Document
+            UTTypeConformsTo: [public.data]
+            UTTypeTagSpecification:
+              public.filename-extension: [torrent]
+              public.mime-type: [application/x-bittorrent]
+  PeerdeckShare:
+    type: app-extension
+    platform: iOS
+    templates: [Shared]
+    sources:
+      - path: ShareExtension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.peerdeck.ios.share
+    entitlements:
+      path: ShareExtension/PeerdeckShare.entitlements
+      properties:
+        com.apple.security.application-groups: [group.dev.peerdeck]
+        keychain-access-groups: ["$(AppIdentifierPrefix)dev.peerdeck.shared"]
+    info:
+      path: ShareExtension/Info.plist
+      properties:
+        CFBundleDisplayName: Peerdeck
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, zh-Hans]
+        NSLocalNetworkUsageDescription: Peerdeck connects to the qBittorrent and Transmission servers on your local network.
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+          NSAllowsLocalNetworking: true
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsWebURLWithMaxCount: 10
+              NSExtensionActivationSupportsText: true
+              NSExtensionActivationSupportsFileWithMaxCount: 10
+schemes:
+  Peerdeck:
+    build:
+      targets:
+        Peerdeck: all
+    run:
+      config: Debug

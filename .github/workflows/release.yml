@@ -1,0 +1,136 @@
+# 发版：推送 v 开头的 tag（v0.2.0、v0.2.0-beta.1）时
+#   1. 跑 TorrentKit 测试
+#   2. 打 macOS dmg（arm64 + x86_64，ad-hoc 签名）和不签名的 iOS ipa
+#   3. 正式版另外生成 AltStore 源（altstore.json）和 Homebrew cask
+#   4. 用 CHANGELOG.md 里这个版本的那一节当说明，发布 GitHub Release（带后缀的 tag 发成预发布）
+#   5. 正式版且是最新版时，把 Casks/peerdeck.rb 提交到默认分支（本仓库自己就是 Homebrew tap）
+# 预发布不动 cask 和 AltStore 源：releases/latest 也不会指向预发布。
+# 在 Actions 页面手动运行（workflow_dispatch）只构建，产物作为 artifact 上传，不发 release。
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "版本号（不带 v）。留空就用工程里写的版本"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # 要 Xcode 26（iOS 26 SDK、Icon Composer 图标）
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      # 构建产物放在仓库外（runner 的临时目录）。job 级 env 里用不了 runner 上下文，所以在这里设
+      - name: Build directory
+        run: echo "TC_BUILD_DIR=$RUNNER_TEMP/build" >> "$GITHUB_ENV"
+
+      - name: Select Xcode 26
+        run: |
+          XCODE=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+
+      - name: Resolve version
+        id: version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if [[ "$GITHUB_REF_TYPE" == tag ]]; then
+            V="${GITHUB_REF_NAME#v}"
+          else
+            V="$INPUT_VERSION"
+          fi
+          # 版本号会进命令行和生成的 Ruby，只接受 x.y.z 或 x.y.z-后缀
+          RE='^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$'
+          if [[ "$GITHUB_REF_TYPE" == tag || -n "$V" ]] && ! [[ "$V" =~ $RE ]]; then
+            echo "::error::版本号格式不对，要 x.y.z 或 x.y.z-后缀"
+            exit 1
+          fi
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          echo "build=${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+          if [[ "$V" == *-* ]]; then echo "prerelease=true" >> "$GITHUB_OUTPUT"; else echo "prerelease=false" >> "$GITHUB_OUTPUT"; fi
+          echo "version=${V:-<project>} build=${{ github.run_number }}"
+
+      # 先查 changelog：没写这个版本的说明就不用浪费时间构建
+      - name: Release notes
+        if: github.ref_type == 'tag'
+        run: scripts/release-notes.sh "${{ steps.version.outputs.version }}" > "$RUNNER_TEMP/notes.md"
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Test TorrentKit
+        run: swift test --package-path Packages/TorrentKit --scratch-path "$TC_BUILD_DIR/spm-kit-test"
+
+      - name: Build dmg
+        run: scripts/build-dmg.sh "${{ steps.version.outputs.version }}" "${{ steps.version.outputs.build }}"
+
+      - name: Build ipa
+        run: scripts/build-ipa.sh "${{ steps.version.outputs.version }}" "${{ steps.version.outputs.build }}"
+
+      - name: Build AltStore source and Homebrew cask
+        if: github.ref_type == 'tag' && steps.version.outputs.prerelease == 'false'
+        env:
+          V: ${{ steps.version.outputs.version }}
+        run: |
+          D="$TC_BUILD_DIR/dist"
+          scripts/altstore-source.py "$D/Peerdeck-$V-unsigned.ipa" "$RUNNER_TEMP/notes.md" > "$D/altstore.json"
+          scripts/homebrew-cask.sh "$V" "$D/Peerdeck-$V.dmg" > "$RUNNER_TEMP/peerdeck.rb"
+
+      - name: Checksums
+        working-directory: ${{ env.TC_BUILD_DIR }}/dist
+        run: |
+          shasum -a 256 *.dmg *.ipa > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: peerdeck-${{ steps.version.outputs.version || github.sha }}
+          path: ${{ env.TC_BUILD_DIR }}/dist/*
+          if-no-files-found: error
+
+      - name: Publish release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          V="${{ steps.version.outputs.version }}"
+          flags=()
+          [[ "${{ steps.version.outputs.prerelease }}" == true ]] && flags+=(--prerelease)
+          gh release create "$GITHUB_REF_NAME" \
+            --title "Peerdeck $V" \
+            --notes-file "$RUNNER_TEMP/notes.md" \
+            --verify-tag \
+            "${flags[@]}" \
+            "$TC_BUILD_DIR"/dist/*
+
+      # 放在发布之后：cask 里的下载地址得先存在。
+      # 补发旧版本时不能把 cask 降级，所以只有它确实是 latest 才更新。
+      # 默认分支如果开了保护，这一步会失败（release 已经发出来了），需要给 Actions 放行。
+      - name: Update Homebrew cask
+        if: github.ref_type == 'tag' && steps.version.outputs.prerelease == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          LATEST=$(gh api "repos/$GITHUB_REPOSITORY/releases/latest" --jq .tag_name)
+          if [[ "$LATEST" != "$GITHUB_REF_NAME" ]]; then
+            echo "::notice::$GITHUB_REF_NAME 不是最新版（$LATEST），不更新 cask"
+            exit 0
+          fi
+          API="repos/$GITHUB_REPOSITORY/contents/Casks/peerdeck.rb"
+          args=(-f "message=chore: update Homebrew cask to $GITHUB_REF_NAME" -f "content=$(base64 < "$RUNNER_TEMP/peerdeck.rb" | tr -d '\n')")
+          # 更新已有文件要带上它的 sha；第一次发版时文件还不存在
+          if SHA=$(gh api "$API" --jq .sha 2>/dev/null); then args+=(-f "sha=$SHA"); fi
+          gh api --method PUT "$API" "${args[@]}" --jq .commit.html_url

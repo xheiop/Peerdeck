@@ -1,0 +1,114 @@
+[
+  {
+    "id": "qb53",
+    "name": "qB 5.3（2 万）",
+    "kind": "qbittorrent",
+    "username": "admin",
+    "password": "adminadmin",
+    "apiKey": "",
+    "enabled": true,
+    "endpoints": [
+      {
+        "baseURL": "http://10.255.255.1:18080",
+        "kind": "lan",
+        "proxyAuth": null,
+        "headers": {},
+        "pinnedCertificateSHA256": null,
+        "timeout": 10,
+        "useSystemProxy": false
+      },
+      {
+        "baseURL": "http://127.0.0.1:18080",
+        "kind": "overlay",
+        "proxyAuth": null,
+        "headers": {},
+        "pinnedCertificateSHA256": null,
+        "timeout": 10,
+        "useSystemProxy": false
+      }
+    ]
+  },
+  {
+    "id": "qb46",
+    "name": "qB 4.6",
+    "kind": "qbittorrent",
+    "username": "admin",
+    "password": "adminadmin",
+    "apiKey": "",
+    "enabled": true,
+    "endpoints": [
+      {
+        "baseURL": "http://127.0.0.1:18081",
+        "kind": "lan",
+        "proxyAuth": null,
+        "headers": {},
+        "pinnedCertificateSHA256": null,
+        "timeout": 10,
+        "useSystemProxy": false
+      }
+    ]
+  },
+  {
+    "id": "tr41",
+    "name": "TR 4.1（2 万）",
+    "kind": "transmission",
+    "username": "admin",
+    "password": "adminadmin",
+    "apiKey": "",
+    "enabled": true,
+    "endpoints": [
+      {
+        "baseURL": "http://127.0.0.1:19091",
+        "kind": "lan",
+        "proxyAuth": null,
+        "headers": {},
+        "pinnedCertificateSHA256": null,
+        "timeout": 10,
+        "useSystemProxy": false
+      }
+    ]
+  },
+  {
+    "id": "tr40",
+    "name": "TR 4.0",
+    "kind": "transmission",
+    "username": "admin",
+    "password": "adminadmin",
+    "apiKey": "",
+    "enabled": true,
+    "endpoints": [
+      {
+        "baseURL": "http://127.0.0.1:19092",
+        "kind": "lan",
+        "proxyAuth": null,
+        "headers": {},
+        "pinnedCertificateSHA256": null,
+        "timeout": 10,
+        "useSystemProxy": false
+      }
+    ]
+  },
+  {
+    "id": "qbproxy",
+    "name": "qB 经反代",
+    "kind": "qbittorrent",
+    "username": "admin",
+    "password": "adminadmin",
+    "apiKey": "",
+    "enabled": true,
+    "endpoints": [
+      {
+        "baseURL": "https://localhost:18443/qbfix/",
+        "kind": "proxy",
+        "proxyAuth": {
+          "username": "proxyuser",
+          "password": "proxypass"
+        },
+        "headers": {},
+        "pinnedCertificateSHA256": null,
+        "timeout": 10,
+        "useSystemProxy": false
+      }
+    ]
+  }
+]

@@ -1,0 +1,15 @@
+.build/
+.swiftpm/
+*.xcodeproj/xcuserdata/
+DerivedData/
+.DS_Store
+HANDOFF.md
+# 内部设计稿和草案只留在本地；公开的图片在 assets/
+/docs/
+__pycache__/
+# iOS 工程由 XcodeGen 按 iOS/project.yml 生成，这些都是生成物
+iOS/*.xcodeproj/
+iOS/Peerdeck/Info.plist
+iOS/Peerdeck/Peerdeck.entitlements
+iOS/ShareExtension/Info.plist
+iOS/ShareExtension/PeerdeckShare.entitlements

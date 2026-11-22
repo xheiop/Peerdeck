@@ -1,0 +1,112 @@
+# transclient 开发 / 集成测试环境（OrbStack / Docker）
+# 端口全部只绑 127.0.0.1。启动后跑 `python3 dev/bootstrap.py` 统一设置 qB 密码。
+#
+#   qb53   qBittorrent 5.3.0   http://127.0.0.1:18080   admin / adminadmin
+#   qb46   qBittorrent 4.6.7   http://127.0.0.1:18081   admin / adminadmin
+#   tr41   Transmission 4.1.4  http://127.0.0.1:19091   admin / adminadmin
+#   tr40   Transmission 4.0.6  http://127.0.0.1:19092   admin / adminadmin
+#   proxy  Caddy 自签 HTTPS     https://localhost:18443  见 Caddyfile
+#   tracker 假 tracker          容器内 http://tracker:6969/{ok,unreg,warn,err500}/announce
+name: transclient-dev
+
+# qB 会校验 Host 头里的端口：映射端口和 WEBUI_PORT 不一致时，任何请求（包括正确密码登录）都返回 401。
+# 所以两边端口保持一致。
+x-qb-env: &qb-env
+  PUID: "1000"
+  PGID: "1000"
+  TZ: Asia/Shanghai
+
+x-tr-env: &tr-env
+  PUID: "1000"
+  PGID: "1000"
+  TZ: Asia/Shanghai
+  USER: admin
+  PASS: adminadmin
+
+services:
+  tracker:
+    image: python:3.13-alpine
+    command: ["python", "-u", "/app/fake_tracker.py"]
+    volumes:
+      - ./fake_tracker.py:/app/fake_tracker.py:ro
+    ports:
+      - "127.0.0.1:16969:6969"
+    networks:
+      default:
+        # 不同主机名模拟不同 PT 站，用来测按站点分组
+        aliases: [pt-a.test, pt-b.test, pt-c.test]
+
+  qb53:
+    image: lscr.io/linuxserver/qbittorrent:5.3.0
+    environment:
+      <<: *qb-env
+      WEBUI_PORT: "18080"
+    volumes:
+      - qb53-config:/config
+      - qb53-downloads:/downloads
+    ports:
+      - "127.0.0.1:18080:18080"
+
+  qb46:
+    image: lscr.io/linuxserver/qbittorrent:4.6.7
+    environment:
+      <<: *qb-env
+      WEBUI_PORT: "18081"
+    volumes:
+      - qb46-config:/config
+      - qb46-downloads:/downloads
+    ports:
+      - "127.0.0.1:18081:18081"
+
+  # 按需起的任意版本 qB，用来二分 API 行为：QBX_TAG=5.0.4 docker compose --profile extra up -d qbx
+  qbx:
+    profiles: [extra]
+    image: lscr.io/linuxserver/qbittorrent:${QBX_TAG:-5.3.0}
+    environment:
+      <<: *qb-env
+      WEBUI_PORT: "18082"
+    volumes:
+      - qbx-config:/config
+      - qbx-downloads:/downloads
+    ports:
+      - "127.0.0.1:18082:18082"
+
+  tr41:
+    image: lscr.io/linuxserver/transmission:4.1.4
+    environment: *tr-env
+    volumes:
+      - tr41-config:/config
+      - tr41-downloads:/downloads
+    ports:
+      - "127.0.0.1:19091:9091"
+
+  tr40:
+    image: lscr.io/linuxserver/transmission:4.0.6
+    environment: *tr-env
+    volumes:
+      - tr40-config:/config
+      - tr40-downloads:/downloads
+    ports:
+      - "127.0.0.1:19092:9091"
+
+  proxy:
+    image: caddy:2.10.2
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - proxy-data:/data
+    ports:
+      - "127.0.0.1:18443:8443"
+    depends_on: [qb53, tr41]
+
+volumes:
+  qb53-config:
+  qb53-downloads:
+  qb46-config:
+  qb46-downloads:
+  qbx-config:
+  qbx-downloads:
+  tr41-config:
+  tr41-downloads:
+  tr40-config:
+  tr40-downloads:
+  proxy-data:

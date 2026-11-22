@@ -1,0 +1,54 @@
+{
+	local_certs
+	skip_install_trust
+	auto_https disable_redirects
+}
+
+# 自签证书（Caddy 内部 CA），用来测 TOFU。宿主机访问 https://localhost:18443
+localhost:8443 {
+	tls internal
+
+	# 反代 + 子路径 + Basic Auth（proxyuser / proxypass）。故意不做修正，用来复现 qB 的 401
+	handle_path /qb/* {
+		basic_auth {
+			proxyuser $2a$14$Mq6o4YsiOO6gb5H/yy4Fs.zxqnyNSpzwZGTiEBMH67SlaYomYF9EO
+		}
+		reverse_proxy qb53:18080
+	}
+
+	# 同上，修正两处让 qB 能用：
+	# 1. Host 改成上游地址（qB 校验 Host 里的端口）
+	# 2. 去掉反代的 Authorization 头（qB 5.x 会把它当 API key 认证来处理，Basic 直接 401）
+	handle_path /qbfix/* {
+		basic_auth {
+			proxyuser $2a$14$Mq6o4YsiOO6gb5H/yy4Fs.zxqnyNSpzwZGTiEBMH67SlaYomYF9EO
+		}
+		reverse_proxy qb53:18080 {
+			header_up Host {upstream_hostport}
+			header_up -Authorization
+		}
+	}
+
+	# 反代 + 子路径，TR 自己的 Basic Auth 直接透传
+	handle_path /tr/* {
+		reverse_proxy tr41:9091
+	}
+
+	# 模拟 Cloudflare Access service token：缺请求头就 403
+	handle_path /cf/* {
+		@noauth not header CF-Access-Client-Id test-client-id
+		respond @noauth "Forbidden by access policy" 403
+		reverse_proxy qb53:18080 {
+			header_up Host {upstream_hostport}
+		}
+	}
+
+	# 模拟 SSO 门户：所有请求 302 到登录页
+	handle_path /sso/* {
+		redir https://localhost:18443/auth/login 302
+	}
+
+	handle {
+		respond "transclient dev proxy" 200
+	}
+}

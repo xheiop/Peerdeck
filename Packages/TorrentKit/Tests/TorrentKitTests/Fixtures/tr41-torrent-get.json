@@ -1,0 +1,218 @@
+{
+ "arguments": {
+  "torrents": [
+   {
+    "addedDate": 1795180420,
+    "doneDate": 0,
+    "downloadDir": "/downloads/scn",
+    "downloadedEver": 0,
+    "error": 0,
+    "errorString": "",
+    "eta": -2,
+    "hashString": "cc68c289500b3f15aeea3b7ef82d414448a05abe",
+    "id": 1,
+    "isPrivate": true,
+    "isStalled": false,
+    "labels": [],
+    "name": "scn-ok.bin",
+    "peersGettingFromUs": 0,
+    "peersSendingToUs": 0,
+    "percentDone": 0.0,
+    "rateDownload": 0,
+    "rateUpload": 0,
+    "secondsSeeding": 0,
+    "sizeWhenDone": 1024,
+    "status": 4,
+    "trackers": [
+     {
+      "announce": "http://pt-a.test:6969/ok/announce",
+      "id": 0,
+      "scrape": "http://pt-a.test:6969/ok/scrape",
+      "sitename": "pt-a",
+      "tier": 0
+     }
+    ],
+    "uploadRatio": 0.0,
+    "uploadedEver": 0
+   },
+   {
+    "addedDate": 1795180420,
+    "doneDate": 0,
+    "downloadDir": "/downloads/scn",
+    "downloadedEver": 0,
+    "error": 2,
+    "errorString": "Unregistered torrent",
+    "eta": -2,
+    "hashString": "09bcd1bf895fca9f1f9be5c1de6987138715fe59",
+    "id": 2,
+    "isPrivate": true,
+    "isStalled": false,
+    "labels": [],
+    "name": "scn-unreg.bin",
+    "peersGettingFromUs": 0,
+    "peersSendingToUs": 0,
+    "percentDone": 0.0,
+    "rateDownload": 0,
+    "rateUpload": 0,
+    "secondsSeeding": 0,
+    "sizeWhenDone": 1024,
+    "status": 4,
+    "trackers": [
+     {
+      "announce": "http://pt-b.test:6969/unreg/announce",
+      "id": 1,
+      "scrape": "http://pt-b.test:6969/unreg/scrape",
+      "sitename": "pt-b",
+      "tier": 0
+     }
+    ],
+    "uploadRatio": 0.0,
+    "uploadedEver": 0
+   },
+   {
+    "addedDate": 1795180420,
+    "doneDate": 0,
+    "downloadDir": "/downloads/scn",
+    "downloadedEver": 0,
+    "error": 1,
+    "errorString": "Rate limited",
+    "eta": -2,
+    "hashString": "234dc30cf5a81986099077d7f7eb015bc3da366c",
+    "id": 3,
+    "isPrivate": true,
+    "isStalled": false,
+    "labels": [],
+    "name": "scn-warn.bin",
+    "peersGettingFromUs": 0,
+    "peersSendingToUs": 0,
+    "percentDone": 0.0,
+    "rateDownload": 0,
+    "rateUpload": 0,
+    "secondsSeeding": 0,
+    "sizeWhenDone": 1024,
+    "status": 4,
+    "trackers": [
+     {
+      "announce": "http://pt-c.test:6969/warn/announce",
+      "id": 2,
+      "scrape": "http://pt-c.test:6969/warn/scrape",
+      "sitename": "pt-c",
+      "tier": 0
+     }
+    ],
+    "uploadRatio": 0.0,
+    "uploadedEver": 0
+   },
+   {
+    "addedDate": 1795180420,
+    "doneDate": 0,
+    "downloadDir": "/downloads/scn",
+    "downloadedEver": 0,
+    "error": 2,
+    "errorString": "Tracker HTTP response 500 (Internal Server Error)",
+    "eta": -2,
+    "hashString": "dfbf5d18e752115fb147ea377ab8842578b2930e",
+    "id": 4,
+    "isPrivate": true,
+    "isStalled": false,
+    "labels": [],
+    "name": "scn-err500.bin",
+    "peersGettingFromUs": 0,
+    "peersSendingToUs": 0,
+    "percentDone": 0.0,
+    "rateDownload": 0,
+    "rateUpload": 0,
+    "secondsSeeding": 0,
+    "sizeWhenDone": 1024,
+    "status": 4,
+    "trackers": [
+     {
+      "announce": "http://pt-a.test:6969/err500/announce",
+      "id": 3,
+      "scrape": "http://pt-a.test:6969/err500/scrape",
+      "sitename": "pt-a",
+      "tier": 0
+     }
+    ],
+    "uploadRatio": 0.0,
+    "uploadedEver": 0
+   },
+   {
+    "addedDate": 1795180420,
+    "doneDate": 0,
+    "downloadDir": "/downloads/scn",
+    "downloadedEver": 0,
+    "error": 2,
+    "errorString": "Tracker HTTP response 0 (No Response)",
+    "eta": -2,
+    "hashString": "e968adb1ab6856ea32ce276eeb9977315ad4abdb",
+    "id": 5,
+    "isPrivate": true,
+    "isStalled": false,
+    "labels": [],
+    "name": "scn-dead.bin",
+    "peersGettingFromUs": 0,
+    "peersSendingToUs": 0,
+    "percentDone": 0.0,
+    "rateDownload": 0,
+    "rateUpload": 0,
+    "secondsSeeding": 0,
+    "sizeWhenDone": 1024,
+    "status": 4,
+    "trackers": [
+     {
+      "announce": "http://dead.invalid:6969/announce",
+      "id": 4,
+      "scrape": "http://dead.invalid:6969/scrape",
+      "sitename": "dead",
+      "tier": 0
+     }
+    ],
+    "uploadRatio": 0.0,
+    "uploadedEver": 0
+   },
+   {
+    "addedDate": 1795180420,
+    "doneDate": 0,
+    "downloadDir": "/downloads/scn",
+    "downloadedEver": 0,
+    "error": 0,
+    "errorString": "",
+    "eta": -1,
+    "hashString": "144b2641547069d43b713fd22c573286bff395e5",
+    "id": 6,
+    "isPrivate": true,
+    "isStalled": false,
+    "labels": [],
+    "name": "scn-mixed.bin",
+    "peersGettingFromUs": 0,
+    "peersSendingToUs": 0,
+    "percentDone": 0.0,
+    "rateDownload": 0,
+    "rateUpload": 0,
+    "secondsSeeding": 0,
+    "sizeWhenDone": 1024,
+    "status": 3,
+    "trackers": [
+     {
+      "announce": "http://pt-b.test:6969/unreg/announce",
+      "id": 5,
+      "scrape": "http://pt-b.test:6969/unreg/scrape",
+      "sitename": "pt-b",
+      "tier": 0
+     },
+     {
+      "announce": "http://pt-a.test:6969/ok/announce",
+      "id": 6,
+      "scrape": "http://pt-a.test:6969/ok/scrape",
+      "sitename": "pt-a",
+      "tier": 1
+     }
+    ],
+    "uploadRatio": 0.0,
+    "uploadedEver": 0
+   }
+  ]
+ },
+ "result": "success"
+}
