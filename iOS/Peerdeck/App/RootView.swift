@@ -40,7 +40,7 @@ struct IOSWelcomeView: View {
     var body: some View {
         VStack(spacing: 14) {
             Text("Connect Your First Client").font(.title2.weight(.semibold))
-            Text("Works with qBittorrent and Transmission. Each client can have several routes: LAN at home; DDNS, an overlay network or a reverse proxy when away. Passwords are stored in the Keychain.")
+            Text("Works with qBittorrent, Transmission and Flood. Each client can have several routes: LAN at home; DDNS, an overlay network or a reverse proxy when away. Passwords are stored in the Keychain.")
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
                 .padding(.horizontal, 32)

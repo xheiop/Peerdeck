@@ -1,0 +1,323 @@
+{
+ "1824F36E84FAE3B16BAFC487080D29C2260305E0": {
+  "bytesDone": 1024,
+  "comment": "",
+  "dateActive": 1795359468,
+  "dateAdded": 1795359468,
+  "dateCreated": -1,
+  "dateFinished": 1795359468,
+  "directory": "/data/seed/qb",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "1824F36E84FAE3B16BAFC487080D29C2260305E0",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "Unregistered torrent",
+  "name": "qb-unreg",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 1,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "complete",
+   "inactive",
+   "seeding",
+   "warning"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "1367AFD08CCD4072DB197A7D2946C8B73FAA97F5": {
+  "bytesDone": 1024,
+  "comment": "",
+  "dateActive": 1795359469,
+  "dateAdded": 1795359469,
+  "dateCreated": -1,
+  "dateFinished": 1795359469,
+  "directory": "/data/seed/qb",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "1367AFD08CCD4072DB197A7D2946C8B73FAA97F5",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "Rate limited",
+  "name": "qb-warn",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 1,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "complete",
+   "inactive",
+   "seeding",
+   "warning"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "bravo.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "D6A140060A96BDFE25B0DE3F08157241300D51EF": {
+  "bytesDone": 1024,
+  "comment": "",
+  "dateActive": 1795359469,
+  "dateAdded": 1795359469,
+  "dateCreated": -1,
+  "dateFinished": 1795359470,
+  "directory": "/data/seed/qb",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "D6A140060A96BDFE25B0DE3F08157241300D51EF",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "name": "qb-err500",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 1,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "complete",
+   "inactive",
+   "seeding"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "9FD6CB0CC6A37D909669EED377B21B2CAE088E9F": {
+  "bytesDone": 2048,
+  "comment": "",
+  "dateActive": 1795359471,
+  "dateAdded": 1795359471,
+  "dateCreated": -1,
+  "dateFinished": 1795359472,
+  "directory": "/data/seed/qb",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "9FD6CB0CC6A37D909669EED377B21B2CAE088E9F",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "name": "qb-multi",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 1,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 2048,
+  "selectedSizeBytes": 2048,
+  "status": [
+   "complete",
+   "inactive",
+   "seeding"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test",
+   "charlie.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "B7E88AE706478E031E14A10E7B0F41456BD4A29C": {
+  "bytesDone": 1024,
+  "comment": "",
+  "dateActive": 1795359467,
+  "dateAdded": 1795359467,
+  "dateCreated": -1,
+  "dateFinished": 1795359467,
+  "directory": "/data/seed/qb",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "B7E88AE706478E031E14A10E7B0F41456BD4A29C",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "name": "qb-ok",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 1,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 1,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "complete",
+   "inactive",
+   "seeding"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "F92DAB15A6DF82A20C3DDA37E96A654521635C51": {
+  "bytesDone": 0,
+  "comment": "",
+  "dateActive": 1795359472,
+  "dateAdded": 1795359472,
+  "dateCreated": -1,
+  "dateFinished": -1,
+  "directory": "/data/seed/qb",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "F92DAB15A6DF82A20C3DDA37E96A654521635C51",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "name": "qb-leech",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 0,
+  "priority": 1,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 1,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "inactive",
+   "downloading"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "96F73B1AD877E290B32889354D7CF755903B3EF9": {
+  "bytesDone": 0,
+  "comment": "",
+  "dateActive": 1795359472,
+  "dateAdded": 1795359472,
+  "dateCreated": -1,
+  "dateFinished": -1,
+  "directory": "/data/seed/qb",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "96F73B1AD877E290B32889354D7CF755903B3EF9",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "name": "qb-paused",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 0,
+  "priority": 1,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "inactive",
+   "stopped"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "09899F15F98B2F8A92B678D2A809E6E3D78D0EE6": {
+  "bytesDone": 1024,
+  "comment": "",
+  "dateActive": 1795359470,
+  "dateAdded": 1795359470,
+  "dateCreated": -1,
+  "dateFinished": 1795359471,
+  "directory": "/data/seed/qb",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "09899F15F98B2F8A92B678D2A809E6E3D78D0EE6",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "name": "qb-dead",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 1,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "complete",
+   "inactive",
+   "seeding"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "dead.invalid"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ }
+}

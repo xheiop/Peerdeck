@@ -107,6 +107,14 @@ struct OverviewScreen: View {
         model.offlineNote.map { "\(title) · \($0)" } ?? title
     }
 
+    /// Flood 没有历史总量：和离线的一样，说明没算进来，不能让人以为是全部
+    private func allTimeHeader(_ online: [ServerRuntime]) -> String {
+        let names = model.servers.filter { store.offlineServers.contains($0.id) }.map(\.config.name)
+            + online.filter { $0.config.kind == .flood }.map(\.config.name)
+        guard !names.isEmpty else { return L("All Time") }
+        return "\(L("All Time")) · \(L("excluding \(names.joined(separator: L(", ")))"))"
+    }
+
     @ViewBuilder private var now: some View {
         LedgerHeader(title: header(L("Now"))).padding(.bottom, 6)
         HStack(alignment: .top, spacing: 12) {
@@ -120,7 +128,7 @@ struct OverviewScreen: View {
     @ViewBuilder private var allTime: some View {
         let rts = model.servers.filter { $0.status.isOnline && !store.offlineServers.contains($0.id) }
         let up = rts.compactMap(\.stats.allTimeUploaded), down = rts.compactMap(\.stats.allTimeDownloaded)
-        LedgerHeader(title: header(L("All Time"))).padding(.bottom, 6)
+        LedgerHeader(title: allTimeHeader(rts)).padding(.bottom, 6)
         HStack(alignment: .top, spacing: 12) {
             figure(up.isEmpty ? nil : up.reduce(0, +), size: totalSize, unitFont: .footnote, label: L("Total uploaded"), name: L("Total uploaded"))
             figure(down.isEmpty ? nil : down.reduce(0, +), size: totalSize, unitFont: .footnote, label: L("Total downloaded"), name: L("Total downloaded"))
@@ -338,7 +346,7 @@ struct ServerLedgerRow: View {
                 Text(detail).font(.footnote.monospacedDigit()).foregroundStyle(.secondary).lineLimit(1)
             }
             Spacer(minLength: 6)
-            if rt.status.isOnline {
+            if rt.status.isOnline, rt.config.kind.hasAlternativeSpeedLimits {
                 Image(systemName: rt.stats.altSpeedEnabled ? "tortoise.fill" : "tortoise").font(.footnote).foregroundStyle(.secondary)
                 Toggle(isOn: Binding(get: { rt.stats.altSpeedEnabled }, set: { model.setAltSpeed($0, server: rt.id) })) {
                     Text(L("Alternative speed limits for \(rt.config.name)"))

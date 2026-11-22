@@ -1,7 +1,5 @@
-import QBittorrentClient
 import SwiftUI
 import TorrentKit
-import TransmissionClient
 
 /// 添加服务器：填表 → 逐条线路探测（自签证书就地确认）→ 显示版本和能力 → 保存（mac 的 SetupSheet 的 iOS 版）
 struct SetupScreen: View {
@@ -53,16 +51,17 @@ struct SetupScreen: View {
             Picker("Type", selection: $config.kind) {
                 Text("qBittorrent").tag(ClientKind.qbittorrent)
                 Text("Transmission").tag(ClientKind.transmission)
+                Text(verbatim: ClientKind.flood.displayName).tag(ClientKind.flood)
             }
             .pickerStyle(.segmented)
             .onChange(of: config.kind) { old, k in
-                if url.hasSuffix(":8080") || url.hasSuffix(":9091") { url = String(url.dropLast(5)) + (k == .qbittorrent ? ":8080" : ":9091") }
+                url = ServerConfig.switchingPort(in: url, from: old, to: k)
                 if config.name == ServerConfig.blank(kind: old).name { config.name = ServerConfig.blank(kind: k).name }
             }
             FormField(L("Name"), text: $config.name)
         }
         Section {
-            FormField(L("Address"), text: $url, prompt: config.kind == .qbittorrent ? "http://192.168.1.2:8080" : "http://192.168.1.2:9091", url: true)
+            FormField(L("Address"), text: $url, prompt: ServerConfig.exampleAddress(config.kind), url: true)
             FormField(L("Username"), text: $config.username)
             FormField(L("Password"), text: $config.password, secure: true)
         } footer: {
@@ -133,13 +132,11 @@ struct SetupScreen: View {
                 results[i] = Row(ok: false, title: results[i].title, detail: outcome.failures.values.first.map { "\($0)" } ?? L("Unreachable"))
                 continue
             }
-            let client: any TorrentClient = config.kind == .qbittorrent
-                ? QBittorrentClient(serverID: config.serverID, endpoint: ep, credentials: config.credentials)
-                : TransmissionClient(serverID: config.serverID, endpoint: ep, credentials: config.credentials)
+            let client = config.makeClient(ep)
             do {
                 let info = try await client.connect()
                 var chips: [String] = []
-                chips.append(info.capabilities.contains(.trackerHealthInList) ? L("✓ Tracker status") : L("✗ No tracker status (qB 5.1.x)"))
+                chips.append(info.trackerStatusSummary)
                 if info.capabilities.contains(.categories) { chips.append(L("✓ Categories and tags")) }
                 if info.capabilities.contains(.apiKey) { chips.append(L("Supports API keys: no IP bans from wrong passwords. Recommended.")) }
                 results[i] = Row(ok: true, title: "\(info.version) · \(Fmt.endpointKind(ep.kind))", detail: "API \(info.apiVersion)", chips: chips)

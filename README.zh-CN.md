@@ -4,7 +4,7 @@
 
 # Peerdeck
 
-**macOS 和 iOS 上的 qBittorrent / Transmission 遥控器**
+**macOS 和 iOS 上的 qBittorrent / Transmission / Flood 遥控器**
 
 [English](README.md) · 简体中文
 
@@ -15,9 +15,9 @@
 
 </div>
 
-下载器一多，哪些种子被站点删了、哪个 tracker 已经连不上，就很难及时发现。Peerdeck 把所有 qBittorrent 和 Transmission 里的种子放进一张列表，把这些问题找出来，让你在一个地方处理完。
+下载器一多，哪些种子被站点删了、哪个 tracker 已经连不上，就很难及时发现。Peerdeck 把所有 qBittorrent、Transmission 和 Flood 里的种子放进一张列表，把这些问题找出来，让你在一个地方处理完。
 
-它只是遥控器：直接连接你已经在运行的下载器，不经过中间服务器，自己也不下载、不做种。Peerdeck 是独立项目，与 qBittorrent、Transmission 官方无关。
+它只是遥控器：直接连接你已经在运行的下载器，不经过中间服务器，自己也不下载、不做种。Peerdeck 是独立项目，与 qBittorrent、Transmission、Flood 官方无关。
 
 <img src="assets/screenshots/mac.png" alt="macOS 上的疑似未注册种子" />
 
@@ -44,7 +44,7 @@
 - 按状态、活动、服务器、站点、分类、标签筛选，或者按名称搜索。
 - 添加磁力链接、`.torrent` 文件和种子链接，可以选文件，也可以给每个站点设默认服务器。
 - 查看每个站点的问题数、上传、下载和总体积。
-- Mac 上可以在菜单栏看速度，出问题或下载完成时会收到通知。
+- Mac 上可以在菜单栏看速度和问题，下载完成时会收到通知。
 
 ### 连接下载器
 
@@ -53,6 +53,21 @@
 - 支持英文和简体中文。iOS 26 上是 Liquid Glass 样式，更早的系统会自动降级。
 
 测试过 qBittorrent 4.6、5.3 和 Transmission 4.0、4.1，单台最多测到 2 万个种子。
+
+### Flood
+
+Peerdeck 也可以连接 [Flood](https://github.com/jesec/flood)，用 rTorrent 的走这条路。测试过 Flood 4.16.4。添加服务器时选 **Flood**，填它网页的地址和账号。
+
+| Flood 后面接的 | tracker 问题和清理 | 说明 |
+|---|---|---|
+| rTorrent | 支持 | 看不到 tracker 警告。挂了多个站的种子报错时只算警告。 |
+| Transmission | 支持 | |
+| qBittorrent | 不支持 | Flood 会把 tracker 报错缓存最长一小时，请直连 qBittorrent。 |
+| Deluge、Neptune | 不支持 | 没有测试过。 |
+
+- 经过 Flood 时没有分类、备用限速、单种限速、历史总量、做种时间，也不能替换 tracker。
+- 接 rTorrent 时，移动和删除文件是 Flood 自己做的，它看到的路径必须和 rTorrent 一致。否则它只会改掉或删掉种子，文件原地不动，而且不报错。
+- Flood 前面的反代不能缓冲 `/api/activity-stream`。
 
 ## 安装
 
@@ -180,7 +195,7 @@ TC_CONFIG_FILE="$PWD/dev/app-servers.json" ~/Library/Caches/transclient-build/Pe
 |---|---|
 | `App/` | macOS app，以及和 iOS 共用的 Model 层 |
 | `iOS/` | iOS app 和分享扩展 |
-| `Packages/TorrentKit/` | qBittorrent 和 Transmission 客户端库，没有第三方依赖 |
+| `Packages/TorrentKit/` | qBittorrent、Transmission 和 Flood 客户端库，没有第三方依赖 |
 | `scripts/` | 发布打包、Homebrew cask、AltStore 源 |
 | `dev/` | 本地测试用的下载器 |
 | `assets/` | 图标和截图 |

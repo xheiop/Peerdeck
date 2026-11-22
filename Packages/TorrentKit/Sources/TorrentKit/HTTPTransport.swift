@@ -161,6 +161,38 @@ public final class HTTPTransport: Sendable {
         return (data, http)
     }
 
+    /// 长连接（Flood 的 SSE）：响应头一到就返回，正文由调用方边收边读。状态码和 send 一样由调用方解释。
+    /// 正文可以很久没数据，所以 session 的超时很长；响应头另外限时，否则黑洞地址要等满那个长超时。
+    public func stream(_ request: URLRequest, headersWithin limit: TimeInterval) async throws -> (URLSession.AsyncBytes, HTTPURLResponse) {
+        let bytes: URLSession.AsyncBytes
+        let response: URLResponse
+        do {
+            (bytes, response) = try await withThrowingTaskGroup(of: (URLSession.AsyncBytes, URLResponse).self) { group in
+                group.addTask { try await self.session.bytes(for: request) }
+                group.addTask {
+                    try await Task.sleep(for: .seconds(limit))
+                    throw URLError(.timedOut)
+                }
+                defer { group.cancelAll() }
+                guard let first = try await group.next() else { throw CancellationError() }
+                return first
+            }
+        } catch let error as URLError {
+            if let fp = delegate.takeRejectedFingerprint() {
+                throw TransportError.untrustedCertificate(sha256: fp)
+            }
+            throw TransportError.unreachable(Self.describe(error))
+        }
+        guard let http = response as? HTTPURLResponse else {
+            throw TransportError.unreachable(String(localized: "Not an HTTP response"))
+        }
+        if (300..<400).contains(http.statusCode) {
+            bytes.task.cancel()
+            throw TransportError.redirected(status: http.statusCode, location: http.value(forHTTPHeaderField: "Location") ?? "")
+        }
+        return (bytes, http)
+    }
+
     private static func describe(_ e: URLError) -> String {
         switch e.code {
         case .timedOut: String(localized: "Timed out")

@@ -1,19 +1,23 @@
 import SwiftUI
 import TorrentKit
+import TorrentKit
 
 /// 备用限速开关（每台服务器一个）。具体限速数值在 mac 上改
 struct SpeedScreen: View {
     let model: AppModel
     @Environment(\.dismiss) private var dismiss
+    private var altServers: [ServerRuntime] { model.onlineServers.filter { $0.config.kind.hasAlternativeSpeedLimits } }
 
     var body: some View {
         NavigationStack {
             List {
                 if model.onlineServers.isEmpty {
                     Text("No servers online").foregroundStyle(.secondary)
+                } else if altServers.isEmpty {
+                    Text("Flood has no alternative speed limits").foregroundStyle(.secondary)
                 } else {
                     Section {
-                        ForEach(model.onlineServers) { rt in
+                        ForEach(altServers) { rt in
                             Toggle(isOn: Binding(get: { rt.stats.altSpeedEnabled }, set: { model.setAltSpeed($0, server: rt.id) })) {
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(rt.config.name)

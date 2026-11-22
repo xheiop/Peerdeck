@@ -90,11 +90,11 @@ def main():
     tag = f"v{version}"
     # 图标和截图钉在这个 tag 上，主分支以后改名或换图都不影响已发布的源
     raw = f"https://raw.githubusercontent.com/{repo}/{tag}/assets"
-    subtitle = "A remote for qBittorrent and Transmission"
+    subtitle = "A remote for qBittorrent, Transmission and Flood"
     description = (
-        "Manage several qBittorrent and Transmission servers in one list, see tracker problems first, "
+        "Manage several qBittorrent, Transmission and Flood servers in one list, see tracker problems first, "
         "and clean up unregistered torrents without losing cross-seeded data.\n\n"
-        "在一张列表里管理多台 qBittorrent / Transmission，先看到 tracker 的问题，"
+        "在一张列表里管理多台 qBittorrent / Transmission / Flood，先看到 tracker 的问题，"
         "清理未注册种子时保留还有辅种的数据。"
     )
 

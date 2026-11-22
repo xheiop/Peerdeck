@@ -61,6 +61,11 @@ struct RetrackerSheet: View {
                 TextField(draft.mode == .host ? "e.g. tracker.new-domain.example" : draft.mode == .passkey ? "New passkey from your profile page on the site" : "Replacement text", text: $draft.replacement)
             }
         }
+        let fixed = targets.filter { model.server($0.ref.server.rawValue)?.config.kind.canReplaceTrackers == false }.count
+        if fixed > 0 {
+            Label("\(fixed) on Flood won’t be changed: Flood can’t replace a single tracker URL safely.", systemImage: "info.circle")
+                .font(.caption).foregroundStyle(.secondary)
+        }
         if let (from, to) = draft.preview {
             VStack(alignment: .leading, spacing: 3) {
                 Text("− " + from).foregroundStyle(.secondary).strikethrough()

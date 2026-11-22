@@ -1,4 +1,5 @@
 import CryptoKit
+import FloodClient
 import Foundation
 
 func CC_SHA1_shim(_ buf: UnsafeRawBufferPointer, _ out: inout [UInt8]) {
@@ -37,12 +38,14 @@ func makeClient(_ t: Target, creds: Credentials = adminCreds) -> any TorrentClie
     switch t.kind {
     case .qbittorrent: QBittorrentClient(serverID: ServerID(t.name), endpoint: t.endpoint, credentials: creds)
     case .transmission: TransmissionClient(serverID: ServerID(t.name), endpoint: t.endpoint, credentials: creds)
+    case .flood: FloodClient(serverID: ServerID(t.name), endpoint: t.endpoint, credentials: creds)
     }
 }
 
 func transportStats(_ c: any TorrentClient) -> HTTPTransport.Stats {
     if let q = c as? QBittorrentClient { return q.transportStats }
     if let t = c as? TransmissionClient { return t.transportStats }
+    if let f = c as? FloodClient { return f.transportStats }
     return .init()
 }
 

@@ -9,6 +9,37 @@ public struct ServerID: Hashable, Sendable, Codable, CustomStringConvertible {
 public enum ClientKind: String, Sendable, Codable {
     case qbittorrent
     case transmission
+    case flood
+
+    /// 产品名，不翻译
+    public var displayName: String {
+        switch self {
+        case .qbittorrent: "qBittorrent"
+        case .transmission: "Transmission"
+        case .flood: "Flood"
+        }
+    }
+
+    public var shortName: String {
+        switch self {
+        case .qbittorrent: "qB"
+        case .transmission: "TR"
+        case .flood: "Flood"
+        }
+    }
+
+    public var defaultPort: Int {
+        switch self {
+        case .qbittorrent: 8080
+        case .transmission: 9091
+        case .flood: 3000
+        }
+    }
+
+    // 只和下载器种类有关、离线时也要知道的能力（和版本、后端有关的放在 Capabilities）
+    public var hasAlternativeSpeedLimits: Bool { self != .flood }
+    public var hasTorrentUploadLimit: Bool { self != .flood }
+    public var canReplaceTrackers: Bool { self != .flood }
 }
 
 /// 种子在全局的唯一标识：服务器 + 服务端自己的 id（qB 用 hash，TR 用数字 id 的字符串形式）。

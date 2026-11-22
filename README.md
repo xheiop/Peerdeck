@@ -4,7 +4,7 @@
 
 # Peerdeck
 
-**A qBittorrent and Transmission remote for macOS and iOS**
+**A qBittorrent, Transmission and Flood remote for macOS and iOS**
 
 English · [简体中文](README.zh-CN.md)
 
@@ -15,9 +15,9 @@ English · [简体中文](README.zh-CN.md)
 
 </div>
 
-Once you run a few download clients, it gets hard to notice which torrents a site deleted or which tracker stopped responding. Peerdeck puts the torrents from all your qBittorrent and Transmission servers in one list and shows you those problems, so you can deal with them in one place.
+Once you run a few download clients, it gets hard to notice which torrents a site deleted or which tracker stopped responding. Peerdeck puts the torrents from all your qBittorrent, Transmission and Flood servers in one list and shows you those problems, so you can deal with them in one place.
 
-It's a remote: it connects straight to the clients you already run, with no server in between, and doesn't download or seed by itself. Peerdeck is an independent project and isn't affiliated with qBittorrent or Transmission.
+It's a remote: it connects straight to the clients you already run, with no server in between, and doesn't download or seed by itself. Peerdeck is an independent project and isn't affiliated with qBittorrent, Transmission or Flood.
 
 <img src="assets/screenshots/mac.png" alt="Likely unregistered torrents on macOS" />
 
@@ -44,7 +44,7 @@ It's a remote: it connects straight to the clients you already run, with no serv
 - Filter by state, activity, server, site, category or tag, or search by name.
 - Add magnet links, `.torrent` files and URLs, choose files, and set a default server for each site.
 - See problems, uploaded, downloaded and total size for each site.
-- On the Mac, check speeds from the menu bar and get notified about problems and finished downloads.
+- On the Mac, check speeds and problems from the menu bar, and get notified when downloads finish.
 
 ### Connect your way
 
@@ -53,6 +53,21 @@ It's a remote: it connects straight to the clients you already run, with no serv
 - Use it in English or Simplified Chinese. On iOS 26 it uses Liquid Glass, with a fallback for earlier versions.
 
 Tested with qBittorrent 4.6 and 5.3, and Transmission 4.0 and 4.1, with up to 20,000 torrents on one server.
+
+### Flood
+
+Peerdeck also connects to [Flood](https://github.com/jesec/flood), which is the way to use it with rTorrent. Tested with Flood 4.16.4. Choose **Flood** when adding a server and enter the address and account you use for its web UI.
+
+| Behind Flood | Tracker problems and cleanup | Notes |
+|---|---|---|
+| rTorrent | Yes | Tracker warnings aren't reported. A failure on a torrent with several sites only counts as a warning. |
+| Transmission | Yes | |
+| qBittorrent | No | Flood caches tracker messages for up to an hour. Connect to qBittorrent directly instead. |
+| Deluge, Neptune | No | Not tested. |
+
+- Categories, alternative and per-torrent speed limits, all-time totals, seeding time and tracker replacement aren't available through Flood.
+- With rTorrent, Flood itself moves and deletes files, so it must see them at the same paths as rTorrent. Otherwise it changes or removes the torrent and silently leaves the files behind.
+- A reverse proxy in front of Flood must not buffer `/api/activity-stream`.
 
 ## Installation
 
@@ -180,7 +195,7 @@ Tags with a suffix, such as `v0.2.0-beta.1`, become pre-releases and leave Homeb
 |---|---|
 | `App/` | macOS app, plus the model layer shared with iOS |
 | `iOS/` | iOS app and share extension |
-| `Packages/TorrentKit/` | qBittorrent and Transmission client library, with no third-party dependencies |
+| `Packages/TorrentKit/` | qBittorrent, Transmission and Flood client library, with no third-party dependencies |
 | `scripts/` | Release packaging, Homebrew cask, AltStore source |
 | `dev/` | Local test servers |
 | `assets/` | Icon and screenshots |

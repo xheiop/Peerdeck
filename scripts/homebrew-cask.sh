@@ -24,7 +24,7 @@ cask "peerdeck" do
 
   url "https://github.com/$REPO/releases/download/v#{version}/Peerdeck-#{version}.dmg"
   name "Peerdeck"
-  desc "Remote for qBittorrent and Transmission"
+  desc "Remote for qBittorrent, Transmission and Flood"
   homepage "https://github.com/$REPO"
 
   livecheck do

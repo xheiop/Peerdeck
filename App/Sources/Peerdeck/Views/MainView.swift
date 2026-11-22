@@ -38,7 +38,7 @@ struct WelcomeView: View {
         VStack(spacing: 14) {
             Image(systemName: "arrow.up.arrow.down.circle").font(.system(size: 44)).foregroundStyle(.tertiary)
             Text("Connect Your First Client").font(.title2.weight(.semibold))
-            Text("Works with qBittorrent and Transmission. Each client can have several routes: LAN at home; DDNS, an overlay network or a reverse proxy when away. Passwords are stored in the Keychain.")
+            Text("Works with qBittorrent, Transmission and Flood. Each client can have several routes: LAN at home; DDNS, an overlay network or a reverse proxy when away. Passwords are stored in the Keychain.")
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 420)

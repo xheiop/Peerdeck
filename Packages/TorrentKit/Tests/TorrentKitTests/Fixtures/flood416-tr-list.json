@@ -1,0 +1,326 @@
+{
+ "A5DB5C0859FAD6E5F261AD15F8E21FE97C7C612C": {
+  "hash": "A5DB5C0859FAD6E5F261AD15F8E21FE97C7C612C",
+  "name": "tr-ok",
+  "comment": "",
+  "bytesDone": 1024,
+  "dateActive": 0,
+  "dateAdded": 1795359473,
+  "dateCreated": 0,
+  "dateFinished": 1795359473,
+  "directory": "/data/seed/tr",
+  "downRate": 0,
+  "downTotal": 0,
+  "upRate": 0,
+  "upTotal": 0,
+  "eta": -1,
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "seeding",
+   "inactive",
+   "complete"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ]
+ },
+ "E05FF5A1B8A80CF1352358B2F75686B276C556D8": {
+  "hash": "E05FF5A1B8A80CF1352358B2F75686B276C556D8",
+  "name": "tr-unreg",
+  "comment": "",
+  "bytesDone": 1024,
+  "dateActive": 0,
+  "dateAdded": 1795359474,
+  "dateCreated": 0,
+  "dateFinished": 1795359474,
+  "directory": "/data/seed/tr",
+  "downRate": 0,
+  "downTotal": 0,
+  "upRate": 0,
+  "upTotal": 0,
+  "eta": -1,
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "Unregistered torrent",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "seeding",
+   "inactive",
+   "error",
+   "complete"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ]
+ },
+ "487AA1DE662D8993AD46774700A1DF475557165C": {
+  "hash": "487AA1DE662D8993AD46774700A1DF475557165C",
+  "name": "tr-warn",
+  "comment": "",
+  "bytesDone": 1024,
+  "dateActive": 0,
+  "dateAdded": 1795359475,
+  "dateCreated": 0,
+  "dateFinished": 1795359475,
+  "directory": "/data/seed/tr",
+  "downRate": 0,
+  "downTotal": 0,
+  "upRate": 0,
+  "upTotal": 0,
+  "eta": -1,
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "Rate limited",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "seeding",
+   "inactive",
+   "warning",
+   "complete"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "bravo.test"
+  ]
+ },
+ "A29296DEC27C17F93CE7AD6A9CC995F1678A4DB2": {
+  "hash": "A29296DEC27C17F93CE7AD6A9CC995F1678A4DB2",
+  "name": "tr-err500",
+  "comment": "",
+  "bytesDone": 1024,
+  "dateActive": 0,
+  "dateAdded": 1795359475,
+  "dateCreated": 0,
+  "dateFinished": 1795359475,
+  "directory": "/data/seed/tr",
+  "downRate": 0,
+  "downTotal": 0,
+  "upRate": 0,
+  "upTotal": 0,
+  "eta": -1,
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "Tracker HTTP response 500 (Internal Server Error)",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "seeding",
+   "inactive",
+   "error",
+   "complete"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ]
+ },
+ "8AEEBDEEC9B835FCAD54C64DF55937C76CCD18CF": {
+  "hash": "8AEEBDEEC9B835FCAD54C64DF55937C76CCD18CF",
+  "name": "tr-dead",
+  "comment": "",
+  "bytesDone": 1024,
+  "dateActive": 0,
+  "dateAdded": 1795359476,
+  "dateCreated": 0,
+  "dateFinished": 1795359476,
+  "directory": "/data/seed/tr",
+  "downRate": 0,
+  "downTotal": 0,
+  "upRate": 0,
+  "upTotal": 0,
+  "eta": -1,
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "Tracker HTTP response 0 (No Response)",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "seeding",
+   "inactive",
+   "error",
+   "complete"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "dead.invalid"
+  ]
+ },
+ "687AB88FC02170DA8163BDD844DE98046B9B7300": {
+  "hash": "687AB88FC02170DA8163BDD844DE98046B9B7300",
+  "name": "tr-multi",
+  "comment": "",
+  "bytesDone": 2048,
+  "dateActive": 0,
+  "dateAdded": 1795359477,
+  "dateCreated": 0,
+  "dateFinished": 1795359477,
+  "directory": "/data/seed/tr",
+  "downRate": 0,
+  "downTotal": 0,
+  "upRate": 0,
+  "upTotal": 0,
+  "eta": -1,
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 2048,
+  "selectedSizeBytes": 2048,
+  "status": [
+   "seeding",
+   "inactive",
+   "complete"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test",
+   "charlie.test"
+  ]
+ },
+ "98F71A95D6C64A66273430053D094FC400918013": {
+  "hash": "98F71A95D6C64A66273430053D094FC400918013",
+  "name": "tr-leech",
+  "comment": "",
+  "bytesDone": 0,
+  "dateActive": 0,
+  "dateAdded": 1795359478,
+  "dateCreated": 0,
+  "dateFinished": 0,
+  "directory": "/data/seed/tr",
+  "downRate": 0,
+  "downTotal": 0,
+  "upRate": 0,
+  "upTotal": 0,
+  "eta": -1,
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 0,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "downloading",
+   "inactive"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ]
+ },
+ "C7CD183C3C41C3F809F85691CD45D1D95D61F825": {
+  "hash": "C7CD183C3C41C3F809F85691CD45D1D95D61F825",
+  "name": "tr-paused",
+  "comment": "",
+  "bytesDone": 1024,
+  "dateActive": 0,
+  "dateAdded": 1795359479,
+  "dateCreated": 0,
+  "dateFinished": 1795359479,
+  "directory": "/data/seed/tr",
+  "downRate": 0,
+  "downTotal": 0,
+  "upRate": 0,
+  "upTotal": 0,
+  "eta": -1,
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "stopped",
+   "inactive",
+   "complete"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ]
+ }
+}

@@ -44,7 +44,7 @@ struct ServerRow: View {
     private var subtitle: String {
         switch runtime.status {
         case .online(_, let ep):
-            let v = runtime.info.map { "\($0.kind == .qbittorrent ? "qB" : "TR") \($0.version.trimmingCharacters(in: CharacterSet(charactersIn: "v")).split(separator: " ").first ?? "")" } ?? ""
+            let v = runtime.info.map { "\($0.kind.shortName) \($0.version.trimmingCharacters(in: CharacterSet(charactersIn: "v")).split(separator: " ").first ?? "")" } ?? ""
             let up = runtime.stats.uploadSpeed > 0 ? " · ↑\(Fmt.speed(runtime.stats.uploadSpeed))" : ""
             // 默认下载目录所在磁盘的剩余空间
             let free = runtime.stats.freeSpace.map { " · " + L("\(Fmt.bytes($0)) free") } ?? ""

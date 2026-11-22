@@ -1,6 +1,9 @@
+import FloodClient
 import Foundation
+import QBittorrentClient
 import Security
 import TorrentKit
+import TransmissionClient
 
 /// 一台下载器的配置。包含密码等敏感信息，整体存 Keychain。
 struct ServerConfig: Codable, Identifiable, Hashable, Sendable {
@@ -22,15 +25,45 @@ struct ServerConfig: Codable, Identifiable, Hashable, Sendable {
         switch kind {
         case .qbittorrent: "api/v2/app/version"
         case .transmission: "transmission/rpc"
+        case .flood: "api/auth/verify" // 没登录时 401，也算「在」
         }
     }
 
     static func blank(kind: ClientKind = .qbittorrent) -> ServerConfig {
         ServerConfig(
-            name: kind == .qbittorrent ? "qBittorrent" : "Transmission",
+            name: kind.displayName,
             kind: kind,
-            endpoints: [Endpoint(baseURL: URL(string: kind == .qbittorrent ? "http://192.168.1.2:8080" : "http://192.168.1.2:9091")!)]
+            endpoints: [Endpoint(baseURL: URL(string: exampleAddress(kind))!)]
         )
+    }
+
+    static func exampleAddress(_ kind: ClientKind) -> String { "http://192.168.1.2:\(kind.defaultPort)" }
+
+    /// 切换类型时，地址末尾如果是原类型的默认端口就跟着换
+    static func switchingPort(in url: String, from old: ClientKind, to new: ClientKind) -> String {
+        let suffix = ":\(old.defaultPort)"
+        return url.hasSuffix(suffix) ? url.dropLast(suffix.count) + ":\(new.defaultPort)" : url
+    }
+
+    /// 连接和各处「测试连接」都从这里建客户端
+    func makeClient(_ ep: Endpoint) -> any TorrentClient {
+        switch kind {
+        case .qbittorrent:
+            QBittorrentClient(serverID: serverID, endpoint: ep, credentials: credentials, apiKey: apiKey.isEmpty ? nil : apiKey)
+        case .transmission:
+            TransmissionClient(serverID: serverID, endpoint: ep, credentials: credentials)
+        case .flood:
+            FloodClient(serverID: serverID, endpoint: ep, credentials: credentials)
+        }
+    }
+}
+
+extension ServerInfo {
+    /// 添加服务器时「测试连接」结果里的 tracker 状态那一项
+    var trackerStatusSummary: String {
+        if capabilities.contains(.trackerHealthInList) { return L("✓ Tracker status") }
+        if kind == .flood { return L("✗ No reliable tracker status through Flood with this client. For cleanup, connect to the client directly.") }
+        return L("✗ No tracker status (qB 5.1.x)")
     }
 }
 

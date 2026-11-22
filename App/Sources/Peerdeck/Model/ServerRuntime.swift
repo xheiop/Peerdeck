@@ -1,9 +1,7 @@
 import Foundation
 import Observation
-import QBittorrentClient
 import SyncEngine
 import TorrentKit
-import TransmissionClient
 
 /// 一台服务器的运行时：选线路、连接、轮询、把变化交给 TorrentStore。
 @MainActor @Observable
@@ -79,16 +77,6 @@ final class ServerRuntime: Identifiable {
         }
     }
 
-    private func makeClient(_ ep: Endpoint) -> any TorrentClient {
-        switch config.kind {
-        case .qbittorrent:
-            QBittorrentClient(serverID: serverID, endpoint: ep, credentials: config.credentials,
-                              apiKey: config.apiKey.isEmpty ? nil : config.apiKey)
-        case .transmission:
-            TransmissionClient(serverID: serverID, endpoint: ep, credentials: config.credentials)
-        }
-    }
-
     private func run() async {
         while !Task.isCancelled {
             status = .connecting
@@ -104,7 +92,7 @@ final class ServerRuntime: Identifiable {
                 continue
             }
 
-            let client = makeClient(ep)
+            let client = config.makeClient(ep)
             self.client = client
             let sync = ServerSync(client: client)
             do {

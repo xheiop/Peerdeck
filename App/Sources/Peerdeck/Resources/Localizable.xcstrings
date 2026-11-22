@@ -34,9 +34,6 @@
         }
       }
     },
-    "%@ %@": {
-      "shouldTranslate": false
-    },
     "%@ (formerly %@)": {
       "localizations": {
         "zh-Hans": {
@@ -263,6 +260,16 @@
         }
       }
     },
+    "%@: tracker status isn’t reliable here, so %@ aren’t listed. Behind Flood, connect to the client directly; qBittorrent 5.1.x needs 5.2 or later.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ 拿不到可靠的 tracker 状态，它的 %2$@不会列在这里。接在 Flood 后面的请直连下载器；qBittorrent 5.1.x 要升级到 5.2 以上。"
+          }
+        }
+      }
+    },
     "%lld": {
       "localizations": {
         "zh-Hans": {
@@ -318,34 +325,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld 件待处理"
-          }
-        }
-      }
-    },
-    "%lld Transmission torrents will be skipped (no categories)": {
-      "localizations": {
-        "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "1 Transmission torrent will be skipped (no categories)"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld Transmission torrents will be skipped (no categories)"
-                }
-              }
-            }
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld 个 Transmission 种子会跳过（没有分类）"
           }
         }
       }
@@ -654,6 +633,26 @@
         }
       }
     },
+    "%lld on Flood will be skipped (no per-torrent limits)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 上的 %lld 个会跳过（不能按种子限速）"
+          }
+        }
+      }
+    },
+    "%lld on Flood won’t be changed: Flood can’t replace a single tracker URL safely.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 上的 %lld 个不会改：Flood 没法安全地只换一条 tracker 地址。"
+          }
+        }
+      }
+    },
     "%lld online": {
       "localizations": {
         "zh-Hans": {
@@ -755,6 +754,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld 个站"
+          }
+        }
+      }
+    },
+    "%lld torrents will be skipped (only qBittorrent has categories)": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 torrent will be skipped (only qBittorrent has categories)"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld torrents will be skipped (only qBittorrent has categories)"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 个种子会跳过（只有 qBittorrent 有分类）"
           }
         }
       }
@@ -2138,6 +2165,176 @@
         }
       }
     },
+    "Flood can’t reach its torrent client (%@)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 连不上它后面的下载器（%@）"
+          }
+        }
+      }
+    },
+    "Flood can’t replace a single tracker URL safely": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 没法安全地只换一条 tracker 地址"
+          }
+        }
+      }
+    },
+    "Flood can’t set tags on Deluge": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 不能给 Deluge 设置标签"
+          }
+        }
+      }
+    },
+    "Flood didn’t return a session cookie": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 没有返回会话 cookie"
+          }
+        }
+      }
+    },
+    "Flood didn’t send the torrent list. A reverse proxy may be buffering its activity stream.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 一直没推送种子列表。可能是反代缓冲了它的实时推送（activity-stream）。"
+          }
+        }
+      }
+    },
+    "Flood gave no reason; check its log": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 没给原因，请看它的日志"
+          }
+        }
+      }
+    },
+    "Flood has no account yet. Finish its setup in the web UI first.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 还没有账号，请先在它的网页里完成初始设置。"
+          }
+        }
+      }
+    },
+    "Flood has no alternative speed limits": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 没有备用限速"
+          }
+        }
+      }
+    },
+    "Flood has no categories": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 没有分类"
+          }
+        }
+      }
+    },
+    "Flood has no low file priority": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 的文件优先级没有「低」这一档"
+          }
+        }
+      }
+    },
+    "Flood has no per-torrent speed limits": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 不能按种子限速"
+          }
+        }
+      }
+    },
+    "Flood is rate limiting requests; try again in a few minutes": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 在限制请求频率，过几分钟再试"
+          }
+        }
+      }
+    },
+    "Flood isn’t allowed to use this path (see its allowedpath option)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 不允许使用这个路径（看它的 allowedpath 参数）"
+          }
+        }
+      }
+    },
+    "Flood lost the connection to its torrent client": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 和它后面的下载器断开了"
+          }
+        }
+      }
+    },
+    "Flood rejected the session right after login": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刚登录，Flood 就拒绝了这个会话"
+          }
+        }
+      }
+    },
+    "Flood tags can’t contain commas": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 的标签里不能有逗号"
+          }
+        }
+      }
+    },
+    "Flood’s activity stream closed (%@)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 的实时推送断开了（%@）"
+          }
+        }
+      }
+    },
     "Formerly %@": {
       "localizations": {
         "zh-Hans": {
@@ -3091,12 +3288,12 @@
         }
       }
     },
-    "Only update the recorded path (for files you already moved). Not supported by qBittorrent; those will be skipped.": {
+    "Only update the recorded path (for files you already moved). Not supported by qBittorrent, or by Flood with clients other than rTorrent and Transmission; those will be skipped.": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "只改记录的路径（文件已经手动挪过时用）。qBittorrent 不支持，会跳过。"
+            "value": "只改记录的路径（文件已经手动挪过时用）。qBittorrent，以及 Flood 后面不是 rTorrent / Transmission 的不支持，会跳过。"
           }
         }
       }
@@ -4552,6 +4749,16 @@
         }
       }
     },
+    "This client always moves files when changing the path": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这个下载器改路径时总会移动文件"
+          }
+        }
+      }
+    },
     "This data is also used by %lld other torrents, so files are kept when deleting.": {
       "localizations": {
         "en": {
@@ -4576,6 +4783,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "这份数据还被另外 %lld 个种子使用，删除时会保留文件。"
+          }
+        }
+      }
+    },
+    "This doesn’t look like Flood. Check the address and its base path.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这个地址看起来不是 Flood，请检查地址和子路径。"
           }
         }
       }
@@ -4755,6 +4972,16 @@
     },
     "Transmission": {
       "shouldTranslate": false
+    },
+    "Transmission didn’t accept the torrent": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transmission 没有接受这个种子"
+          }
+        }
+      }
     },
     "Transmission has no categories": {
       "localizations": {
@@ -5138,12 +5365,12 @@
         }
       }
     },
-    "Works with qBittorrent and Transmission. Each client can have several routes: LAN at home; DDNS, an overlay network or a reverse proxy when away. Passwords are stored in the Keychain.": {
+    "Works with qBittorrent, Transmission and Flood. Each client can have several routes: LAN at home; DDNS, an overlay network or a reverse proxy when away. Passwords are stored in the Keychain.": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "支持 qBittorrent 和 Transmission。一台下载器可以配多条线路：在家走内网，在外走 DDNS、组网或反代。密码保存在钥匙串里。"
+            "value": "支持 qBittorrent、Transmission 和 Flood。一台下载器可以配多条线路：在家走内网，在外走 DDNS、组网或反代。密码保存在钥匙串里。"
           }
         }
       }
@@ -5217,12 +5444,6 @@
           }
         }
       }
-    },
-    "http://192.168.1.2:8080": {
-      "shouldTranslate": false
-    },
-    "http://192.168.1.2:9091": {
-      "shouldTranslate": false
     },
     "https://nas.example.com/qb/": {
       "shouldTranslate": false
@@ -5300,22 +5521,32 @@
         }
       }
     },
-    "skipped %lld (Transmission has no categories)": {
+    "skipped %lld (Flood has no per-torrent limits)": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "跳过 %lld 个（Transmission 没有分类）"
+            "value": "跳过 %lld 个（Flood 不能按种子限速）"
           }
         }
       }
     },
-    "skipped %lld (qBittorrent always moves files when changing the path)": {
+    "skipped %lld (only qBittorrent has categories)": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "跳过 %lld 个（qBittorrent 改路径总会移动文件）"
+            "value": "跳过 %lld 个（只有 qBittorrent 有分类）"
+          }
+        }
+      }
+    },
+    "skipped %lld (the client always moves files when changing the path)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "跳过 %lld 个（下载器改路径时总会移动文件）"
           }
         }
       }
@@ -5438,6 +5669,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "✓ tracker 状态"
+          }
+        }
+      }
+    },
+    "✗ No reliable tracker status through Flood with this client. For cleanup, connect to the client directly.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✗ 经 Flood 拿不到这种下载器可靠的 tracker 状态。要用清理，请直连下载器。"
           }
         }
       }

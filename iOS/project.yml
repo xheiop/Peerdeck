@@ -54,6 +54,8 @@ targetTemplates:
       - package: TorrentKit
         product: TransmissionClient
       - package: TorrentKit
+        product: FloodClient
+      - package: TorrentKit
         product: SyncEngine
 targets:
   Peerdeck:
@@ -90,7 +92,7 @@ targets:
         UIApplicationSupportsMultipleScenes: false
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
         UISupportedInterfaceOrientations~ipad: [UIInterfaceOrientationPortrait, UIInterfaceOrientationPortraitUpsideDown, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
-        NSLocalNetworkUsageDescription: Peerdeck connects to the qBittorrent and Transmission servers on your local network.
+        NSLocalNetworkUsageDescription: Peerdeck connects to the qBittorrent, Transmission and Flood servers on your local network.
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: true
           NSAllowsLocalNetworking: true
@@ -133,7 +135,7 @@ targets:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDevelopmentRegion: en
         CFBundleLocalizations: [en, zh-Hans]
-        NSLocalNetworkUsageDescription: Peerdeck connects to the qBittorrent and Transmission servers on your local network.
+        NSLocalNetworkUsageDescription: Peerdeck connects to the qBittorrent, Transmission and Flood servers on your local network.
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: true
           NSAllowsLocalNetworking: true

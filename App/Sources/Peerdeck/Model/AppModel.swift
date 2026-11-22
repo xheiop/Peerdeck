@@ -159,10 +159,10 @@ final class AppModel {
 
     func refreshServerMaps() {
         store.serverNames = Dictionary(uniqueKeysWithValues: servers.map { ($0.id, $0.config.name) })
-        // qB 5.1.x：列表接口里没有 tracker 状态
+        // 列表里没有可信的 tracker 状态：qB 5.1.x；Flood 后面接的是 qB（报错缓存 1 小时）、Deluge 等
         store.noHealthServers = Set(servers.filter { rt in
-            guard let info = rt.info, info.kind == .qbittorrent else { return false }
-            return info.apiVersion > SemVer(2, 11, 2) && !info.capabilities.contains(.trackerHealthInList)
+            guard let info = rt.info, !info.capabilities.contains(.trackerHealthInList) else { return false }
+            return info.kind == .flood || (info.kind == .qbittorrent && info.apiVersion > SemVer(2, 11, 2))
         }.map(\.id))
         // 连不上 / 证书待确认 / 停用的下载器：它们的种子不算进总览
         let offline = Set(servers.filter { rt in
@@ -220,7 +220,7 @@ final class AppModel {
     var altSpeedCount: Int { servers.filter { $0.status.isOnline && $0.stats.altSpeedEnabled }.count }
 
     func setAltSpeed(_ on: Bool, server id: String? = nil) {
-        for rt in servers where rt.status.isOnline && (id == nil || rt.id == id) {
+        for rt in servers where rt.status.isOnline && rt.config.kind.hasAlternativeSpeedLimits && (id == nil || rt.id == id) {
             guard let client = rt.client else { continue }
             Task {
                 do { try await client.setAltSpeed(on); rt.refreshNow() } catch { self.alert = Fmt.labeled(rt.config.name, "\(error)") }
@@ -298,7 +298,7 @@ final class AppModel {
                 } catch { alert = Fmt.labeled(rt.config.name, "\(error)") }
             }
             var parts = [category.isEmpty ? L("Cleared the category of \(Fmt.torrents(done))") : L("Moved \(Fmt.torrents(done)) to category \(category)")]
-            if skipped > 0 { parts.append(L("skipped \(skipped) (Transmission has no categories)")) }
+            if skipped > 0 { parts.append(L("skipped \(skipped) (only qBittorrent has categories)")) }
             if done + skipped < total { parts.append(L("some servers are offline")) }
             showToast(parts.joined(separator: L("; ")))
         }
@@ -331,8 +331,9 @@ final class AppModel {
 
     func setUploadLimit(_ bps: Int64, on refs: [TorrentRef]) {
         Task {
-            var n = 0
+            var n = 0, skipped = 0
             for (rt, client, refs) in grouped(refs) {
+                guard rt.config.kind.hasTorrentUploadLimit else { skipped += refs.count; continue }
                 do {
                     try await client.setUploadLimit(bps, on: refs.map(\.id))
                     n += refs.count
@@ -340,7 +341,9 @@ final class AppModel {
                     rt.refreshNow()
                 } catch { alert = Fmt.labeled(rt.config.name, "\(error)") }
             }
-            showToast(bps > 0 ? L("Set upload limit of \(Fmt.torrents(n)) to \(Fmt.speed(bps))") : L("Removed upload limit from \(Fmt.torrents(n))"))
+            var parts = [bps > 0 ? L("Set upload limit of \(Fmt.torrents(n)) to \(Fmt.speed(bps))") : L("Removed upload limit from \(Fmt.torrents(n))")]
+            if skipped > 0 { parts.append(L("skipped \(skipped) (Flood has no per-torrent limits)")) }
+            showToast(parts.joined(separator: L("; ")))
         }
     }
 
@@ -357,7 +360,7 @@ final class AppModel {
             }
             rememberPath(path)
             var parts = [moveFiles ? L("The client is moving \(Fmt.torrents(n)) to \(path)") : L("Changed the path of \(Fmt.torrents(n)) to \(path)")]
-            if skipped > 0 { parts.append(L("skipped \(skipped) (qBittorrent always moves files when changing the path)")) }
+            if skipped > 0 { parts.append(L("skipped \(skipped) (the client always moves files when changing the path)")) }
             showToast(parts.joined(separator: L("; ")))
         }
     }

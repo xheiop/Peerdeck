@@ -100,7 +100,7 @@ struct MenuBarContent: View {
                 Divider()
                 HStack {
                     ServerRow(runtime: rt, count: c.servers[rt.id] ?? 0)
-                    if rt.status.isOnline {
+                    if rt.status.isOnline, rt.config.kind.hasAlternativeSpeedLimits {
                         Toggle(isOn: Binding(get: { rt.stats.altSpeedEnabled }, set: { model.setAltSpeed($0, server: rt.id) })) {
                             Image(systemName: "tortoise")
                         }

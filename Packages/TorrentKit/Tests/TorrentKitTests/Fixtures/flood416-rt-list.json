@@ -1,0 +1,325 @@
+{
+ "FA81915819DF2F715827F6A3A8B9E4C6332E318C": {
+  "bytesDone": 1024,
+  "comment": "",
+  "dateActive": 0,
+  "dateAdded": 1795359461,
+  "dateCreated": 0,
+  "dateFinished": 1795359461,
+  "directory": "/data/seed/rt",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "FA81915819DF2F715827F6A3A8B9E4C6332E318C",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "name": "rt-ok",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 1,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "complete",
+   "seeding",
+   "inactive"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "571121D1773ACEFA42220ED87EE0B7BF598A1FDA": {
+  "bytesDone": 1024,
+  "comment": "",
+  "dateActive": 0,
+  "dateAdded": 1795359462,
+  "dateCreated": 0,
+  "dateFinished": 1795359462,
+  "directory": "/data/seed/rt",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "571121D1773ACEFA42220ED87EE0B7BF598A1FDA",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "Tracker: [Failure reason \"Unregistered torrent\"]",
+  "name": "rt-unreg",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "complete",
+   "seeding",
+   "error",
+   "inactive"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "7FFABF0DD2E2A3073850719E0ED5938D64F8BCF8": {
+  "bytesDone": 1024,
+  "comment": "",
+  "dateActive": 0,
+  "dateAdded": 1795359463,
+  "dateCreated": 0,
+  "dateFinished": 1795359462,
+  "directory": "/data/seed/rt",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "7FFABF0DD2E2A3073850719E0ED5938D64F8BCF8",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "name": "rt-warn",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "complete",
+   "seeding",
+   "inactive"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "bravo.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "F875674390662D02F769A14D443545598468BAF6": {
+  "bytesDone": 1024,
+  "comment": "",
+  "dateActive": 0,
+  "dateAdded": 1795359464,
+  "dateCreated": 0,
+  "dateFinished": 1795359463,
+  "directory": "/data/seed/rt",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "F875674390662D02F769A14D443545598468BAF6",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "Tracker: [Could not parse bencoded data: Error response                   Error response         Error code: 500         Message: Internal S]",
+  "name": "rt-err500",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "complete",
+   "seeding",
+   "error",
+   "inactive"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "41F7B11A3F204214CF46ECEAC98A7C77E7663EA5": {
+  "bytesDone": 1024,
+  "comment": "",
+  "dateActive": 0,
+  "dateAdded": 1795359464,
+  "dateCreated": 0,
+  "dateFinished": 1795359464,
+  "directory": "/data/seed/rt",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "41F7B11A3F204214CF46ECEAC98A7C77E7663EA5",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "Tracker: [Server returned nothing (no headers, no data)]",
+  "name": "rt-dead",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "complete",
+   "seeding",
+   "error",
+   "inactive"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "dead.invalid"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "71BE05E24798C6F3611C14D446AED7E45DB84D2D": {
+  "bytesDone": 2048,
+  "comment": "",
+  "dateActive": 0,
+  "dateAdded": 1795359465,
+  "dateCreated": 0,
+  "dateFinished": 1795359465,
+  "directory": "/data/seed/rt/rt-multi",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "71BE05E24798C6F3611C14D446AED7E45DB84D2D",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "Tracker: [Failure reason \"Unregistered torrent\"]",
+  "name": "rt-multi",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 100,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 1,
+  "sizeBytes": 2048,
+  "selectedSizeBytes": 2048,
+  "status": [
+   "complete",
+   "seeding",
+   "error",
+   "inactive"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test",
+   "charlie.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "8DA96ABD5DE1602E81B408C2C1F2E478DC714624": {
+  "bytesDone": 0,
+  "comment": "",
+  "dateActive": 0,
+  "dateAdded": 1795359466,
+  "dateCreated": 0,
+  "dateFinished": 0,
+  "directory": "/data/seed/rt",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "8DA96ABD5DE1602E81B408C2C1F2E478DC714624",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "name": "rt-leech",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 0,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 1,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "downloading",
+   "inactive"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ },
+ "D7CACE8501100886E71DDE7FD815CC50CFAC05CB": {
+  "bytesDone": 0,
+  "comment": "",
+  "dateActive": 0,
+  "dateAdded": 1795359467,
+  "dateCreated": 0,
+  "dateFinished": 0,
+  "directory": "/data/seed/rt",
+  "downRate": 0,
+  "downTotal": 0,
+  "eta": -1,
+  "hash": "D7CACE8501100886E71DDE7FD815CC50CFAC05CB",
+  "isPrivate": true,
+  "isInitialSeeding": false,
+  "isSequential": false,
+  "message": "",
+  "name": "rt-paused",
+  "peersConnected": 0,
+  "peersTotal": 0,
+  "percentComplete": 0,
+  "priority": 2,
+  "ratio": 0,
+  "seedsConnected": 0,
+  "seedsTotal": 0,
+  "sizeBytes": 1024,
+  "selectedSizeBytes": 1024,
+  "status": [
+   "stopped",
+   "inactive"
+  ],
+  "tags": [
+   "flood-test"
+  ],
+  "trackerURIs": [
+   "alpha.test"
+  ],
+  "upRate": 0,
+  "upTotal": 0
+ }
+}

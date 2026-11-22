@@ -46,8 +46,13 @@ struct BannersView: View {
             if store.sidebar.isProblemView, store.counts.noHealth > 0 {
                 Bar(tint: .secondary) {
                     Image(systemName: "info.circle").foregroundStyle(.secondary)
-                    Text("\(noHealthNames) doesn’t report tracker status (qBittorrent 5.1.x), so its \(Fmt.torrents(store.counts.noHealth)) aren’t listed here. Upgrade to 5.2 or later.")
-                        .foregroundStyle(.secondary)
+                    if store.noHealthServers.contains(where: { model.server($0)?.config.kind == .flood }) {
+                        Text("\(noHealthNames): tracker status isn’t reliable here, so \(Fmt.torrents(store.counts.noHealth)) aren’t listed. Behind Flood, connect to the client directly; qBittorrent 5.1.x needs 5.2 or later.")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("\(noHealthNames) doesn’t report tracker status (qBittorrent 5.1.x), so its \(Fmt.torrents(store.counts.noHealth)) aren’t listed here. Upgrade to 5.2 or later.")
+                            .foregroundStyle(.secondary)
+                    }
                     Spacer()
                 }
             }

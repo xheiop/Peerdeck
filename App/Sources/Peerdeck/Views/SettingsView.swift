@@ -1,7 +1,5 @@
-import QBittorrentClient
 import SwiftUI
 import TorrentKit
-import TransmissionClient
 
 struct SettingsView: View {
     @Bindable var model: AppModel
@@ -113,10 +111,11 @@ private struct ServerEditor: View {
                         Picker("Type", selection: $config.kind) {
                             Text("qBittorrent").tag(ClientKind.qbittorrent)
                             Text("Transmission").tag(ClientKind.transmission)
+                            Text(verbatim: ClientKind.flood.displayName).tag(ClientKind.flood)
                         }
                     } else {
                         LabeledContent("Type") {
-                            Text((runtime?.info?.version).map { "\(config.kind == .qbittorrent ? "qBittorrent" : "Transmission") \($0)" } ?? (config.kind == .qbittorrent ? "qBittorrent" : "Transmission"))
+                            Text((runtime?.info?.version).map { "\(config.kind.displayName) \($0)" } ?? config.kind.displayName)
                             Text("· type can’t be changed after creation").foregroundStyle(.secondary).font(.caption)
                         }
                     }
@@ -129,7 +128,7 @@ private struct ServerEditor: View {
                         .disabled(!apiKeyAvailable && !useAPIKey)
                         if !apiKeyAvailable { Text("API keys need qBittorrent 5.2 or later (this one is \(runtime?.info?.version ?? L("an older version"))).").font(.caption).foregroundStyle(.secondary) }
                     }
-                    if useAPIKey {
+                    if config.kind == .qbittorrent, useAPIKey {
                         SecureField("API key", text: $config.apiKey)
                         Text("No login, no expiry, and no IP bans for typos. Generate one in qB’s WebUI settings.").font(.caption).foregroundStyle(.secondary)
                     } else {
@@ -273,9 +272,7 @@ private struct ServerEditor: View {
             let outcome = await EndpointSelector.select([ep], probePath: c.probePath)
             if let (_, fp) = outcome.untrusted.first { results[ep.baseURL] = L("🔒 Certificate needs review \(fp.prefix(8))"); continue }
             guard outcome.selected != nil else { results[ep.baseURL] = "✗ " + (outcome.failures.values.first.map { "\($0)" } ?? L("Unreachable")); continue }
-            let client: any TorrentClient = c.kind == .qbittorrent
-                ? QBittorrentClient(serverID: c.serverID, endpoint: ep, credentials: c.credentials, apiKey: c.apiKey.isEmpty ? nil : c.apiKey)
-                : TransmissionClient(serverID: c.serverID, endpoint: ep, credentials: c.credentials)
+            let client = c.makeClient(ep)
             do {
                 _ = try await client.connect()
                 let ms = (ContinuousClock.now - start).components

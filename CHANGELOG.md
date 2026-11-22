@@ -15,14 +15,14 @@ First preview release.
 
 ### macOS
 
-- One list for every torrent across several qBittorrent and Transmission servers, tested with 20,000 torrents per server.
+- One list for every torrent across several qBittorrent, Transmission and Flood servers, tested with 20,000 torrents per server.
 - Sidebar views by state, server, site, category and tag, with live counts.
 - Problem views for torrents the tracker rejects, likely unregistered torrents, and trackers unreachable for a long time.
 - Clean up likely unregistered torrents in one step; torrents whose data is shared with a cross-seed are kept.
 - Deletes wait 10 seconds and can be undone.
 - Add torrents from magnet links, `.torrent` files or URLs, with file selection and a per-site default server.
 - Replace tracker URLs in bulk, with undo.
-- Menu bar panel with current speeds and problems; notifications for finished downloads, new problems and servers going down.
+- Menu bar panel with current speeds and problems; notifications for finished downloads.
 
 ### iOS
 
@@ -40,6 +40,7 @@ First preview release.
 
 ### Connections
 
+- qBittorrent, Transmission, and Flood (for rTorrent). Through Flood, tracker problems and cleanup work with rTorrent and Transmission only.
 - Each server can have several routes (LAN, overlay network, DDNS, reverse proxy); the highest-priority route that is reachable is used.
 - Self-signed HTTPS certificates can be trusted by fingerprint.
 - Passwords are stored in the Keychain.

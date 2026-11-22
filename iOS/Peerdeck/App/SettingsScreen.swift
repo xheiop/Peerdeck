@@ -1,7 +1,5 @@
-import QBittorrentClient
 import SwiftUI
 import TorrentKit
-import TransmissionClient
 
 /// 设置：服务器、刷新、站点、tracker 问题的判定
 struct SettingsScreen: View {
@@ -83,14 +81,14 @@ struct ServerEditScreen: View {
             }
             Section {
                 FormField(L("Name"), text: $config.name)
-                LabeledContent("Type", value: (runtime?.info?.version).map { "\(config.kind == .qbittorrent ? "qBittorrent" : "Transmission") \($0)" } ?? (config.kind == .qbittorrent ? "qBittorrent" : "Transmission"))
+                LabeledContent("Type", value: (runtime?.info?.version).map { "\(config.kind.displayName) \($0)" } ?? config.kind.displayName)
                 if config.kind == .qbittorrent {
                     Picker("Authentication", selection: $useAPIKey) {
                         Text("Username & Password").tag(false)
                         Text("API key").tag(true)
                     }
                 }
-                if useAPIKey {
+                if config.kind == .qbittorrent, useAPIKey {
                     FormField("API key", text: $config.apiKey, secure: true)
                 } else {
                     FormField(L("Username"), text: $config.username)
@@ -187,9 +185,7 @@ struct ServerEditScreen: View {
             let outcome = await EndpointSelector.select([ep], probePath: c.probePath)
             if let (_, fp) = outcome.untrusted.first { results[ep.baseURL] = L("🔒 Certificate needs review \(fp.prefix(8))"); continue }
             guard outcome.selected != nil else { results[ep.baseURL] = "✗ " + (outcome.failures.values.first.map { "\($0)" } ?? L("Unreachable")); continue }
-            let client: any TorrentClient = c.kind == .qbittorrent
-                ? QBittorrentClient(serverID: c.serverID, endpoint: ep, credentials: c.credentials, apiKey: c.apiKey.isEmpty ? nil : c.apiKey)
-                : TransmissionClient(serverID: c.serverID, endpoint: ep, credentials: c.credentials)
+            let client = c.makeClient(ep)
             do {
                 _ = try await client.connect()
                 let ms = (ContinuousClock.now - start).components

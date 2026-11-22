@@ -59,6 +59,7 @@ private struct ServerLimitsEditor: View {
 
     private var isTR: Bool { runtime.config.kind == .transmission }
     private var alt: Bool { runtime.stats.altSpeedEnabled }
+    private var hasAlt: Bool { runtime.config.kind.hasAlternativeSpeedLimits }
 
     private var edited: SpeedLimits {
         SpeedLimits(download: Self.bytes(down), upload: Self.bytes(up), altDownload: Self.bytes(altDown), altUpload: Self.bytes(altUp))
@@ -72,18 +73,20 @@ private struct ServerLimitsEditor: View {
             HStack {
                 Text(runtime.config.name).fontWeight(.semibold).lineLimit(1)
                 Spacer()
-                Toggle(isOn: Binding(get: { alt }, set: { model.setAltSpeed($0, server: runtime.id) })) {
-                    Label("Alternative", systemImage: alt ? "tortoise.fill" : "tortoise")
+                if hasAlt {
+                    Toggle(isOn: Binding(get: { alt }, set: { model.setAltSpeed($0, server: runtime.id) })) {
+                        Label("Alternative", systemImage: alt ? "tortoise.fill" : "tortoise")
+                    }
+                    .toggleStyle(.button)
+                    .help("Switch between normal and alternative limits")
                 }
-                .toggleStyle(.button)
-                .help("Switch between normal and alternative limits")
             }
             if loaded == nil, error == nil {
                 ProgressView().controlSize(.small).frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 12)
             } else {
                 Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: 6) {
                     row(L("Normal"), active: !alt, $down, $up, placeholder: L("Unlimited"))
-                    row(L("Alternative"), active: alt, $altDown, $altUp, placeholder: isTR ? L("Required") : L("Unlimited"))
+                    if hasAlt { row(L("Alternative"), active: alt, $altDown, $altUp, placeholder: isTR ? L("Required") : L("Unlimited")) }
                 }
                 HStack {
                     if let error {

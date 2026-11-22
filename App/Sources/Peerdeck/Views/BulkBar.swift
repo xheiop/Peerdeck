@@ -25,8 +25,8 @@ struct BulkBar: View {
             Divider().frame(height: 16)
             Menu {
                 let cats = model.store.categories
-                let tr = sel.filter { model.server($0.ref.server.rawValue)?.config.kind == .transmission }.count
-                if tr > 0 { Text("\(tr) Transmission torrents will be skipped (no categories)") }
+                let noCategory = sel.filter { model.server($0.ref.server.rawValue)?.config.kind != .qbittorrent }.count
+                if noCategory > 0 { Text("\(noCategory) torrents will be skipped (only qBittorrent has categories)") }
                 ForEach(cats, id: \.self) { c in Button(c) { model.setCategory(c, on: refs) } }
                 Divider()
                 Button("New Category…") { pop = "cat" }
@@ -56,6 +56,10 @@ struct BulkBar: View {
                     form(L("Upload Limit · \(Fmt.torrents(sel.count))")) {
                         HStack { TextField("", text: $limitKB).frame(width: 90); Text("KB/s per torrent") }
                         Button("Unlimited") { model.setUploadLimit(0, on: refs); pop = nil }
+                        let noLimit = sel.filter { model.server($0.ref.server.rawValue)?.config.kind.hasTorrentUploadLimit == false }.count
+                        if noLimit > 0 {
+                            Text("\(noLimit) on Flood will be skipped (no per-torrent limits)").font(.caption).foregroundStyle(.secondary)
+                        }
                     } apply: { model.setUploadLimit((Int64(limitKB) ?? 0) * 1024, on: refs) }
                 }
             Button { pop = "move" } label: { Label("Move", systemImage: "folder") }
@@ -68,7 +72,7 @@ struct BulkBar: View {
                             }
                         }
                         Toggle("Move files too", isOn: $moveFiles)
-                        Text(moveFiles ? "The client moves the files on the server." : "Only update the recorded path (for files you already moved). Not supported by qBittorrent; those will be skipped.")
+                        Text(moveFiles ? "The client moves the files on the server." : "Only update the recorded path (for files you already moved). Not supported by qBittorrent, or by Flood with clients other than rTorrent and Transmission; those will be skipped.")
                             .font(.caption).foregroundStyle(.secondary).frame(width: 300, alignment: .leading)
                         let cross = sel.filter { model.store.cross[$0.ref] != nil }.count
                         if cross > 0, moveFiles {
