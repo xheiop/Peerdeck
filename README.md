@@ -9,134 +9,93 @@
 English · [简体中文](README.zh-CN.md)
 
 [![Platform](https://img.shields.io/badge/platform-macOS%2015%2B%20%7C%20iOS%2017%2B-blue?logo=apple)](#installation)
-[![Homebrew](https://img.shields.io/badge/Homebrew-cask-FBB040?logo=homebrew&logoColor=white)](#homebrew)
-[![AltStore](https://img.shields.io/badge/AltStore-source-018084)](#altstore--sidestore)
+[![Homebrew](https://img.shields.io/badge/Homebrew-cask-FBB040?logo=homebrew&logoColor=white)](#macos)
+[![AltStore](https://img.shields.io/badge/AltStore-source-018084)](#ios)
 [![License](https://img.shields.io/badge/license-GPL--3.0--only-B25000)](LICENSE)
 
 </div>
 
-Once you run a few download clients, it gets hard to notice which torrents a site deleted or which tracker stopped responding. Peerdeck puts the torrents from all your qBittorrent, Transmission and Flood servers in one list and shows you those problems, so you can deal with them in one place.
+Manage your qBittorrent, Transmission and Flood servers from your Mac, iPhone or iPad.
 
-It's a remote: it connects straight to the clients you already run, with no server in between, and doesn't download or seed by itself. Peerdeck is an independent project and isn't affiliated with qBittorrent, Transmission or Flood.
+Peerdeck puts the torrents from all your servers in one list, so you can watch speeds, filter, add, pause and delete in one place instead of switching between web UIs. It connects straight to the clients you already run, with no server in between, and doesn't download or seed by itself.
 
 <img src="assets/screenshots/mac.png" alt="Likely unregistered torrents on macOS" />
 
 <table>
   <tr>
     <td><img src="assets/screenshots/ios-overview.png" alt="Overview" /></td>
-    <td><img src="assets/screenshots/ios-attention.png" alt="Needs Attention" /></td>
     <td><img src="assets/screenshots/ios-sites.png" alt="Sites" /></td>
+    <td><img src="assets/screenshots/ios-attention.png" alt="Needs Attention" /></td>
     <td><img src="assets/screenshots/ios-overview-dark.png" alt="Overview in dark mode" /></td>
   </tr>
 </table>
 
 ## Features
 
-### Deal with tracker problems
+### All your servers in one list
 
-- See rejected, likely unregistered and long-unreachable torrents, grouped by the tracker's own message.
-- Clean up unregistered torrents in one step. Torrents that share data with others are kept, and each one is checked again before it's removed.
-- Change your mind: deletes wait 10 seconds before they run.
-- On the Mac, replace tracker domains or passkeys in bulk, with undo.
-
-### Manage torrents
-
-- Filter by state, activity, server, site, category or tag, or search by name.
+- Filter torrents from every server by state, activity, server, site, category or tag, or search by name.
+- Start, pause, recheck, reannounce and delete in bulk.
+- See each server's speed and free space, and toggle alternative speed limits.
 - Add magnet links, `.torrent` files and URLs, set a default server for each site, and choose which files to download once they're added.
-- See problems, uploaded, downloaded and total size for each site.
-- On the Mac, check speeds and problems from the menu bar, and get notified when downloads finish.
 
-### Connect your way
+### By site
 
-- Give a server several routes (LAN, overlay network, DDNS, reverse proxy) in order of priority.
-- Trust self-signed certificates by fingerprint. Credentials are stored in the Keychain.
-- Use it in English or Simplified Chinese. On iOS 26 it uses Liquid Glass, with a fallback for earlier versions.
+- See torrents, uploaded, downloaded and total size for each site.
+- Torrents the site deleted, that a tracker rejects, or that can't reach their tracker are listed on their own, ready to clean up in one go. Data still used by cross-seeds is kept (matched by infohash or name, so renamed cross-seeds aren't recognized).
 
-> [!WARNING]
-> Deleting files can't be undone after the 10-second window. Peerdeck recognizes shared data by infohash or name, so it **can't detect renamed cross-seeds, torrents that share only some files, or clients you haven't added**. It keeps files whenever one of your servers is offline, turned off or can't be checked.
+### Also on the Mac
 
-Tested with qBittorrent 4.6 and 5.3, and Transmission 4.0 and 4.1, with up to 20,000 torrents on one server.
+- Change category, tags, per-torrent upload limit and save location, and adjust global speed limits.
+- Replace tracker domains or passkeys in bulk.
+- Check speeds from the menu bar and get notified when downloads finish.
 
-### Flood
+### Connections
 
-Peerdeck also connects to [Flood](https://github.com/jesec/flood), which is the way to use it with rTorrent. Tested with Flood 4.16.4. Choose **Flood** when adding a server and enter the address and account you use for its web UI.
+- Give a server several addresses (LAN, overlay network, DDNS, reverse proxy) in order of priority.
+- Self-signed certificates work. Credentials are stored in the Keychain.
+- English and Simplified Chinese. Liquid Glass on iOS 26+.
 
-| Behind Flood | Tracker problems and cleanup | Notes |
-|---|---|---|
-| rTorrent | Yes | Tracker warnings aren't reported. A failure on a torrent with several sites only counts as a warning. |
-| Transmission | Yes | |
-| qBittorrent | No | Flood caches tracker messages for up to an hour. Connect to qBittorrent directly instead. |
-| Deluge, Neptune | No | Not tested. |
+## Supported clients
 
-- Categories, alternative and per-torrent speed limits, all-time totals, seeding time and tracker replacement aren't available through Flood.
-- With rTorrent, Flood itself moves and deletes files, so it must see them at the same paths as rTorrent. Otherwise it changes or removes the torrent and silently leaves the files behind.
-- A reverse proxy in front of Flood must not buffer `/api/activity-stream`.
+| Client | Tested versions |
+|---|---|
+| qBittorrent | 4.6, 5.3 |
+| Transmission | 4.0, 4.1 |
+| [Flood](https://github.com/jesec/flood) | 4.16, with rTorrent or Transmission behind it |
+
+Tested with up to 20,000 torrents on one server.
+
+Tracker problems can't be detected when Flood runs on qBittorrent, so connect to qBittorrent directly. Categories, alternative and per-torrent speed limits, and tracker replacement aren't available through Flood.
 
 ## Installation
 
-### Homebrew
+### macOS
 
-Requires macOS 15 or later (Apple Silicon and Intel).
+Requires macOS 15 or later, on Apple Silicon or Intel.
 
 ```bash
 brew tap xheiop/peerdeck https://github.com/xheiop/Peerdeck
 brew install --cask xheiop/peerdeck/peerdeck
 ```
 
-To update:
+Or download the dmg from [Releases](https://github.com/xheiop/Peerdeck/releases/latest) and drag Peerdeck into Applications.
 
-```bash
-brew update && brew upgrade --cask peerdeck
-```
+Peerdeck isn't notarized, so macOS blocks it the first time. Open it once, then go to **System Settings → Privacy & Security** and click **Open Anyway**.
 
-Then follow [First launch on macOS](#first-launch-on-macos).
+### iOS
 
-### Manual download
+Requires iOS 17 or later. Every release includes an unsigned ipa.
 
-Download `Peerdeck-x.y.z.dmg` from [Releases](https://github.com/xheiop/Peerdeck/releases/latest), open it, and drag Peerdeck into Applications.
-
-### First launch on macOS
-
-Peerdeck is ad-hoc signed and not notarized, so macOS blocks it the first time, whichever way you installed it:
-
-1. Open Peerdeck and dismiss the warning.
-2. Go to **System Settings → Privacy & Security** and click **Open Anyway**.
-
-Or remove the quarantine flag yourself:
-
-```bash
-xattr -dr com.apple.quarantine /Applications/Peerdeck.app
-```
-
-After an update, macOS may also ask again for access to your saved servers in the Keychain.
-
-### iOS / iPadOS (sideload)
-
-Every release ships an **unsigned** `Peerdeck-x.y.z-unsigned.ipa` for iOS 17 and later.
-
-| Your device | Use | Updates |
-|---|---|---|
-| iOS 17 or later | [AltStore Classic](https://altstore.io) or [SideStore](https://sidestore.io) | Through the source below |
-| iOS 17.0 exactly | [TrollStore](https://github.com/opa334/TrollStore) | Install the new ipa over the old one |
-| iOS 17 or later | [Sideloadly](https://sideloadly.io) or another signing tool | Install the new ipa over the old one |
-
-#### AltStore / SideStore
-
-Add this source in the **Sources** tab, then install Peerdeck from it. New releases show up as updates.
+The easiest way is [AltStore](https://altstore.io) or [SideStore](https://sidestore.io). Add this source, and new versions will show up as updates:
 
 ```text
 https://github.com/xheiop/Peerdeck/releases/latest/download/altstore.json
 ```
 
-AltStore PAL is not supported, because it only installs notarized apps. With a free Apple ID, apps have to be refreshed every 7 days.
+You can also download the ipa from [Releases](https://github.com/xheiop/Peerdeck/releases/latest) and install it with Sideloadly or another signing tool, or with [TrollStore](https://github.com/opa334/TrollStore) on iOS 17.0.
 
-#### TrollStore
-
-TrollStore does not support iOS 17.0.1 or later, and Peerdeck needs iOS 17, so this works on **iOS 17.0 only**. Download the ipa from [Releases](https://github.com/xheiop/Peerdeck/releases/latest) and open it in TrollStore.
-
-#### Sideloading limitation
-
-The unsigned ipa carries no App Group or shared Keychain entitlements, so **the share extension can't see the servers saved in the app**. Add torrents inside Peerdeck, or tap a magnet link to open it there.
+In sideloaded builds the share extension can't see the servers saved in the app. Add torrents inside Peerdeck, or tap a magnet link to open it there.
 
 ## Building
 
@@ -173,25 +132,6 @@ English strings in the code are the localization keys. Put Chinese translations 
 
 </details>
 
-<details>
-<summary>Releasing</summary>
-
-1. Add a `## [x.y.z] - YYYY-MM-DD` section to [CHANGELOG.md](CHANGELOG.md) and commit it.
-2. Push the branch, then the tag:
-
-   ```bash
-   git push origin main
-   git tag vX.Y.Z
-   git push origin vX.Y.Z
-   ```
-
-3. The [Release workflow](.github/workflows/release.yml) tests, builds, and publishes the dmg, ipa, checksums and `altstore.json`, then commits `Casks/peerdeck.rb` to the default branch.
-4. Run `git pull` to get that commit.
-
-Tags with a suffix, such as `v0.2.0-beta.1`, become pre-releases and leave Homebrew and AltStore untouched.
-
-</details>
-
 ## Project layout
 
 | Path | Contents |
@@ -205,11 +145,11 @@ Tags with a suffix, such as `v0.2.0-beta.1`, become pre-releases and leave Homeb
 
 ## Credits
 
-- [qBittorrent](https://github.com/qbittorrent/qBittorrent) and [Transmission](https://github.com/transmission/transmission): the clients Peerdeck controls, and their remote APIs
+- [qBittorrent](https://github.com/qbittorrent/qBittorrent), [Transmission](https://github.com/transmission/transmission) and [Flood](https://github.com/jesec/flood): the clients Peerdeck controls, and their remote APIs
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen): generates the iOS project
 
 ## License
 
 Copyright © 2026 xheiop
 
-Peerdeck is free software, licensed under the [GNU General Public License v3.0 only](LICENSE) (`GPL-3.0-only`). It comes without any warranty.
+Peerdeck is free and open source, licensed under [GPL-3.0-only](LICENSE). It's an independent project, not affiliated with qBittorrent, Transmission or Flood.
