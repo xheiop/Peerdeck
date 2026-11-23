@@ -4,7 +4,7 @@
 
 # Peerdeck
 
-**A qBittorrent, Transmission and Flood remote for macOS and iOS**
+**A native qBittorrent, Transmission and Flood remote for macOS and iOS**
 
 English · [简体中文](README.zh-CN.md)
 
@@ -15,7 +15,7 @@ English · [简体中文](README.zh-CN.md)
 
 </div>
 
-Manage your qBittorrent, Transmission and Flood servers from your Mac, iPhone or iPad.
+Manage your qBittorrent, Transmission and Flood servers from your Mac, iPhone or iPad, without keeping a browser tab open for each one.
 
 Peerdeck puts the torrents from all your servers in one list, so you can watch speeds, filter, add, pause and delete in one place instead of switching between web UIs. It connects straight to the clients you already run, with no server in between, and doesn't download or seed by itself.
 
@@ -30,29 +30,42 @@ Peerdeck puts the torrents from all your servers in one list, so you can watch s
   </tr>
 </table>
 
+## Who it's for
+
+- You run qBittorrent, Transmission or Flood on a NAS, VPS, seedbox or home server, and more than one of them.
+- You use private trackers, cross-seed, and need a safe way to find and clean up dead torrents.
+- You want native Mac and iPhone apps, not another web UI.
+
+## Who it's not for
+
+- You download the occasional torrent and don't run a server of your own.
+- You want an app that downloads and seeds by itself. Peerdeck only controls the clients you already run.
+- You want a one-tap App Store install. On iOS it can only be sideloaded for now; see [Installation](#ios).
+
 ## Features
+
+### Built for private trackers
+
+- See torrents, uploaded, downloaded and total size for each site.
+- Torrents the site deleted, that a tracker rejects, or that can't reach their tracker are listed on their own, ready to clean up in one go. Data still used by cross-seeds is kept (matched by infohash or name, so renamed cross-seeds aren't recognized).
+- Replace tracker domains or passkeys in bulk on the Mac.
+- Set a default server for each site.
 
 ### All your servers in one list
 
 - Filter torrents from every server by state, activity, server, site, category or tag, or search by name.
 - Start, pause, recheck, reannounce and delete in bulk.
 - See each server's speed and free space, and toggle alternative speed limits.
-- Add magnet links, `.torrent` files and URLs, set a default server for each site, and choose which files to download once they're added.
-
-### By site
-
-- See torrents, uploaded, downloaded and total size for each site.
-- Torrents the site deleted, that a tracker rejects, or that can't reach their tracker are listed on their own, ready to clean up in one go. Data still used by cross-seeds is kept (matched by infohash or name, so renamed cross-seeds aren't recognized).
+- Add magnet links, `.torrent` files and URLs, and choose which files to download once they're added.
 
 ### Also on the Mac
 
 - Change category, tags, per-torrent upload limit and save location, and adjust global speed limits.
-- Replace tracker domains or passkeys in bulk.
 - Check speeds from the menu bar and get notified when downloads finish.
 
-### Connections
+### Direct connection, no server in between
 
-- Give a server several addresses (LAN, overlay network, DDNS, reverse proxy) in order of priority.
+- Give a server several addresses (LAN, overlay network, DDNS, reverse proxy), tried in order of priority.
 - Self-signed certificates work. Credentials are stored in the Keychain.
 - English and Simplified Chinese. Liquid Glass on iOS 26+.
 
@@ -85,7 +98,7 @@ Peerdeck isn't notarized, so macOS blocks it the first time. Open it once, then 
 
 ### iOS
 
-Requires iOS 17 or later. Every release includes an unsigned ipa.
+Requires iOS 17 or later.
 
 The easiest way is [AltStore](https://altstore.io) or [SideStore](https://sidestore.io). Add this source, and new versions will show up as updates:
 

@@ -4,7 +4,7 @@
 
 # Peerdeck
 
-**macOS 和 iOS 上的 qBittorrent / Transmission / Flood 遥控器**
+**macOS 和 iOS 原生 qBittorrent、Transmission、Flood 遥控**
 
 [English](README.md) · 简体中文
 
@@ -15,46 +15,59 @@
 
 </div>
 
-在 Mac、iPhone 和 iPad 上远程管理你的 qBittorrent、Transmission 和 Flood。
+在 Mac、iPhone、iPad 上管理你的 qBittorrent、Transmission、Flood 服务器，不用每个服务器开一个浏览器标签页。
 
 几台下载器的种子合在一张列表里，看速度、筛选、添加、暂停、删除都在一个地方做完，不用在几个网页之间来回切。Peerdeck 直接连接你已经在运行的下载器，不经过中间服务器，自己不下载也不做种。
 
-<img src="assets/screenshots/mac.png" alt="macOS 上的疑似未注册种子" />
+<img src="assets/screenshots/mac.png" alt="macOS 上可能已失联的种子" />
 
 <table>
   <tr>
     <td><img src="assets/screenshots/ios-overview.png" alt="总览" /></td>
     <td><img src="assets/screenshots/ios-sites.png" alt="站点" /></td>
-    <td><img src="assets/screenshots/ios-attention.png" alt="需要处理" /></td>
-    <td><img src="assets/screenshots/ios-overview-dark.png" alt="深色模式的总览" /></td>
+    <td><img src="assets/screenshots/ios-attention.png" alt="需要注意" /></td>
+    <td><img src="assets/screenshots/ios-overview-dark.png" alt="深色模式总览" /></td>
   </tr>
 </table>
 
+## 适合谁
+
+- 在 NAS、VPS、Seedbox 或家里服务器上跑 qBittorrent、Transmission 或 Flood，而且不止一台。
+- 玩 PT，跨站做种，需要安全地找出并清理失效种。
+- 想要原生 Mac 和 iPhone 应用，而不是又一个网页后台。
+
+## 不适合谁
+
+- 只是偶尔下载一个种子，没有自己的服务器。
+- 想找一个自己下载、自己做种的应用。Peerdeck 只遥控你已有的客户端。
+- 想要 App Store 一键安装。iOS 目前只能侧载，见[安装](#ios)。
+
 ## 功能
 
-### 一张列表管所有下载器
+### 为 PT 做的
 
-- 所有服务器的种子合在一起，按状态、活动、服务器、站点、分类、标签筛选，或者按名称搜索。
-- 批量开始、暂停、重新校验、重新汇报和删除。
-- 看每台服务器的速度和剩余空间，一键开关备用限速。
-- 添加磁力链接、`.torrent` 文件和种子链接，可以给每个站点设默认服务器，添加后再选要下载的文件。
+- 按站点看种子、上传、下载和总大小。
+- 被站点删除、被 Tracker 拒绝、连不上 Tracker 的种子单独列出，可以一键清理。交叉做种仍在用的数据会保留（按 infohash 或名字匹配，改过名的交叉种认不出来）。
+- Mac 上批量替换 Tracker 域名或 passkey。
+- 每个站点可以设默认服务器。
 
-### 按站点看
+### 所有服务器，一个列表
 
-- 每个站点的种子数、上传、下载和总体积。
-- 被站点删掉、tracker 报错或者长时间连不上的种子会单独列出来，可以一次清理。还在辅种的数据会保留（按 hash 或名字识别，改过名的辅种认不出）。
+- 按状态、活跃度、服务器、站点、分类、标签过滤所有服务器的种子，或按名字搜索。
+- 批量开始、暂停、重新校验、重新汇报、删除。
+- 看每台服务器的速度和剩余空间，切换备用限速。
+- 添加磁力链接、`.torrent` 文件和 URL，添加后选择要下载哪些文件。
 
 ### Mac 上还可以
 
-- 改分类、标签、单种上传限速和保存位置，调整全局限速。
-- 批量替换 tracker 域名或 passkey。
-- 在菜单栏看速度，下载完成时收到通知。
+- 改分类、标签、单个种子的上传限速和保存位置，调整全局限速。
+- 菜单栏看速度，下载完成时收到通知。
 
-### 连接
+### 直连，没有中间服务器
 
-- 一台服务器可以配内网、组网、DDNS、反向代理多个地址，按优先级选用。
+- 一台服务器可以填多个地址（局域网、组网、DDNS、反代），按优先级尝试。
 - 支持自签证书，账号密码存在钥匙串里。
-- 中英文界面，支持 Liquid Glass。
+- 中文和英文，iOS 26+ 支持 Liquid Glass。
 
 ## 支持的下载器
 
@@ -66,47 +79,47 @@
 
 单台下载器测试到 2 万个种子。
 
-Flood 后端是 qBittorrent 时识别不了 tracker 问题，建议直连 qBittorrent。经过 Flood 没有分类、备用限速、单种限速和替换 tracker。
+Flood 接 qBittorrent 时测不出 Tracker 问题，请直接连 qBittorrent。分类、备用限速、单个种子限速和 Tracker 替换在 Flood 下不可用。
 
 ## 安装
 
 ### macOS
 
-需要 macOS 15 或更高版本，Apple 芯片和 Intel 都支持。
+需要 macOS 15 或更高，Apple Silicon 或 Intel 都可以。
 
 ```bash
 brew tap xheiop/peerdeck https://github.com/xheiop/Peerdeck
 brew install --cask xheiop/peerdeck/peerdeck
 ```
 
-也可以到 [Releases](https://github.com/xheiop/Peerdeck/releases/latest) 下载 dmg，拖进「应用程序」。
+也可以从 [Releases](https://github.com/xheiop/Peerdeck/releases/latest) 下载 dmg，拖到“应用程序”里。
 
-Peerdeck 没有经过公证，第一次打开会被拦下：打开一次以后，到 **系统设置 → 隐私与安全性** 点 **仍要打开**。
+Peerdeck 没有经过公证，macOS 第一次会拦截。打开一次，然后去**系统设置 → 隐私与安全性**，点**仍要打开**。
 
 ### iOS
 
-需要 iOS 17 或更高版本。每个版本都附带一个未签名的 ipa。
+需要 iOS 17 或更高。
 
-推荐用 [AltStore](https://altstore.io) 或 [SideStore](https://sidestore.io) 添加下面这个源，以后的新版本会出现在更新列表里：
+最方便的是 [AltStore](https://altstore.io) 或 [SideStore](https://sidestore.io)。添加下面这个源，以后的新版本会出现在更新列表里：
 
 ```text
 https://github.com/xheiop/Peerdeck/releases/latest/download/altstore.json
 ```
 
-也可以从 [Releases](https://github.com/xheiop/Peerdeck/releases/latest) 下载 ipa，用 Sideloadly 等工具签名安装；iOS 17.0 可以用 [TrollStore（巨魔）](https://github.com/opa334/TrollStore)。
+也可以从 [Releases](https://github.com/xheiop/Peerdeck/releases/latest) 下载 ipa，用 Sideloadly 或其他签名工具安装，或者在 iOS 17.0 上用 [TrollStore](https://github.com/opa334/TrollStore)。
 
-侧载版的分享扩展读不到 app 里保存的服务器，请在 app 里添加种子，或者点磁力链接跳转过来。
+侧载版里分享扩展看不到应用内保存的服务器。请在 Peerdeck 内添加种子，或点磁力链接在 Peerdeck 里打开。
 
 ## 构建
 
-需要 macOS 15+、Xcode 26+；iOS 工程还需要 [XcodeGen](https://github.com/yonaskolb/XcodeGen)（`brew install xcodegen`）。
+需要 macOS 15+、Xcode 26+，iOS 项目需要 [XcodeGen](https://github.com/yonaskolb/XcodeGen)（`brew install xcodegen`）。
 
 ```bash
-App/scripts/build-mac.sh                      # 构建 Peerdeck.app 并输出路径
+App/scripts/build-mac.sh                      # 构建 Peerdeck.app 并打印路径
 (cd iOS && xcodegen)                          # 生成 iOS/Peerdeck.xcodeproj
 swift test --package-path Packages/TorrentKit # 测试客户端库
-scripts/build-dmg.sh                          # 打通用架构的 dmg
-scripts/build-ipa.sh                          # 打未签名的 ipa
+scripts/build-dmg.sh                          # 打包通用 dmg
+scripts/build-ipa.sh                          # 打包未签名 ipa
 ```
 
 构建产物放在 `~/Library/Caches/transclient-build`，可以用 `TC_BUILD_DIR` 修改。要用 Xcode 装到 iPhone 上，先在 `iOS/project.yml` 里填 `DEVELOPMENT_TEAM`，并登记 App Group `group.dev.peerdeck`。
@@ -128,7 +141,7 @@ TC_CONFIG_FILE="$PWD/dev/app-servers.json" ~/Library/Caches/transclient-build/Pe
 <details>
 <summary>翻译</summary>
 
-代码里的英文原文就是本地化的键。中文译文写在 `App/scripts/i18n_zh.py`，改完运行 `App/scripts/i18n.sh`。
+代码里的英文字符串就是本地化 key。中文翻译放在 `App/scripts/i18n_zh.py`，然后运行 `App/scripts/i18n.sh`。
 
 </details>
 
@@ -145,8 +158,8 @@ TC_CONFIG_FILE="$PWD/dev/app-servers.json" ~/Library/Caches/transclient-build/Pe
 
 ## 致谢
 
-- [qBittorrent](https://github.com/qbittorrent/qBittorrent)、[Transmission](https://github.com/transmission/transmission) 和 [Flood](https://github.com/jesec/flood)：Peerdeck 遥控的下载器，以及它们的远程接口
-- [XcodeGen](https://github.com/yonaskolb/XcodeGen)：生成 iOS 工程
+- [qBittorrent](https://github.com/qbittorrent/qBittorrent)、[Transmission](https://github.com/transmission/transmission) 和 [Flood](https://github.com/jesec/flood)：Peerdeck 控制的客户端及其远程 API
+- [XcodeGen](https://github.com/yonaskolb/XcodeGen)：生成 iOS 项目
 
 ## 许可证
 
