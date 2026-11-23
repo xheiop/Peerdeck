@@ -9,7 +9,7 @@ and used as its GitHub Release notes.
 
 ## [Unreleased]
 
-## [0.1.0] - Unreleased
+## [0.1.0] - 2026-11-23
 
 First preview release.
 
