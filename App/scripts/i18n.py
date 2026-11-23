@@ -17,6 +17,10 @@ def unit(v):
     return {"stringUnit": {"state": "translated", "value": v}}
 
 
+# 代码里已经没有的键：xcstringstool sync 只把它标成 stale，不会删
+for key in [k for k, e in cat["strings"].items() if e.get("extractionState") == "stale"]:
+    del cat["strings"][key]
+
 for key, entry in cat["strings"].items():
     entry.pop("shouldTranslate", None)
     loc = {}

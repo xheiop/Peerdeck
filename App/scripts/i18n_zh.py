@@ -392,7 +392,7 @@ ZH = {
     'Their servers are offline.': '它们所在的服务器不在线。',
     'These torrents were deleted or replaced by their sites. Seeding them no longer counts toward your upload.': '这些种子已经被站点删除或替换，继续做种不会计入上传。',
     'This data is also used by %lld other torrents, so files are kept when deleting.': '这份数据还被另外 %lld 个种子使用，删除时会保留文件。',
-    'Threshold for “Unreachable for Long”': '「长时间连不上」的阈值',
+    '“Unreachable for Long” after': '「长时间连不上」的阈值',
     'Timed out': '超时',
     'TLS handshake failed': 'TLS 握手失败',
     'Top level isn’t a dictionary': '顶层不是字典',

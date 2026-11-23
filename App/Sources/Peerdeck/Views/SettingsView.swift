@@ -355,7 +355,7 @@ private struct SitesTab: View {
                 }
             }
             Section {
-                Picker("Threshold for “Unreachable for Long”", selection: $model.prefs.longUnreachableHours) { ForEach([1, 6, 24], id: \.self) { Text("\($0) h").tag($0) } }
+                Picker("“Unreachable for Long” after", selection: $model.prefs.longUnreachableHours) { ForEach([1, 6, 24], id: \.self) { Text("\($0) h").tag($0) } }
                 Text("Only trackers unreachable for longer than this go to Needs Attention. Recent ones are just marked in the list.").font(.caption).foregroundStyle(.secondary)
             }
             Section("Keywords for “Likely Unregistered”") {

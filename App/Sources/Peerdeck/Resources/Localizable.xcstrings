@@ -328,17 +328,6 @@
         }
       }
     },
-    "%lld Things to Handle": {
-      "extractionState": "stale",
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld 件待处理"
-          }
-        }
-      }
-    },
     "%lld are on offline servers and weren’t changed": {
       "localizations": {
         "en": {
@@ -711,35 +700,6 @@
         }
       }
     },
-    "%lld servers online, download %@, upload %@": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "1 server online, download %@, upload %@"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld servers online, download %@, upload %@"
-                }
-              }
-            }
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld 台在线，下载 %2$@，上传 %3$@"
-          }
-        }
-      }
-    },
     "%lld sites": {
       "localizations": {
         "en": {
@@ -849,17 +809,6 @@
     "0": {
       "shouldTranslate": false
     },
-    "1 Thing to Handle": {
-      "extractionState": "stale",
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1 件待处理"
-          }
-        }
-      }
-    },
     "1 file": {
       "localizations": {
         "zh-Hans": {
@@ -939,6 +888,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "API key 需要 qBittorrent 5.2 及以上（这台是 %@）。"
+          }
+        }
+      }
+    },
+    "About": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "关于"
+          }
+        }
+      }
+    },
+    "About Peerdeck": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "关于 Peerdeck"
           }
         }
       }
@@ -1131,17 +1100,6 @@
         }
       }
     },
-    "All Good": {
-      "extractionState": "stale",
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "一切正常"
-          }
-        }
-      }
-    },
     "All Time": {
       "localizations": {
         "zh-Hans": {
@@ -1212,34 +1170,12 @@
         }
       }
     },
-    "Alternative Speed Limits": {
-      "extractionState": "stale",
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "备用限速"
-          }
-        }
-      }
-    },
     "Alternative speed limits for %@": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "%@ 的备用限速"
-          }
-        }
-      }
-    },
-    "Alternative speed limits, per server": {
-      "extractionState": "stale",
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "备用限速，每台服务器单独控制"
           }
         }
       }
@@ -1270,6 +1206,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "认证"
+          }
+        }
+      }
+    },
+    "Backup": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "备份"
           }
         }
       }
@@ -1410,6 +1356,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "已把 %@ 的路径改成 %@"
+          }
+        }
+      }
+    },
+    "Check for Updates": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "检查更新"
+          }
+        }
+      }
+    },
+    "Check for Updates…": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "检查更新…"
+          }
+        }
+      }
+    },
+    "Check for updates automatically": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自动检查更新"
           }
         }
       }
@@ -1594,6 +1570,16 @@
         }
       }
     },
+    "Confirm Password": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "确认密码"
+          }
+        }
+      }
+    },
     "Connect": {
       "localizations": {
         "zh-Hans": {
@@ -1664,6 +1650,16 @@
         }
       }
     },
+    "Couldn’t Check for Updates": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "检查更新失败"
+          }
+        }
+      }
+    },
     "Couldn’t download the torrent file (%@). The link will be handed to the client, so files can’t be previewed.": {
       "localizations": {
         "zh-Hans": {
@@ -1674,12 +1670,32 @@
         }
       }
     },
+    "Couldn’t find a published release on GitHub.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub 上找不到已发布的版本。"
+          }
+        }
+      }
+    },
     "Couldn’t load server settings: %@": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "读取服务器配置失败：%@"
+          }
+        }
+      }
+    },
+    "Couldn’t read the reply from GitHub.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法解析 GitHub 的回应。"
           }
         }
       }
@@ -2064,6 +2080,16 @@
         }
       }
     },
+    "Enter Password": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "输入密码"
+          }
+        }
+      }
+    },
     "Error": {
       "localizations": {
         "zh-Hans": {
@@ -2074,13 +2100,42 @@
         }
       }
     },
-    "Everything Else": {
-      "extractionState": "stale",
+    "Export": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "其余"
+            "value": "导出"
+          }
+        }
+      }
+    },
+    "Export Settings": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出配置"
+          }
+        }
+      }
+    },
+    "Export Settings…": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出配置…"
+          }
+        }
+      }
+    },
+    "Exports servers, sites and the “Likely Unregistered” keywords, for moving them to another Mac or iPhone, for example through iCloud Drive. Importing adds and updates; nothing already here is removed.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出服务器、站点和「疑似未注册」关键词，用来搬到另一台 Mac 或 iPhone，比如经过 iCloud 云盘。导入只会新增和更新，不会删掉这里已有的。"
           }
         }
       }
@@ -2375,6 +2430,16 @@
         }
       }
     },
+    "Free and open source, licensed under GPL-3.0-only.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免费开源，使用 GPL-3.0-only 许可证。"
+          }
+        }
+      }
+    },
     "Free space in the default download folder: %@": {
       "localizations": {
         "zh-Hans": {
@@ -2411,6 +2476,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "通用"
+          }
+        }
+      }
+    },
+    "GitHub returned HTTP %lld.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub 返回了 HTTP %lld。"
           }
         }
       }
@@ -2475,12 +2550,52 @@
         }
       }
     },
+    "Import": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入"
+          }
+        }
+      }
+    },
+    "Import Settings?": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入配置？"
+          }
+        }
+      }
+    },
+    "Import Settings…": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入配置…"
+          }
+        }
+      }
+    },
     "In Use": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "生效中"
+          }
+        }
+      }
+    },
+    "Include passwords": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "带上密码"
           }
         }
       }
@@ -2575,12 +2690,32 @@
         }
       }
     },
+    "Keywords: %lld new.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "关键词：新增 %lld 个。"
+          }
+        }
+      }
+    },
     "LAN": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "内网"
+          }
+        }
+      }
+    },
+    "Later": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "稍后"
           }
         }
       }
@@ -2661,6 +2796,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "登录被拒（401）：用户名密码错误；或者 qB 的 Host 头校验没通过（反代、Docker 端口映射时，Host 里的端口和 WebUI 端口不一致）；或者反代把自己的 Authorization 头转给了 qB 5.x"
+          }
+        }
+      }
+    },
+    "Looks for a new version on GitHub once a day. You can also choose Peerdeck › Check for Updates….": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每天到 GitHub 查一次有没有新版本。也可以在菜单栏选 Peerdeck › 检查更新… 手动检查。"
           }
         }
       }
@@ -2901,28 +3046,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "站点个人页里的新 passkey"
-          }
-        }
-      }
-    },
-    "New tracker problems": {
-      "extractionState": "stale",
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "新的 tracker 问题"
-          }
-        }
-      }
-    },
-    "New “Rejected” or “Unreachable for Long” torrents, summarized at most hourly (not implemented yet)": {
-      "extractionState": "stale",
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "出现新的「被拒绝」或「长时间连不上」时，每小时最多汇总一次（还没实现）"
           }
         }
       }
@@ -3177,6 +3300,16 @@
         }
       }
     },
+    "Nothing to import: everything in this file is already here.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有要导入的：文件里的内容这里都有了。"
+          }
+        }
+      }
+    },
     "Notification permission is managed in System Settings › Notifications.": {
       "localizations": {
         "zh-Hans": {
@@ -3193,17 +3326,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "通知"
-          }
-        }
-      }
-    },
-    "Notify when unreachable and again when back (not implemented yet)": {
-      "extractionState": "stale",
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "连不上时通知，恢复时再通知一次（还没实现）"
           }
         }
       }
@@ -3338,6 +3460,16 @@
         }
       }
     },
+    "Open": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开"
+          }
+        }
+      }
+    },
     "Open Window": {
       "localizations": {
         "zh-Hans": {
@@ -3428,6 +3560,16 @@
         }
       }
     },
+    "Passwords, API keys, reverse proxy passwords and custom header values are left out. Enter them again after importing.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不导出密码、API key、反代密码和附加请求头的值，导入后要重新填。"
+          }
+        }
+      }
+    },
     "Paste": {
       "localizations": {
         "zh-Hans": {
@@ -3450,6 +3592,36 @@
     },
     "Peerdeck": {
       "shouldTranslate": false
+    },
+    "Peerdeck %@ Is Available": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peerdeck %@ 可以更新了"
+          }
+        }
+      }
+    },
+    "Peerdeck %@ is the latest version.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peerdeck %@ 已经是最新版本。"
+          }
+        }
+      }
+    },
+    "Peerdeck is free and open source, licensed under GPL-3.0-only.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peerdeck 免费开源，使用 GPL-3.0-only 许可证。"
+          }
+        }
+      }
     },
     "Private": {
       "localizations": {
@@ -4147,23 +4319,22 @@
         }
       }
     },
-    "Server goes offline": {
-      "extractionState": "stale",
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "服务器掉线"
-          }
-        }
-      }
-    },
     "Server is offline": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "服务器不在线"
+          }
+        }
+      }
+    },
+    "Servers: %lld new, %lld changed.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服务器：新增 %lld 台，更新 %lld 台。"
           }
         }
       }
@@ -4194,6 +4365,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "设置"
+          }
+        }
+      }
+    },
+    "Settings exported.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配置已导出。"
+          }
+        }
+      }
+    },
+    "Settings imported.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配置已导入。"
           }
         }
       }
@@ -4268,6 +4459,16 @@
         }
       }
     },
+    "Sites: %lld new, %lld changed.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "站点：新增 %lld 个，更新 %lld 个。"
+          }
+        }
+      }
+    },
     "Size": {
       "localizations": {
         "zh-Hans": {
@@ -4314,6 +4515,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "排序方式"
+          }
+        }
+      }
+    },
+    "Source Code": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "源代码"
           }
         }
       }
@@ -4709,6 +4920,26 @@
         }
       }
     },
+    "The file is encrypted with this password (at least %lld characters). You’ll need it to import the file; it can’t be recovered.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件会用这个密码加密（至少 %lld 个字符）。导入时要输入它，忘了找不回来。"
+          }
+        }
+      }
+    },
+    "The password needs at least %lld characters.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密码至少要 %lld 个字符。"
+          }
+        }
+      }
+    },
     "The reverse proxy requires authentication (realm=%@). Check the proxy username and password of the route.": {
       "localizations": {
         "zh-Hans": {
@@ -4837,22 +5068,62 @@
         }
       }
     },
+    "This file has no passwords. Servers already here keep theirs; enter the passwords for new servers in Settings.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这个文件不带密码。这里已有的服务器保留原来的密码，新加的服务器要在设置里填上密码。"
+          }
+        }
+      }
+    },
+    "This file includes passwords and is encrypted. Enter the password set when it was exported.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这个文件带了密码，是加密的。输入导出时设的密码。"
+          }
+        }
+      }
+    },
+    "This file is encrypted. Enter its password.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这个文件是加密的，需要输入密码。"
+          }
+        }
+      }
+    },
+    "This file isn’t a Peerdeck settings export.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这不是 Peerdeck 导出的配置文件。"
+          }
+        }
+      }
+    },
+    "This file was exported by a newer version of Peerdeck. Update Peerdeck and try again.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这个文件是新版本的 Peerdeck 导出的，更新 Peerdeck 后再试。"
+          }
+        }
+      }
+    },
     "This torrent is gone": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "这个种子已经不在了"
-          }
-        }
-      }
-    },
-    "Threshold for “Unreachable for Long”": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "「长时间连不上」的阈值"
           }
         }
       }
@@ -5049,28 +5320,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "信任这个证书"
-          }
-        }
-      }
-    },
-    "Turn All Off": {
-      "extractionState": "stale",
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "全部关闭"
-          }
-        }
-      }
-    },
-    "Turn All On": {
-      "extractionState": "stale",
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "全部开启"
           }
         }
       }
@@ -5345,12 +5594,32 @@
         }
       }
     },
+    "Version": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "版本"
+          }
+        }
+      }
+    },
     "View": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "查看"
+          }
+        }
+      }
+    },
+    "View Release": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看发布页"
           }
         }
       }
@@ -5415,6 +5684,26 @@
         }
       }
     },
+    "Wrong password.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密码不对。"
+          }
+        }
+      }
+    },
+    "Wrong password. Try again.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密码不对，再试一次。"
+          }
+        }
+      }
+    },
     "Wrong username or password": {
       "localizations": {
         "zh-Hans": {
@@ -5451,6 +5740,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "10 秒内可以撤销"
+          }
+        }
+      }
+    },
+    "You have %@. Download the new version from the release page.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前是 %@。到发布页下载新版本。"
+          }
+        }
+      }
+    },
+    "You have %@. If you installed Peerdeck with AltStore or SideStore, update it there; otherwise download the new version from the release page.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前是 %@。用 AltStore 或 SideStore 装的，在那里更新；其他方式装的，到发布页下载新版本。"
+          }
+        }
+      }
+    },
+    "You have %@. Update with Homebrew: brew upgrade --cask peerdeck": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前是 %@。用 Homebrew 更新：brew upgrade --cask peerdeck"
+          }
+        }
+      }
+    },
+    "You’re Up to Date": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已是最新版本"
           }
         }
       }
@@ -5607,6 +5936,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "· 创建后不能改类型"
+          }
+        }
+      }
+    },
+    "“Unreachable for Long” after": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「长时间连不上」的阈值"
           }
         }
       }
