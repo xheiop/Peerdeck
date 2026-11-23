@@ -2,7 +2,7 @@
 #
 # 推送 v 开头的 tag（v0.2.0、v0.2.0-beta.1）时
 #   1. 跑 TorrentKit 测试
-#   2. 打 macOS dmg（arm64 + x86_64，ad-hoc 签名）和不签名的 iOS ipa
+#   2. 打 macOS dmg（arm64 + x86_64，ad-hoc 签名）、不签名的 iOS ipa 和 TrollStore 用的 tipa
 #   3. 正式版另外生成 AltStore 源（altstore.json）和 Homebrew cask
 #   4. 用 CHANGELOG.md 里这个版本的那一节当说明，发布 GitHub Release（带后缀的 tag 发成预发布）
 #   5. 正式版且是最新版时，把 Casks/peerdeck.rb 提交到默认分支（本仓库自己就是 Homebrew tap）
@@ -94,7 +94,7 @@ jobs:
       - name: Checksums
         working-directory: ${{ env.TC_BUILD_DIR }}/dist
         run: |
-          shasum -a 256 *.dmg *.ipa > SHA256SUMS.txt
+          shasum -a 256 *.dmg *.ipa *.tipa > SHA256SUMS.txt
           cat SHA256SUMS.txt
 
       - uses: actions/upload-artifact@v4

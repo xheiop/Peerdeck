@@ -84,14 +84,38 @@ enum AppData {
     static let appGroup = "group.dev.peerdeck"
     static let dir: URL = {
         if let p = ProcessInfo.processInfo.environment["TC_DATA_DIR"] { return URL(fileURLWithPath: p, isDirectory: true) }
+        let local = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appending(path: "Peerdeck", directoryHint: .isDirectory)
         #if os(iOS)
         // iOS：放在 App Group 容器里，Share Extension 也能读到偏好（站点默认服务器、最近路径）
         if let group = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppData.appGroup) {
-            return group.appending(path: "Peerdeck", directoryHint: .isDirectory)
+            let dir = group.appending(path: "Peerdeck", directoryHint: .isDirectory)
+            // 扩展自己的目录里只会有它以前写的默认偏好，不搬
+            if !Bundle.main.bundlePath.hasSuffix(".appex") { adopt(local, into: dir) }
+            return dir
         }
         #endif
-        return FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appending(path: "Peerdeck", directoryHint: .isDirectory)
+        return local
     }()
+
+    #if os(iOS)
+    /// 之前装的版本拿不到 App Group（比如 TrollStore 装的未签名 ipa），偏好、站点表、问题账本存在 app 自己的容器里。
+    /// 拿到 App Group 后第一次启动时搬过来。分享扩展可能先在组里写了一份默认偏好，以 app 原来的为准。
+    private static func adopt(_ old: URL, into dir: URL) {
+        let fm = FileManager.default
+        guard let names = try? fm.contentsOfDirectory(atPath: old.path), !names.isEmpty else { return }
+        do {
+            try fm.createDirectory(at: dir, withIntermediateDirectories: true)
+            for name in names {
+                let dest = dir.appending(path: name)
+                try? fm.removeItem(at: dest)
+                try fm.moveItem(at: old.appending(path: name), to: dest)
+            }
+            Log.info("把 \(names.joined(separator: "、")) 搬进了 App Group")
+        } catch {
+            Log.info("搬数据进 App Group 失败：\(error)")
+        }
+    }
+    #endif
 
     static func load<T: Decodable>(_ name: String, as: T.Type) -> T? {
         guard let data = try? Data(contentsOf: dir.appending(path: name)) else { return nil }

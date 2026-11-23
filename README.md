@@ -106,9 +106,7 @@ The easiest way is [AltStore](https://altstore.io) or [SideStore](https://sidest
 https://github.com/xheiop/Peerdeck/releases/latest/download/altstore.json
 ```
 
-You can also download the ipa from [Releases](https://github.com/xheiop/Peerdeck/releases/latest) and install it with Sideloadly or another signing tool, or with [TrollStore](https://github.com/opa334/TrollStore) on iOS 17.0.
-
-In sideloaded builds the share extension can't see the servers saved in the app. Add torrents inside Peerdeck, or tap a magnet link to open it there.
+You can also download the ipa from [Releases](https://github.com/xheiop/Peerdeck/releases/latest) and install it with Sideloadly or another signing tool. On iOS 17.0, install the `.tipa` from Releases with [TrollStore](https://github.com/opa334/TrollStore).
 
 ## Building
 
@@ -119,7 +117,7 @@ App/scripts/build-mac.sh                      # build Peerdeck.app and print its
 (cd iOS && xcodegen)                          # generate iOS/Peerdeck.xcodeproj
 swift test --package-path Packages/TorrentKit # test the client library
 scripts/build-dmg.sh                          # package the universal dmg
-scripts/build-ipa.sh                          # package the unsigned ipa
+scripts/build-ipa.sh                          # package the unsigned ipa and the TrollStore tipa
 ```
 
 Build outputs go to `~/Library/Caches/transclient-build`; set `TC_BUILD_DIR` to change that. To run on an iPhone from Xcode, set `DEVELOPMENT_TEAM` in `iOS/project.yml` and register the App Group `group.dev.peerdeck`.

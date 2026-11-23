@@ -8,6 +8,7 @@ import TorrentKit
 ///   TC_DEBUG_SIDEBAR=<视图>       同 mac：all|active|rejected|unregistered|unreachable|state.<组>|server.<id>|site.<域名>|category.<名>|tag.<名>
 ///   TC_DEBUG_OPEN_FIRST=<秒>      打开列表第一个种子的详情；再加 TC_DEBUG_FILES=1 直接进文件列表
 ///   TC_DEBUG_IMPORT_TO_KEYCHAIN=<json>  启动时把这份配置写进 Keychain（验证共享组）
+///   TC_DEBUG_KEYCHAIN_GROUP=<组>   配合上一项：只写进这个钥匙串组，模拟旧版本存的配置（验证启动时挪进共享组）
 ///   TC_LOG=1                     打日志（simctl launch --console 能看到）
 ///   TC_DEBUG_CLEANUP=<秒>         打开「清理未注册」确认（配合 TC_DEBUG_SIDEBAR=unregistered）
 ///   TC_DEBUG_ADD=<文本>           打开添加面板并填入文本（\n 分行）

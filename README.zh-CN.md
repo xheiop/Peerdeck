@@ -106,9 +106,7 @@ Peerdeck 没有经过公证，macOS 第一次会拦截。打开一次，然后�
 https://github.com/xheiop/Peerdeck/releases/latest/download/altstore.json
 ```
 
-也可以从 [Releases](https://github.com/xheiop/Peerdeck/releases/latest) 下载 ipa，用 Sideloadly 或其他签名工具安装，或者在 iOS 17.0 上用 [TrollStore](https://github.com/opa334/TrollStore)。
-
-侧载版里分享扩展看不到应用内保存的服务器。请在 Peerdeck 内添加种子，或点磁力链接在 Peerdeck 里打开。
+也可以从 [Releases](https://github.com/xheiop/Peerdeck/releases/latest) 下载 ipa，用 Sideloadly 或其他签名工具安装。iOS 17.0 可以用 [TrollStore](https://github.com/opa334/TrollStore) 安装 Releases 里的 `.tipa`。
 
 ## 构建
 
@@ -119,7 +117,7 @@ App/scripts/build-mac.sh                      # 构建 Peerdeck.app 并打印路
 (cd iOS && xcodegen)                          # 生成 iOS/Peerdeck.xcodeproj
 swift test --package-path Packages/TorrentKit # 测试客户端库
 scripts/build-dmg.sh                          # 打包通用 dmg
-scripts/build-ipa.sh                          # 打包未签名 ipa
+scripts/build-ipa.sh                          # 打包未签名 ipa 和 TrollStore 用的 tipa
 ```
 
 构建产物放在 `~/Library/Caches/transclient-build`，可以用 `TC_BUILD_DIR` 修改。要用 Xcode 装到 iPhone 上，先在 `iOS/project.yml` 里填 `DEVELOPMENT_TEAM`，并登记 App Group `group.dev.peerdeck`。

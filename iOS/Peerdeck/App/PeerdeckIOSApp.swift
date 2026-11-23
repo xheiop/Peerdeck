@@ -1,3 +1,4 @@
+import Security
 import SwiftUI
 import TorrentKit
 
@@ -8,9 +9,12 @@ struct PeerdeckIOSApp: App {
 
     init() {
         let env = ProcessInfo.processInfo.environment
-        // 调试：把一份 JSON 配置写进 Keychain（验证 Keychain 共享组能读写），之后照常从 Keychain 读
+        // 调试：把一份 JSON 配置写进 Keychain（验证 Keychain 共享组能读写），之后照常从 Keychain 读。
+        // 同时给了 TC_DEBUG_KEYCHAIN_GROUP 时，先删掉所有组里的这一条，再只写进那个组，模拟旧版本存的配置（验证下面的搬迁）
         if let path = env["TC_DEBUG_IMPORT_TO_KEYCHAIN"], let configs = try? FileConfigStore(url: URL(fileURLWithPath: path)).load() {
-            do { try KeychainConfigStore().save(configs); Log.info("已把 \(configs.count) 台服务器写进 Keychain") }
+            let group = env["TC_DEBUG_KEYCHAIN_GROUP"]
+            if group != nil { SecItemDelete(KeychainConfigStore().query as CFDictionary) }
+            do { try KeychainConfigStore(accessGroup: group).save(configs); Log.info("已把 \(configs.count) 台服务器写进 Keychain（组：\(group ?? "默认")）") }
             catch { Log.info("写 Keychain 失败：\(error)") }
         }
         let store: any ConfigStore = if let path = env["TC_CONFIG_FILE"] {
@@ -18,6 +22,8 @@ struct PeerdeckIOSApp: App {
         } else {
             KeychainConfigStore()
         }
+        // 旧版本存在别的钥匙串组里的配置挪进共享组，分享扩展才读得到
+        (store as? KeychainConfigStore)?.moveToDefaultGroup()
         let model = AppModel(configStore: store)
         _model = State(initialValue: model)
         DispatchQueue.main.async { model.load() }

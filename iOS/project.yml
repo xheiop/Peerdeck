@@ -79,6 +79,7 @@ targets:
       properties:
         com.apple.security.application-groups: [group.dev.peerdeck]
         # 第一个 access group 是默认组：KeychainConfigStore 不指定组，app 和扩展就都读写这一组
+        # scripts/build-ipa.sh 打 TrollStore 用的 tipa 时照这两个组签，改了要一起改
         keychain-access-groups: ["$(AppIdentifierPrefix)dev.peerdeck.shared"]
     info:
       path: Peerdeck/Info.plist

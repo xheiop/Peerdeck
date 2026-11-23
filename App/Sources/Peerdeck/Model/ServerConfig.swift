@@ -82,18 +82,29 @@ enum ConfigStoreError: Error, CustomStringConvertible {
 }
 
 /// 默认存储：整个配置数组 JSON 编码后存成一条 Keychain 通用密码。
+/// 不指定 access group 时用 entitlements 里的第一个组，iOS 上就是 app 和分享扩展共用的 `<Team ID>.dev.peerdeck.shared`。
 struct KeychainConfigStore: ConfigStore {
     let service = "dev.peerdeck.mac"
     let account = "servers"
+    /// 只有调试时指定（把配置写进别的组，模拟旧版本存的）
+    var accessGroup: String? = nil
 
-    func load() throws -> [ServerConfig] {
-        var out: CFTypeRef?
-        let q: [String: Any] = [
+    static let label = "Peerdeck Server Settings"
+
+    var query: [String: Any] {
+        var q: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecAttrAccount as String: account,
-            kSecReturnData as String: true,
         ]
+        if let accessGroup { q[kSecAttrAccessGroup as String] = accessGroup }
+        return q
+    }
+
+    func load() throws -> [ServerConfig] {
+        var out: CFTypeRef?
+        var q = query
+        q[kSecReturnData as String] = true
         let status = SecItemCopyMatching(q as CFDictionary, &out)
         if status == errSecItemNotFound { return [] }
         guard status == errSecSuccess, let data = out as? Data else { throw ConfigStoreError.keychain(status) }
@@ -102,16 +113,12 @@ struct KeychainConfigStore: ConfigStore {
 
     func save(_ configs: [ServerConfig]) throws {
         let data = try JSONEncoder().encode(configs)
-        let q: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecAttrAccount as String: account,
-        ]
+        let q = query
         let status = SecItemUpdate(q as CFDictionary, [kSecValueData as String: data] as CFDictionary)
         if status == errSecItemNotFound {
             var add = q
             add[kSecValueData as String] = data
-            add[kSecAttrLabel as String] = "Peerdeck Server Settings"
+            add[kSecAttrLabel as String] = Self.label
             let s = SecItemAdd(add as CFDictionary, nil)
             guard s == errSecSuccess else { throw ConfigStoreError.keychain(s) }
         } else if status != errSecSuccess {
@@ -119,6 +126,40 @@ struct KeychainConfigStore: ConfigStore {
         }
     }
 }
+
+#if os(iOS)
+extension KeychainConfigStore {
+    /// 配置不在共享组里时，挪进默认组（也就是共享组），分享扩展才读得到。只在 app 里、读配置之前调用。
+    /// 什么时候会这样：之前装的版本签名时没带共享组。比如 TrollStore 装未签名的 ipa，配置存在它补的 TROLLTROLL.* 组里；
+    /// 换成带共享组的 tipa 以后，旧配置还在原来的组里（tipa 给 app 留着这个组，才读得到它）。
+    func moveToDefaultGroup() {
+        var q = query
+        q[kSecReturnAttributes as String] = true
+        q[kSecReturnData as String] = true
+        q[kSecMatchLimit as String] = kSecMatchLimitAll
+        var out: CFTypeRef?
+        guard SecItemCopyMatching(q as CFDictionary, &out) == errSecSuccess, let items = out as? [[String: Any]] else { return }
+        func group(_ item: [String: Any]) -> String { item[kSecAttrAccessGroup as String] as? String ?? "" }
+        guard !items.contains(where: { group($0).hasSuffix(".dev.peerdeck.shared") }),
+              let old = items.first, let data = old[kSecValueData as String] as? Data else { return }
+        var add = query
+        add[kSecValueData as String] = data
+        add[kSecAttrLabel as String] = Self.label
+        add[kSecReturnAttributes as String] = true
+        var added: CFTypeRef?
+        let status = SecItemAdd(add as CFDictionary, &added)
+        // errSecDuplicateItem：默认组就是旧组，这次安装也没有共享组，没什么可挪的
+        guard status == errSecSuccess else {
+            if status != errSecDuplicateItem { Log.info("挪服务器配置失败：\(status)") }
+            return
+        }
+        var del = query
+        del[kSecAttrAccessGroup as String] = group(old)
+        let s = SecItemDelete(del as CFDictionary)
+        Log.info("服务器配置从钥匙串组 \(group(old)) 挪到了 \(group(added as? [String: Any] ?? [:]))，删旧的：\(s)")
+    }
+}
+#endif
 
 /// 开发和自动化验证用：明文 JSON 文件。只有设置了 TC_CONFIG_FILE 环境变量才会用。
 struct FileConfigStore: ConfigStore {
