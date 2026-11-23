@@ -9,6 +9,18 @@ and used as its GitHub Release notes.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-23
+
+### macOS and iOS
+
+- Export and import settings, optionally with passwords encrypted
+- Show the version and check GitHub for updates
+- Keep the "Unreachable for Long" setting on one line in English
+
+### iOS
+
+- Share extension sees your servers when installed with TrollStore (use the new .tipa)
+
 ## [0.1.0] - 2026-11-23
 
 First preview release.
@@ -47,5 +59,6 @@ First preview release.
 - Self-signed HTTPS certificates can be trusted by fingerprint.
 - Passwords are stored in the Keychain.
 
-[Unreleased]: ../../compare/v0.1.0...HEAD
+[Unreleased]: ../../compare/v0.2.0...HEAD
+[0.2.0]: ../../compare/v0.1.0...v0.2.0
 [0.1.0]: ../../releases/tag/v0.1.0
