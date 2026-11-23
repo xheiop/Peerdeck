@@ -4,8 +4,8 @@ All notable changes to Peerdeck are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow
 [Semantic Versioning](https://semver.org/).
 
-Each release's section is used as its GitHub Release notes (`scripts/release-notes.sh`),
-so a tag can only be released after its section is written.
+Each release's section is generated from its commits by `scripts/release.sh` (see `cliff.toml`)
+and used as its GitHub Release notes.
 
 ## [Unreleased]
 

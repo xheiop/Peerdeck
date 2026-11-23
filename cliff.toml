@@ -1,0 +1,81 @@
+# git-cliff 配置：scripts/release.sh 用它按提交生成 CHANGELOG.md 里新版本的那一节，以及算下一个版本号。
+# 这里只生成这一节的正文；版本标题、[Unreleased] 和底部链接由 release.sh 自己写。
+#
+# 提交信息约定（Conventional Commits）：
+#   feat(范围): …   新功能      → 写进 changelog，升次版本号
+#   perf(范围): …   性能改进    → 写进 changelog，升修订号
+#   fix(范围):  …   修复        → 写进 changelog，升修订号
+#   refactor / chore / ci / test / docs / build / style 不写进 changelog
+#
+#   范围写 mac 或 ios 时归到对应平台那一节；不写，或者写别的（flood、qbittorrent、transmission…），算两个平台都有。
+#   标题直接写给用户看（它会原样出现在 Release 和 AltStore 的更新说明里），一个提交只做一件事。
+#   破坏性改动在类型后面加 !，比如 feat(ios)!: …；1.0 之前也只升次版本号。
+
+[changelog]
+header = ""
+footer = ""
+trim = true
+body = """
+{%- set_global shared = [] -%}
+{%- set_global mac = [] -%}
+{%- set_global ios = [] -%}
+{%- for commit in commits -%}
+  {%- if commit.scope -%}{%- set scope = commit.scope | lower -%}{%- else -%}{%- set scope = "" -%}{%- endif -%}
+  {%- if scope == "mac" or scope == "macos" -%}
+    {%- set_global mac = mac | concat(with=commit) -%}
+  {%- elif scope == "ios" -%}
+    {%- set_global ios = ios | concat(with=commit) -%}
+  {%- else -%}
+    {%- set_global shared = shared | concat(with=commit) -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if shared | length > 0 %}
+### macOS and iOS
+{% for group in ["1 feat", "2 perf", "3 fix"] -%}
+{%- for commit in shared | filter(attribute="group", value=group) %}
+- {% if commit.breaking %}**Breaking:** {% endif %}{{ commit.message | trim | upper_first }}
+{%- endfor -%}
+{%- endfor %}
+{% endif -%}
+
+{%- if mac | length > 0 %}
+### macOS
+{% for group in ["1 feat", "2 perf", "3 fix"] -%}
+{%- for commit in mac | filter(attribute="group", value=group) %}
+- {% if commit.breaking %}**Breaking:** {% endif %}{{ commit.message | trim | upper_first }}
+{%- endfor -%}
+{%- endfor %}
+{% endif -%}
+
+{%- if ios | length > 0 %}
+### iOS
+{% for group in ["1 feat", "2 perf", "3 fix"] -%}
+{%- for commit in ios | filter(attribute="group", value=group) %}
+- {% if commit.breaking %}**Breaking:** {% endif %}{{ commit.message | trim | upper_first }}
+{%- endfor -%}
+{%- endfor %}
+{% endif -%}
+"""
+
+[git]
+conventional_commits = true
+filter_unconventional = true
+split_commits = false
+protect_breaking_commits = false
+filter_commits = true
+sort_commits = "oldest"
+# 只有正式版的 tag 算发版：预发布（v0.3.0-beta.1）里的提交会再写进下一个正式版
+tag_pattern = "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+commit_parsers = [
+  { message = "^feat", group = "1 feat" },
+  { message = "^perf", group = "2 perf" },
+  { message = "^fix", group = "3 fix" },
+  { message = ".*", skip = true },
+]
+
+[bump]
+# 1.0 之前：feat 升次版本号，破坏性改动也只升次版本号；1.0 由人决定
+features_always_bump_minor = true
+breaking_always_bump_major = false
+initial_tag = "v0.1.0"

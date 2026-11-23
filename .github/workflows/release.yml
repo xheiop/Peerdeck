@@ -1,4 +1,6 @@
-# 发版：推送 v 开头的 tag（v0.2.0、v0.2.0-beta.1）时
+# 发版先在本地运行 scripts/release.sh：它按提交生成 CHANGELOG.md 里这个版本的那一节，提交、打 tag 并推送。
+#
+# 推送 v 开头的 tag（v0.2.0、v0.2.0-beta.1）时
 #   1. 跑 TorrentKit 测试
 #   2. 打 macOS dmg（arm64 + x86_64，ad-hoc 签名）和不签名的 iOS ipa
 #   3. 正式版另外生成 AltStore 源（altstore.json）和 Homebrew cask
