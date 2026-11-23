@@ -296,6 +296,8 @@ private struct GeneralTab: View {
             Picker("Refresh interval (background)", selection: $model.prefs.refreshBackground) { ForEach([10, 30, 60], id: \.self) { Text("\($0) s").tag($0) } }
             Text("The background interval is used when only the menu bar is open.").font(.caption).foregroundStyle(.secondary)
             Toggle("Stay in the menu bar after closing the main window", isOn: $model.prefs.keepInMenuBar)
+            Toggle("Check for updates automatically", isOn: $model.prefs.autoCheckUpdates)
+            Text("Looks for a new version on GitHub once a day. You can also choose Peerdeck › Check for Updates….").font(.caption).foregroundStyle(.secondary)
             LabeledContent("Magnet links and .torrent files") {
                 Button("Make Default") { setDefaultHandler() }
             }

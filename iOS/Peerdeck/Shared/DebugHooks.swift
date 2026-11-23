@@ -14,6 +14,8 @@ import TorrentKit
 ///   TC_DEBUG_ADD=<文本>           打开添加面板并填入文本（\n 分行）
 ///   TC_DEBUG_SCREEN=filters|settings|speed|setup|attention   打开对应的页面（attention = 总览里的「需要处理」）
 ///   TC_DEBUG_BACKUP=export       设置页的「备份」一节出现时打开导出选项
+///   TC_DEBUG_UPDATE_JSON=<文件>   检查更新时读这个文件当作 GitHub 的回应，不联网
+///   TC_DEBUG_ABOUT_CHECK=1       设置页的「关于」一节出现时检查一次更新
 @MainActor
 enum DebugHooks {
     /// iOS 界面监听这个值，决定要不要打开某个页面（只在调试时用）

@@ -54,6 +54,8 @@ final class AppModel {
     var sheet: ActiveSheet?
     var toast: Toast?
     var alert: String?
+    /// mac：检查更新的结果，主窗口弹出
+    var updateNotice: UpdateCheck.Outcome?
     var showInspector = false
     var showSpeedLimits = false
     /// iOS：当前标签页（overview / torrents / sites / servers / search）

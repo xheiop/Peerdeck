@@ -45,7 +45,17 @@ struct PeerdeckApp: App {
         let model = AppModel(configStore: store)
         _model = State(initialValue: model)
         // 等 run loop 起来再加载，避免启动时同步读 Keychain 卡住首帧
-        DispatchQueue.main.async { model.load() }
+        DispatchQueue.main.async {
+            model.load()
+            model.checkForUpdatesIfDue()
+        }
+        // 菜单栏常驻时 app 会开很久：每 6 小时看一次是否到了该检查的时间（一天最多查一次）
+        Task { @MainActor in
+            while true {
+                try? await Task.sleep(for: .seconds(6 * 3600))
+                model.checkForUpdatesIfDue()
+            }
+        }
     }
 
     var body: some Scene {
@@ -56,6 +66,15 @@ struct PeerdeckApp: App {
         }
         .defaultSize(width: 1280, height: 760)
         .commands {
+            CommandGroup(replacing: .appInfo) {
+                Button("About Peerdeck") { AboutPanel.show() }
+                // 结果在主窗口弹出，所以先把主窗口打开
+                Button("Check for Updates…") {
+                    NSApp.activate()
+                    model.openMainWindow?()
+                    model.checkForUpdates(manual: true)
+                }
+            }
             CommandGroup(replacing: .newItem) {
                 Button("Add Torrents…") { model.beginAdd() }.keyboardShortcut("n")
                 Button("Add Server…") { model.sheet = .setup; NSApp.activate(); model.openMainWindow?() }

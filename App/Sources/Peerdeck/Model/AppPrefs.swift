@@ -57,6 +57,11 @@ struct AppPrefs: Codable, Sendable {
     var columns: [String: [String]] = [:]
     var lastAddServer: String?
     var recentPaths: [String] = []
+    /// mac：每天自动查一次 GitHub 上有没有新版本
+    var autoCheckUpdates = true
+    var lastUpdateCheck: Date?
+    /// 自动检查提醒过的版本：同一个版本只提醒一次
+    var notifiedVersion: String?
 
     init() {}
 
@@ -76,6 +81,9 @@ struct AppPrefs: Codable, Sendable {
         columns = (try? c.decode([String: [String]].self, forKey: .columns)) ?? [:]
         lastAddServer = try? c.decode(String.self, forKey: .lastAddServer)
         recentPaths = (try? c.decode([String].self, forKey: .recentPaths)) ?? []
+        autoCheckUpdates = (try? c.decode(Bool.self, forKey: .autoCheckUpdates)) ?? d.autoCheckUpdates
+        lastUpdateCheck = try? c.decode(Date.self, forKey: .lastUpdateCheck)
+        notifiedVersion = try? c.decode(String.self, forKey: .notifiedVersion)
     }
 }
 

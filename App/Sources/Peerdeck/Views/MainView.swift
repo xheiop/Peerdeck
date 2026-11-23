@@ -27,6 +27,17 @@ struct RootView: View {
         } message: {
             Text(model.alert ?? "")
         }
+        .alert(model.updateNotice?.title ?? "", isPresented: Binding(get: { model.updateNotice != nil }, set: { if !$0 { model.updateNotice = nil } }),
+               presenting: model.updateNotice) { notice in
+            if case .available(let release, _) = notice {
+                Button("View Release") { NSWorkspace.shared.open(release.page) }
+                Button("Later", role: .cancel) {}
+            } else {
+                Button("OK") {}
+            }
+        } message: { notice in
+            Text(notice.message(homebrew: UpdateCheck.installedWithHomebrew))
+        }
         .overlay(alignment: .bottom) { ToastView(model: model) }
     }
 }

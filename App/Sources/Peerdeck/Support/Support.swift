@@ -45,6 +45,8 @@ private var debugPanels: [NSPanel] = []
 ///   TC_DEBUG_RETRACKER=<秒>      对当前站点打开「替换 tracker」面板
 ///   TC_DEBUG_SETTINGS=<标签>     打开设置窗口（servers|general|notify|sites），TC_DEBUG_SETTINGS_SERVER=<id> 选中服务器
 ///   TC_DEBUG_BACKUP=export       设置里「备份」一节出现时打开导出选项（配合 TC_DEBUG_SETTINGS=general）
+///   TC_DEBUG_ABOUT=1             2 秒后打开「关于 Peerdeck」面板
+///   TC_DEBUG_UPDATE_JSON=<文件>   检查更新时读这个文件当作 GitHub 的回应，不联网；开发配置（TC_CONFIG_FILE）下只有给了它才会自动检查
 ///   TC_DEBUG_LIMITS=1            3 秒后打开工具栏「限速」弹窗
 ///   TC_DEBUG_MENU=1              把菜单栏弹出面板放进一个普通窗口（截图用）
 ///   TC_DEBUG_SETUP=1             打开「添加服务器」面板
@@ -103,6 +105,7 @@ enum DebugHooks {
                 model.openSettingsWindow?()
             }
         }
+        if env["TC_DEBUG_ABOUT"] == "1" { DispatchQueue.main.asyncAfter(deadline: .now() + 2) { AboutPanel.show() } }
         if env["TC_DEBUG_LIMITS"] == "1" { DispatchQueue.main.asyncAfter(deadline: .now() + 3) { model.showSpeedLimits = true } }
         if env["TC_DEBUG_SETUP"] == "1" { DispatchQueue.main.asyncAfter(deadline: .now() + 1) { model.sheet = .setup } }
         if let spec = env["TC_DEBUG_RETRACKER_SEL"], let t = env["TC_DEBUG_RETRACKER_AT"].flatMap(Double.init) {
