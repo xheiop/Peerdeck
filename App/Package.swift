@@ -22,5 +22,10 @@ let package = Package(
             // Info.plist 和 *.xcstrings 都由 scripts/build-mac.sh 放进 .app（xcstrings 用 xcstringstool 编译），不走 SwiftPM 资源
             exclude: ["Resources"]
         ),
+        // 模型层的单元测试：swift test --package-path App
+        .testTarget(
+            name: "PeerdeckTests",
+            dependencies: ["Peerdeck"]
+        ),
     ]
 )

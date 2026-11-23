@@ -299,6 +299,7 @@ private struct GeneralTab: View {
             LabeledContent("Magnet links and .torrent files") {
                 Button("Make Default") { setDefaultHandler() }
             }
+            BackupSection(model: model)
         }
         .formStyle(.grouped)
     }

@@ -13,6 +13,7 @@ import TorrentKit
 ///   TC_DEBUG_CLEANUP=<秒>         打开「清理未注册」确认（配合 TC_DEBUG_SIDEBAR=unregistered）
 ///   TC_DEBUG_ADD=<文本>           打开添加面板并填入文本（\n 分行）
 ///   TC_DEBUG_SCREEN=filters|settings|speed|setup|attention   打开对应的页面（attention = 总览里的「需要处理」）
+///   TC_DEBUG_BACKUP=export       设置页的「备份」一节出现时打开导出选项
 @MainActor
 enum DebugHooks {
     /// iOS 界面监听这个值，决定要不要打开某个页面（只在调试时用）

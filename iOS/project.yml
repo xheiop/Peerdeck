@@ -2,7 +2,7 @@
 # 生成的 Peerdeck.xcodeproj 不进 git，以这个文件为准。
 #
 # 代码组织：
-# - ../App/Sources/Peerdeck/Model、Support/Format.swift、Support/Notifier.swift、Views/ServerRow.swift
+# - ../App/Sources/Peerdeck/Model、Support/Format.swift、Support/Notifier.swift、Views/ServerRow.swift、Views/BackupSection.swift
 #   和 mac 共用，直接编进 iOS 的 target（没有拆成单独的 Swift 包，这样 Model 层不用全改成 public）
 # - Peerdeck/Shared：iOS app 和 Share Extension 共用的界面
 # - Peerdeck/App：只有 app 用的界面
@@ -40,6 +40,8 @@ targetTemplates:
       - path: ../App/Sources/Peerdeck/Support/Notifier.swift
         group: Shared (mac + iOS)
       - path: ../App/Sources/Peerdeck/Views/ServerRow.swift
+        group: Shared (mac + iOS)
+      - path: ../App/Sources/Peerdeck/Views/BackupSection.swift
         group: Shared (mac + iOS)
       - path: ../App/Sources/Peerdeck/Resources/Localizable.xcstrings
         group: Shared (mac + iOS)

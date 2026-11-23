@@ -34,6 +34,7 @@ struct SettingsScreen: View {
                 } footer: {
                     Text("Only trackers unreachable for longer than this go to Needs Attention. Recent ones are just marked in the list.")
                 }
+                BackupSection(model: model)
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)

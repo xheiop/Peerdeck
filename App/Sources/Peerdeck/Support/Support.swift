@@ -44,6 +44,7 @@ private var debugPanels: [NSPanel] = []
 ///   TC_DEBUG_CLEANUP=<秒>        打开「清理未注册」面板
 ///   TC_DEBUG_RETRACKER=<秒>      对当前站点打开「替换 tracker」面板
 ///   TC_DEBUG_SETTINGS=<标签>     打开设置窗口（servers|general|notify|sites），TC_DEBUG_SETTINGS_SERVER=<id> 选中服务器
+///   TC_DEBUG_BACKUP=export       设置里「备份」一节出现时打开导出选项（配合 TC_DEBUG_SETTINGS=general）
 ///   TC_DEBUG_LIMITS=1            3 秒后打开工具栏「限速」弹窗
 ///   TC_DEBUG_MENU=1              把菜单栏弹出面板放进一个普通窗口（截图用）
 ///   TC_DEBUG_SETUP=1             打开「添加服务器」面板
