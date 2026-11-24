@@ -9,6 +9,14 @@ and used as its GitHub Release notes.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-24
+
+### macOS and iOS
+
+- Set location for single torrents and on iOS
+- See the peers a torrent is connected to
+- Rename torrents
+
 ## [0.2.0] - 2026-11-23
 
 ### macOS and iOS
@@ -59,6 +67,7 @@ First preview release.
 - Self-signed HTTPS certificates can be trusted by fingerprint.
 - Passwords are stored in the Keychain.
 
-[Unreleased]: ../../compare/v0.2.0...HEAD
+[Unreleased]: ../../compare/v0.3.0...HEAD
+[0.3.0]: ../../compare/v0.2.0...v0.3.0
 [0.2.0]: ../../compare/v0.1.0...v0.2.0
 [0.1.0]: ../../releases/tag/v0.1.0
