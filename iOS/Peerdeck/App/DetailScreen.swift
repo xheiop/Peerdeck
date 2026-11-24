@@ -159,6 +159,9 @@ struct TorrentDetailScreen: View {
             Menu {
                 Button { model.perform(.recheck, on: [ref]) } label: { Label("Recheck", systemImage: "checkmark.arrow.trianglehead.counterclockwise") }
                 Button { model.requestSetLocation([ref]) } label: { Label("Set Location…", systemImage: "folder") }
+                if model.supportsRename(ref) {
+                    Button { model.requestRename(ref) } label: { Label("Rename…", systemImage: "pencil") }
+                }
             } label: { Label("More", systemImage: "ellipsis.circle") }
             Spacer()
             Button { model.requestDelete([ref]) } label: { Label("Delete…", systemImage: "trash") }

@@ -63,6 +63,7 @@ private struct TorrentDetail: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 Text(t.name).font(.headline).textSelection(.enabled)
+                    .contextMenu { if model.supportsRename(t.ref) { Button("Rename…") { model.requestRename(t.ref) } } }
 
                 if rules.isProblem(t) { problemCard(t) }
                 if let n = store.cross[t.ref] { crossCard(t, n) }

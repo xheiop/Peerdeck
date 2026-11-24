@@ -100,6 +100,8 @@ public actor TransmissionClient: TorrentClient {
         let api = s.semver.flatMap(SemVer.init(parsing:)) ?? SemVer(0, s.rpcVersion ?? 0)
         rpcVersion = s.rpcVersion ?? 0
         var caps: Capabilities = [.trackerHealthInList, .relocateWithoutMove, .lowFilePriority]
+        // torrent-rename-path 从 2.80（RPC 15）起。TR 没有只改显示名的接口，改的是磁盘上的顶层文件或目录
+        if (s.rpcVersion ?? 0) >= 15 { caps.formUnion([.renameTorrent, .renameRenamesData]) }
         if (s.rpcVersion ?? 0) >= 16 { caps.insert(.tags) } // labels 从 3.0 就有，sitename 从 4.0
         if (s.rpcVersion ?? 0) >= 17 { caps.insert(.trackerSiteName) }
         return ServerInfo(kind: .transmission, version: s.version, apiVersion: api, capabilities: caps)
@@ -237,6 +239,14 @@ public actor TransmissionClient: TorrentClient {
     public func peers(of id: String) async throws -> [Peer] {
         let target = try Self.hashes([id])
         return try decode(TRPeerList.self, try await call("torrent-get", ["ids": target, "fields": ["id", "peers"]])).model()
+    }
+
+    public func renameTorrent(_ id: String, currentName: String, to newName: String) async throws {
+        if let problem = TorrentRename.problem(newName) { throw ClientError.unsupported(problem) }
+        let name = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard name != currentName else { return }
+        // path 是种子的根（种子名），改它就是改种子名
+        _ = try await call("torrent-rename-path", ["ids": try Self.hashes([id]), "path": currentName, "name": name])
     }
 
     public func setFilePriority(_ priority: FilePriority, files indices: [Int], of id: String) async throws {

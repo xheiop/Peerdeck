@@ -603,6 +603,17 @@ ZH = {
     'Unknown client': '未知客户端',
     'The torrent is stopped, so no peers are connected.': '种子已停止，没有连接中的 peer。',
     'No peers connected right now.': '现在没有连接中的 peer。',
+    'Rename…': '重命名…',
+    'Rename': '重命名',
+    'Renamed to %@': '已重命名为 %@',
+    'The name can’t be empty': '名称不能为空',
+    'The name can’t contain / or \\': '名称里不能有 / 或 \\',
+    'This name isn’t allowed': '不能用这个名称',
+    'Rename Torrent': '重命名种子',
+    'Only the name shown in the client changes. Files on disk aren’t touched.': '只改下载器里显示的名字，不动磁盘上的文件。',
+    'Transmission also renames the top-level file or folder on disk.': 'Transmission 会同时改磁盘上的顶层文件或目录。',
+    'This torrent is cross-seeded: after renaming, the other torrents won’t find this data.': '这个种子有辅种：改名后，其他种子会找不到这份数据。',
+    'Flood can’t rename torrents': 'Flood 不能给种子改名',
 }
 
 # 其他字符串表：同一句英文在别的语境要不同中文时用（目前是分组标题）

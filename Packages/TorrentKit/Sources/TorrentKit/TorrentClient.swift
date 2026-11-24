@@ -32,6 +32,9 @@ public protocol TorrentClient: Actor {
     func peers(of id: String) async throws -> [Peer]
     /// 下载器不支持的档位（qB 的 .low）抛 .unsupported
     func setFilePriority(_ priority: FilePriority, files indices: [Int], of id: String) async throws
+    /// 给种子改名。qB 只改显示的名字；TR 同时改磁盘上的顶层文件或目录（currentName 就是它现在的名字）。
+    /// 不支持的下载器（Flood）抛 .unsupported；新名字不合法也抛 .unsupported
+    func renameTorrent(_ id: String, currentName: String, to newName: String) async throws
     func setAltSpeed(_ enabled: Bool) async throws
     func speedLimits() async throws -> SpeedLimits
     /// TR 的备用限速不能是「不限」（0 在 TR 里是真的 0），传 0 会抛 .unsupported

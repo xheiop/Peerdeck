@@ -17,6 +17,7 @@ import TransmissionClient
 //   swift run -c release tcli sync qb53 5      全量 + N 次增量的耗时和流量
 //   swift run -c release tcli bench 20000      合成数据的合并、过滤、排序耗时
 //   swift run -c release tcli files [目标…]     文件列表、文件优先级、剩余空间（加一个三文件的暂停种子，测完删掉）
+//   swift run -c release tcli rename [目标…]    种子改名（加一个两文件的暂停种子，改名、读回、测完删掉）
 //   swift run -c release tcli peers <hash> [目标…]  打印这个种子当前的 peer（只读）。flood 目标是 Flood 测试环境的免登录实例，要先启动它
 
 let adminCreds = Credentials(username: "admin", password: "adminadmin")
@@ -453,6 +454,58 @@ func filesCheck(_ name: String) async {
         files = try await client.files(of: id)
         ok("恢复普通", files.allSatisfy { $0.priority == .normal }, "\(files.map(\.priority))")
 
+
+        try await client.perform(.delete(withData: true), on: [id])
+        try await Task.sleep(for: .seconds(1.5)); try await sync.refresh()
+        ok("清理测试种子", await sync.torrents([id]).isEmpty)
+    } catch {
+        print("  ✗ 失败：\(error)")
+    }
+}
+
+// MARK: - rename
+
+func renameCheck(_ name: String) async {
+    guard let target = presets[name] else { print("未知目标 \(name)"); return }
+    let client = makeClient(target)
+    let stamp = String(Int(Date().timeIntervalSince1970))
+    func ok(_ label: String, _ cond: Bool, _ extra: String = "") { print("  \(cond ? "✓" : "✗") \(label) \(extra)") }
+    do {
+        let info = try await client.connect()
+        print("===== \(name) \(info.version)")
+        let parts = ["a", "b"].map { Data("rename \($0) \(stamp)".utf8) }
+        var sha = [UInt8](repeating: 0, count: 20)
+        parts.reduce(Data(), +).withUnsafeBytes { CC_SHA1_shim($0, &sha) }
+        let meta: [String: Any] = [
+            "announce": "http://pt-a.test:6969/ok/announce",
+            "info": [
+                "name": "tc-rename-\(stamp)",
+                "files": zip(["a.txt", "b.txt"], parts).map { ["length": $1.count, "path": [$0]] as [String: Any] },
+                "piece length": 16384, "pieces": Data(sha), "private": 1,
+            ] as [String: Any],
+        ]
+        try await client.add(.file(bencode(meta), filename: "rename.torrent"), options: AddOptions(savePath: "/downloads/tc", paused: true))
+        try await Task.sleep(for: .seconds(2))
+        let sync = ServerSync(client: client)
+        try await sync.refresh()
+        guard let t = await sync.snapshot().first(where: { $0.name == "tc-rename-\(stamp)" }) else { print("  ✗ 添加失败"); return }
+        let id = t.ref.id
+        guard info.capabilities.contains(.renameTorrent) else { ok("不支持改名（按能力）", true); return }
+
+        let newName = "tc-renamed-\(stamp)"
+        try await client.renameTorrent(id, currentName: t.name, to: newName)
+        try await Task.sleep(for: .seconds(1.5)); try await sync.refresh()
+        let renamed = await sync.torrents([id]).first
+        ok("改名后读回", renamed?.name == newName, renamed?.name ?? "nil")
+        let files = try await client.files(of: id).map(\.path)
+        // qB 只改显示名，文件路径不变；TR 连顶层目录一起改
+        let wantRoot = info.capabilities.contains(.renameRenamesData) ? newName : "tc-rename-\(stamp)"
+        ok(info.capabilities.contains(.renameRenamesData) ? "文件路径跟着改（TR）" : "文件路径不变（qB）", files.allSatisfy { $0.hasPrefix(wantRoot + "/") }, files.joined(separator: " "))
+        do { try await client.renameTorrent(id, currentName: newName, to: "x/y"); ok("带 / 的名字被拒绝", false) }
+        catch ClientError.unsupported { ok("带 / 的名字被拒绝", true) }
+        try await client.renameTorrent(id, currentName: newName, to: newName)
+        ok("同名不报错", true)
+
         try await client.perform(.delete(withData: true), on: [id])
         try await Task.sleep(for: .seconds(1.5)); try await sync.refresh()
         ok("清理测试种子", await sync.torrents([id]).isEmpty)
@@ -492,6 +545,8 @@ case "ops":
     for n in (args.count > 1 ? Array(args.dropFirst()) : ["qb53", "qb46", "tr41", "tr40"]) { await ops(n) }
 case "files":
     for n in (args.count > 1 ? Array(args.dropFirst()) : ["qb53", "qb46", "tr41", "tr40"]) { await filesCheck(n) }
+case "rename":
+    for n in (args.count > 1 ? Array(args.dropFirst()) : ["qb53", "qb46", "tr41", "tr40"]) { await renameCheck(n) }
 case "peers":
     guard args.count > 1 else { print("用法：tcli peers <hash> [目标…]"); break }
     for n in (args.count > 2 ? Array(args.dropFirst(2)) : ["qb53", "qb46", "tr41", "tr40"]) { await peersCheck(n, hash: args[1]) }

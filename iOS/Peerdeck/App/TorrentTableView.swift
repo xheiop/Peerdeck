@@ -141,7 +141,9 @@ struct TorrentTableView: UIViewRepresentable {
                     UIMenu(options: .displayInline, children: [
                         UIAction(title: L("Show Only “\(model.siteName(model.store.siteID(of: t)))”"), image: UIImage(systemName: "globe")) { _ in model.store.sidebar = .site(model.store.siteID(of: t)) },
                         UIAction(title: L("Copy Name"), image: UIImage(systemName: "doc.on.doc")) { _ in UIPasteboard.general.string = t.name },
-                    ]),
+                    ] + (model.supportsRename(ref) ? [
+                        UIAction(title: L("Rename…"), image: UIImage(systemName: "pencil")) { _ in model.requestRename(ref) },
+                    ] : [])),
                     UIAction(title: L("Delete…"), image: UIImage(systemName: "trash"), attributes: .destructive) { _ in model.requestDelete([ref]) },
                 ])
             }

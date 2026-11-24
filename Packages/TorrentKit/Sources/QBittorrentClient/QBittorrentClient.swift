@@ -48,6 +48,7 @@ public actor QBittorrentClient: TorrentClient {
             throw ClientError.unexpectedResponse("webapiVersion: \(api)")
         }
         var caps: Capabilities = [.categories, .tags]
+        caps.insert(.renameTorrent) // torrents/rename：webapi 2.0 起就有，只改显示名
         // has_tracker_* 字段：5.2.4（webapi 2.15.1）有、5.1.2（2.11.4）没有，中间版本没测，按 2.12 起算（待确认）
         if apiVer >= SemVer(2, 12, 0) { caps.insert(.trackerHealthInList); caps.insert(.apiKey) }
         let info = ServerInfo(
@@ -291,6 +292,13 @@ public actor QBittorrentClient: TorrentClient {
     public func peers(of id: String) async throws -> [Peer] {
         let data = try await get("sync/torrentPeers", [URLQueryItem(name: "hash", value: id), URLQueryItem(name: "rid", value: "0")])
         return try JSONDecoder().decode(QBPeerList.self, from: data).model()
+    }
+
+    public func renameTorrent(_ id: String, currentName: String, to newName: String) async throws {
+        if let problem = TorrentRename.problem(newName) { throw ClientError.unsupported(problem) }
+        let name = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard name != currentName else { return }
+        try await post("torrents/rename", ["hash": id, "name": name])
     }
 
     public func setFilePriority(_ priority: FilePriority, files indices: [Int], of id: String) async throws {

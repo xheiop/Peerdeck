@@ -31,6 +31,8 @@ enum ActiveSheet: Identifiable {
     case retracker(RetrackerDraft)
     /// 更改保存位置（qB setLocation / TR torrent-set-location / Flood move）
     case setLocation(refs: [TorrentRef])
+    /// 种子改名
+    case renameTorrent(TorrentRef)
     case setup
     /// 清理「疑似未注册」：按原话分组，自动保留有辅种的
     case cleanup
@@ -40,6 +42,7 @@ enum ActiveSheet: Identifiable {
         case .add(let d): "add-\(d.id)"
         case .delete(let r, let c): "delete-\(c)-\(r.count)"
         case .retracker(let d): "retracker-\(d.id)"
+        case .renameTorrent(let r): "rename-\(r.server.rawValue)/\(r.id)"
         case .setLocation(let r): "location-\(r.count)-\(r.first.map { "\($0.server.rawValue)/\($0.id)" } ?? "")"
         case .setup: "setup"
         case .cleanup: "cleanup"
@@ -434,6 +437,49 @@ final class AppModel {
         guard let rt = server(ref.server.rawValue), let client = rt.client else { throw ClientError.notConnected }
         try await client.setFilePriority(priority, files: indices, of: ref.id)
         rt.refreshNow()
+    }
+
+    // MARK: - 种子改名
+
+    func requestRename(_ ref: TorrentRef) {
+        guard supportsRename(ref) else { return }
+        sheet = .renameTorrent(ref)
+    }
+
+    /// Flood 不能改名
+    func supportsRename(_ ref: TorrentRef) -> Bool {
+        server(ref.server.rawValue)?.info?.capabilities.contains(.renameTorrent) ?? false
+    }
+
+    /// 改名面板里的说明，以及（有辅种且会动磁盘时）的警告
+    func renameNotes(_ ref: TorrentRef, newName: String) -> (info: String, warning: String?) {
+        if !newName.isEmpty, let problem = TorrentRename.problem(newName) { return (problem, nil) }
+        guard server(ref.server.rawValue)?.info?.capabilities.contains(.renameRenamesData) == true else {
+            return (L("Only the name shown in the client changes. Files on disk aren’t touched."), nil)
+        }
+        let info = L("Transmission also renames the top-level file or folder on disk.")
+        let warning = store.cross[ref] != nil ? L("This torrent is cross-seeded: after renaming, the other torrents won’t find this data.") : nil
+        return (info, warning)
+    }
+
+    func canRename(_ ref: TorrentRef, to newName: String) -> Bool {
+        guard let t = store.torrent(ref), TorrentRename.problem(newName) == nil else { return false }
+        return newName.trimmingCharacters(in: .whitespacesAndNewlines) != t.name
+    }
+
+    func renameTorrent(_ ref: TorrentRef, to newName: String) {
+        guard let rt = server(ref.server.rawValue), let client = rt.client, let t = store.torrent(ref) else {
+            alert = L("Some servers are offline; their torrents weren’t changed."); return
+        }
+        let name = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+        Task {
+            do {
+                try await client.renameTorrent(ref.id, currentName: t.name, to: name)
+                store.patchLocally([ref]) { $0.name = name }
+                rt.refreshNow()
+                showToast(L("Renamed to \(name)"))
+            } catch { alert = Fmt.labeled(rt.config.name, "\(error)") }
+        }
     }
 
     /// 文件优先级有没有「低」这一档（TR 有，qB 没有）

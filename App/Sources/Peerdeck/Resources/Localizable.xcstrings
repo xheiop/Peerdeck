@@ -2270,6 +2270,16 @@
         }
       }
     },
+    "Flood can’t rename torrents": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flood 不能给种子改名"
+          }
+        }
+      }
+    },
     "Flood can’t replace a single tracker URL safely": {
       "localizations": {
         "zh-Hans": {
@@ -3450,6 +3460,16 @@
         }
       }
     },
+    "Only the name shown in the client changes. Files on disk aren’t touched.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "只改下载器里显示的名字，不动磁盘上的文件。"
+          }
+        }
+      }
+    },
     "Only trackers unreachable for longer than this go to Needs Attention. Recent ones are just marked in the list.": {
       "localizations": {
         "zh-Hans": {
@@ -4002,6 +4022,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "已取消 %@ 的限速"
+          }
+        }
+      }
+    },
+    "Rename": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重命名"
+          }
+        }
+      }
+    },
+    "Rename Torrent": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重命名种子"
+          }
+        }
+      }
+    },
+    "Renamed to %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已重命名为 %@"
+          }
+        }
+      }
+    },
+    "Rename…": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重命名…"
           }
         }
       }
@@ -4993,6 +5053,26 @@
         }
       }
     },
+    "The name can’t be empty": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "名称不能为空"
+          }
+        }
+      }
+    },
+    "The name can’t contain / or \\": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "名称里不能有 / 或 \\"
+          }
+        }
+      }
+    },
     "The password needs at least %lld characters.": {
       "localizations": {
         "zh-Hans": {
@@ -5191,6 +5271,26 @@
         }
       }
     },
+    "This name isn’t allowed": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不能用这个名称"
+          }
+        }
+      }
+    },
+    "This torrent is cross-seeded: after renaming, the other torrents won’t find this data.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这个种子有辅种：改名后，其他种子会找不到这份数据。"
+          }
+        }
+      }
+    },
     "This torrent is gone": {
       "localizations": {
         "zh-Hans": {
@@ -5356,6 +5456,16 @@
     },
     "Transmission": {
       "shouldTranslate": false
+    },
+    "Transmission also renames the top-level file or folder on disk.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transmission 会同时改磁盘上的顶层文件或目录。"
+          }
+        }
+      }
     },
     "Transmission didn’t accept the torrent": {
       "localizations": {

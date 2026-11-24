@@ -472,6 +472,22 @@ public struct Capabilities: OptionSet, Sendable, Hashable {
     public static let apiKey = Capabilities(rawValue: 1 << 5)
     /// 文件优先级有「低」这一档（TR 有，qB 没有）
     public static let lowFilePriority = Capabilities(rawValue: 1 << 6)
+    /// 能给种子改名（qB torrents/rename、TR torrent-rename-path；Flood 没有这个接口）
+    public static let renameTorrent = Capabilities(rawValue: 1 << 7)
+    /// 改名会连磁盘上的顶层文件或目录一起改（TR）。qB 只改显示的名字，不动文件
+    public static let renameRenamesData = Capabilities(rawValue: 1 << 8)
+}
+
+/// 种子改名时新名字的检查（TR 改的是磁盘上的顶层文件或目录，所以按文件名规则来，qB 跟着一致）
+public enum TorrentRename {
+    /// 新名字不合法时返回原因，合法返回 nil
+    public static func problem(_ name: String) -> String? {
+        let n = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if n.isEmpty { return String(localized: "The name can’t be empty") }
+        if n.contains("/") || n.contains("\\") { return String(localized: "The name can’t contain / or \\") }
+        if n == "." || n == ".." { return String(localized: "This name isn’t allowed") }
+        return nil
+    }
 }
 
 public struct SemVer: Comparable, Sendable, Hashable, CustomStringConvertible {

@@ -349,6 +349,10 @@ public actor FloodClient: TorrentClient {
         try await get([FloodPeer].self, "api/torrents/\(id)/peers").map(\.model)
     }
 
+    public func renameTorrent(_ id: String, currentName: String, to newName: String) async throws {
+        throw ClientError.unsupported(String(localized: "Flood can’t rename torrents"))
+    }
+
     public func setFilePriority(_ priority: FilePriority, files indices: [Int], of id: String) async throws {
         guard !indices.isEmpty else { return }
         let value: Int
