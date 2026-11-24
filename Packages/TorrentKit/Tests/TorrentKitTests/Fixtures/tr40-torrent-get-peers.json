@@ -1,0 +1,72 @@
+{
+ "torrents": [
+  {
+   "hashString": "91bc1000e50fdddb97e0c954e7628f92ef35e05d",
+   "peers": [
+    {
+     "address": "192.168.107.4",
+     "clientIsChoked": false,
+     "clientIsInterested": true,
+     "clientName": "qBittorrent 4.6.7",
+     "flagStr": "DEI",
+     "isDownloadingFrom": true,
+     "isEncrypted": true,
+     "isIncoming": true,
+     "isUTP": false,
+     "isUploadingTo": false,
+     "peerIsChoked": true,
+     "peerIsInterested": false,
+     "port": 57975,
+     "progress": 1,
+     "rateToClient": 24000,
+     "rateToPeer": 0
+    },
+    {
+     "address": "192.168.107.6",
+     "clientIsChoked": false,
+     "clientIsInterested": false,
+     "clientName": "Transmission 4.1.4",
+     "flagStr": "K?EX",
+     "isDownloadingFrom": false,
+     "isEncrypted": true,
+     "isIncoming": false,
+     "isUTP": false,
+     "isUploadingTo": false,
+     "peerIsChoked": false,
+     "peerIsInterested": false,
+     "port": 51413,
+     "progress": 0.005,
+     "rateToClient": 0,
+     "rateToPeer": 0
+    },
+    {
+     "address": "192.168.107.2",
+     "clientIsChoked": false,
+     "clientIsInterested": true,
+     "clientName": "qBittorrent 5.3.0",
+     "flagStr": "D?EX",
+     "isDownloadingFrom": true,
+     "isEncrypted": true,
+     "isIncoming": false,
+     "isUTP": false,
+     "isUploadingTo": false,
+     "peerIsChoked": false,
+     "peerIsInterested": false,
+     "port": 6881,
+     "progress": 0.01,
+     "rateToClient": 0,
+     "rateToPeer": 0
+    }
+   ],
+   "peersFrom": {
+    "fromCache": 0,
+    "fromDht": 0,
+    "fromIncoming": 1,
+    "fromLpd": 0,
+    "fromLtep": 0,
+    "fromPex": 2,
+    "fromTracker": 0
+   }
+  }
+ ]
+}

@@ -227,6 +227,27 @@ struct FloodDetails: Decodable {
     var realURLs: [String] { trackers.filter { $0.type != 3 && $0.url.contains("://") }.map(\.url) }
 }
 
+/// api/torrents/{hash}/peers 的一项（Flood 4.16.4 TR 后端实测）。没有端口，也没有累计量和连接方式
+struct FloodPeer: Decodable {
+    var address: String
+    var country: String?
+    var clientVersion: String?
+    /// 0…100
+    var completedPercent: Double?
+    var downloadRate: Double?
+    var uploadRate: Double?
+    var isEncrypted: Bool?
+    var isIncoming: Bool?
+
+    var model: Peer {
+        Peer(address: address, port: 0, client: clientVersion ?? "",
+             progress: completedPercent.map { min(1, max(0, $0 / 100)) } ?? 0,
+             downloadRate: FloodNumber.int(downloadRate) ?? 0, uploadRate: FloodNumber.int(uploadRate) ?? 0,
+             encrypted: isEncrypted, incoming: isIncoming,
+             countryCode: country.flatMap { $0.isEmpty ? nil : $0.uppercased() })
+    }
+}
+
 struct FloodContent: Decodable {
     var index: Int
     var path: String

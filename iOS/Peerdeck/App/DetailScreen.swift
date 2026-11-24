@@ -10,6 +10,8 @@ struct TorrentDetailScreen: View {
     @State private var trackerError: String?
     /// TC_DEBUG_FILES=1 时直接打开文件列表（截图用）
     @State private var showFiles = ProcessInfo.processInfo.environment["TC_DEBUG_FILES"] == "1"
+    /// TC_DEBUG_PEERS=1 时直接打开 Peers（截图用）
+    @State private var showPeers = ProcessInfo.processInfo.environment["TC_DEBUG_PEERS"] == "1"
 
     private var store: TorrentStore { model.store }
 
@@ -32,6 +34,16 @@ struct TorrentDetailScreen: View {
                     }
                     .buttonStyle(.plain)
                     .padding(.top, 10)
+                    NavigationLink { PeersScreen(model: model, torrent: t) } label: {
+                        HStack {
+                            Text("Peers").font(.subheadline)
+                            Spacer()
+                            Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
+                        }
+                        .padding(.horizontal, 20).padding(.vertical, 12).contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .overlay(alignment: .top) { Rectangle().fill(Color(uiColor: .separator)).frame(height: 0.5).padding(.leading, 20) }
                     LedgerHeader(title: "Tracker").padding(.top, 18).padding(.bottom, 4)
                     VStack(alignment: .leading, spacing: 0) { trackerRows }
                 }
@@ -42,6 +54,7 @@ struct TorrentDetailScreen: View {
             .toolbar(.hidden, for: .tabBar)
             .toolbar { actions(t) }
             .navigationDestination(isPresented: $showFiles) { FilesScreen(model: model, torrent: t) }
+            .navigationDestination(isPresented: $showPeers) { PeersScreen(model: model, torrent: t) }
             .task(id: ref) {
                 do { trackers = try await model.trackers(for: ref) } catch { trackerError = "\(error)" }
             }

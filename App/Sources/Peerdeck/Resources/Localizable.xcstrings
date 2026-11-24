@@ -3130,6 +3130,16 @@
         }
       }
     },
+    "No peers connected right now.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "现在没有连接中的 peer。"
+          }
+        }
+      }
+    },
     "No routes configured": {
       "localizations": {
         "zh-Hans": {
@@ -3619,6 +3629,19 @@
           "stringUnit": {
             "state": "translated",
             "value": "Peerdeck 免费开源，使用 GPL-3.0-only 许可证。"
+          }
+        }
+      }
+    },
+    "Peers": {
+      "shouldTranslate": false
+    },
+    "Peers (%@)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peers（%@）"
           }
         }
       }
@@ -5020,6 +5043,16 @@
         }
       }
     },
+    "The torrent is stopped, so no peers are connected.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "种子已停止，没有连接中的 peer。"
+          }
+        }
+      }
+    },
     "Their data is also used by torrents outside this cleanup (same infohash or same name). Kept by default: they can keep seeding on other sites.": {
       "localizations": {
         "zh-Hans": {
@@ -5410,6 +5443,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "未知"
+          }
+        }
+      }
+    },
+    "Unknown client": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未知客户端"
           }
         }
       }

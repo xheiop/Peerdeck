@@ -1,0 +1,42 @@
+[
+ {
+  "address": "192.168.107.6",
+  "country": "",
+  "clientVersion": "Transmission 4.1.4",
+  "completedPercent": 20.999999344348907,
+  "downloadRate": 0,
+  "uploadRate": 0,
+  "isEncrypted": true,
+  "isIncoming": false
+ },
+ {
+  "address": "192.168.107.2",
+  "country": "",
+  "clientVersion": "qBittorrent/5.3.0",
+  "completedPercent": 20.999999344348907,
+  "downloadRate": 0,
+  "uploadRate": 0,
+  "isEncrypted": true,
+  "isIncoming": false
+ },
+ {
+  "address": "192.168.107.3",
+  "country": "",
+  "clientVersion": "Transmission 4.0.6",
+  "completedPercent": 20.499999821186066,
+  "downloadRate": 0,
+  "uploadRate": 0,
+  "isEncrypted": true,
+  "isIncoming": false
+ },
+ {
+  "address": "192.168.107.4",
+  "country": "",
+  "clientVersion": "qBittorrent/4.6.7",
+  "completedPercent": 100,
+  "downloadRate": 24576,
+  "uploadRate": 0,
+  "isEncrypted": true,
+  "isIncoming": false
+ }
+]

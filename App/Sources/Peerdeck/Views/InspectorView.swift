@@ -42,6 +42,9 @@ private struct TorrentDetail: View {
     @State private var showFiles = ProcessInfo.processInfo.environment["TC_DEBUG_FILES"] == "1"
     @State private var files: [ContentFile]?
     @State private var filesError: String?
+    /// TC_DEBUG_PEERS=1 时默认展开（截图用）
+    @State private var showPeers = ProcessInfo.processInfo.environment["TC_DEBUG_PEERS"] == "1"
+    @State private var peerFeed: PeerFeed
 
     init(model: AppModel, torrent: Torrent) {
         self.model = model
@@ -49,6 +52,7 @@ private struct TorrentDetail: View {
         let problem = model.store.rules.isProblem(torrent)
         _showInfo = State(initialValue: !problem)
         _showTrackers = State(initialValue: problem)
+        _peerFeed = State(initialValue: PeerFeed(ref: torrent.ref))
     }
 
     private var store: TorrentStore { model.store }
@@ -120,6 +124,11 @@ private struct TorrentDetail: View {
                     }
                     .padding(.top, 4)
                 }
+                DisclosureGroup(isExpanded: $showPeers) {
+                    peersSection.padding(.top, 4)
+                } label: {
+                    Text(peerFeed.peers.map { L("Peers (\(Fmt.count($0.count)))") } ?? L("Peers"))
+                }
             }
             .padding(14)
         }
@@ -128,6 +137,48 @@ private struct TorrentDetail: View {
         }
         // 文件列表展开时才去拿（大种子几百个文件，不展开就不请求）
         .task(id: showFiles) { if showFiles, files == nil { await loadFiles() } }
+        // Peers 展开时才轮询
+        .task(id: showPeers) { if showPeers { await peerFeed.run(model) } }
+    }
+
+    @ViewBuilder private var peersSection: some View {
+        if let peers = peerFeed.peers {
+            if peers.isEmpty {
+                Text(torrent.state == .stopped ? L("The torrent is stopped, so no peers are connected.") : L("No peers connected right now."))
+                    .font(.callout).foregroundStyle(.secondary)
+            } else {
+                VStack(alignment: .leading, spacing: 6) {
+                    let total = peerFeed.totals
+                    Text(verbatim: "↓ \(Fmt.speed(total.down)) · ↑ \(Fmt.speed(total.up))")
+                        .font(.caption).foregroundStyle(.secondary).monospacedDigit()
+                    LazyVStack(alignment: .leading, spacing: 6) {
+                        ForEach(Array(peers.enumerated()), id: \.offset) { _, p in
+                            VStack(alignment: .leading, spacing: 1) {
+                                HStack(spacing: 6) {
+                                    Text(p.clientLabel).lineLimit(1).truncationMode(.tail)
+                                    Spacer(minLength: 4)
+                                    if !p.flags.isEmpty {
+                                        Text(verbatim: p.flags).font(.caption.monospaced()).foregroundStyle(.secondary).help(p.flagsHelp ?? "")
+                                    }
+                                }
+                                HStack(spacing: 6) {
+                                    Text(verbatim: [p.countryCode, p.endpoint].compactMap { $0 }.joined(separator: " "))
+                                        .font(.caption.monospaced()).lineLimit(1).truncationMode(.middle).textSelection(.enabled)
+                                    Spacer(minLength: 4)
+                                    Text(verbatim: p.statusLine).font(.caption).monospacedDigit()
+                                }
+                                .foregroundStyle(.secondary)
+                            }
+                            .font(.callout)
+                        }
+                    }
+                }
+            }
+        } else if let error = peerFeed.error {
+            Text(error).foregroundStyle(.secondary)
+        } else {
+            ProgressView().controlSize(.small)
+        }
     }
 
     private func loadFiles() async {

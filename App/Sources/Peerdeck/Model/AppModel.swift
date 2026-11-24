@@ -143,15 +143,19 @@ final class AppModel {
         DebugHooks.install(self)
     }
 
+    /// 轮询间隔：前台用设置里的「前台刷新」，mac 在后台用「后台刷新」，iOS 进后台就不轮询
+    var pollInterval: Duration {
+        #if os(macOS)
+        NSApp.isActive ? .seconds(prefs.refreshForeground) : .seconds(prefs.refreshBackground)
+        #else
+        // 系统也会挂起 app。回到前台时 setForeground 会立即唤醒
+        foreground ? .seconds(prefs.refreshForeground) : .seconds(3600)
+        #endif
+    }
+
     private func makeRuntime(_ c: ServerConfig) -> ServerRuntime {
         let rt = ServerRuntime(config: c, store: lightweight ? nil : store) { [weak self] in
-            guard let self else { return .seconds(2) }
-            #if os(macOS)
-            return NSApp.isActive ? .seconds(self.prefs.refreshForeground) : .seconds(self.prefs.refreshBackground)
-            #else
-            // iOS 进后台就不轮询（系统也会挂起 app）。回到前台时 setForeground 会立即唤醒
-            return self.foreground ? .seconds(self.prefs.refreshForeground) : .seconds(3600)
-            #endif
+            self?.pollInterval ?? .seconds(2)
         }
         rt.onStatusChange = { [weak self] in self?.refreshServerMaps() }
         rt.syncTorrents = !lightweight
@@ -418,6 +422,12 @@ final class AppModel {
     func files(for ref: TorrentRef) async throws -> [ContentFile] {
         guard let client = server(ref.server.rawValue)?.client else { throw ClientError.notConnected }
         return try await client.files(of: ref.id)
+    }
+
+    /// 按显示顺序排好（正在传数据的在前）
+    func peers(for ref: TorrentRef) async throws -> [Peer] {
+        guard let client = server(ref.server.rawValue)?.client else { throw ClientError.notConnected }
+        return try await client.peers(of: ref.id).sorted(by: Peer.displayOrder)
     }
 
     func setFilePriority(_ priority: FilePriority, files indices: [Int], of ref: TorrentRef) async throws {

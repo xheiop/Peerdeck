@@ -153,6 +153,43 @@ struct QBFile: Decodable {
     }
 }
 
+/// sync/torrentPeers 的返回（rid=0，全量）。字典的键是「ip:port」
+struct QBPeerList: Decodable {
+    struct Item: Decodable {
+        var ip: String?
+        var port: Int?
+        var client: String?
+        var progress: Double?
+        var dl_speed: Int64?
+        var up_speed: Int64?
+        var downloaded: Int64?
+        var uploaded: Int64?
+        var flags: String?
+        var flags_desc: String?
+        var connection: String?
+        var country_code: String?
+    }
+    var peers: [String: Item]?
+
+    func model() -> [Peer] {
+        (peers ?? [:]).compactMap { key, p in
+            // 老版本可能没有 ip / port 字段，从键里拆
+            let split = key.lastIndex(of: ":").map { (String(key[..<$0]), Int(key[key.index(after: $0)...])) }
+            guard let address = p.ip ?? split?.0 else { return nil }
+            let flags = p.flags ?? ""
+            return Peer(address: address.trimmingCharacters(in: CharacterSet(charactersIn: "[]")), port: p.port ?? split?.1 ?? 0,
+                        client: p.client ?? "", progress: min(1, max(0, p.progress ?? 0)),
+                        downloadRate: p.dl_speed ?? 0, uploadRate: p.up_speed ?? 0,
+                        downloaded: p.downloaded, uploaded: p.uploaded,
+                        flags: flags, flagsHelp: p.flags_desc.flatMap { $0.isEmpty ? nil : $0 },
+                        connection: p.connection.flatMap { $0.isEmpty ? nil : $0 },
+                        encrypted: flags.split(separator: " ").contains("E"),
+                        incoming: flags.split(separator: " ").contains("I"),
+                        countryCode: p.country_code.flatMap { $0.isEmpty ? nil : $0.uppercased() })
+        }
+    }
+}
+
 struct QBAddResult: Decodable {
     var success_count: Int?
     var failure_count: Int?

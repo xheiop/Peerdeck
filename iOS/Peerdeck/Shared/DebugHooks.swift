@@ -6,7 +6,7 @@ import TorrentKit
 ///   TC_CONFIG_FILE=<json>        服务器配置从这个文件读写，不碰 Keychain
 ///   TC_DATA_DIR=<目录>            偏好、站点表、问题账本存这里
 ///   TC_DEBUG_SIDEBAR=<视图>       同 mac：all|active|rejected|unregistered|unreachable|state.<组>|server.<id>|site.<域名>|category.<名>|tag.<名>
-///   TC_DEBUG_OPEN_FIRST=<秒>      打开列表第一个种子的详情；再加 TC_DEBUG_FILES=1 直接进文件列表
+///   TC_DEBUG_OPEN_FIRST=<秒>      打开列表第一个种子的详情；再加 TC_DEBUG_FILES=1 直接进文件列表，TC_DEBUG_PEERS=1 直接进 Peers
 ///   TC_DEBUG_IMPORT_TO_KEYCHAIN=<json>  启动时把这份配置写进 Keychain（验证共享组）
 ///   TC_DEBUG_KEYCHAIN_GROUP=<组>   配合上一项：只写进这个钥匙串组，模拟旧版本存的配置（验证启动时挪进共享组）
 ///   TC_LOG=1                     打日志（simctl launch --console 能看到）

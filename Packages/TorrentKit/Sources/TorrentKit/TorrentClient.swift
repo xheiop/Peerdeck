@@ -28,6 +28,8 @@ public protocol TorrentClient: Actor {
     func trackers(of id: String) async throws -> [Tracker]
     /// 种子的文件列表。磁力链接还没拿到元数据时是空的
     func files(of id: String) async throws -> [ContentFile]
+    /// 种子当前连着的对端。每次都是全量（qB 也用 rid=0），只在详情打开时轮询
+    func peers(of id: String) async throws -> [Peer]
     /// 下载器不支持的档位（qB 的 .low）抛 .unsupported
     func setFilePriority(_ priority: FilePriority, files indices: [Int], of id: String) async throws
     func setAltSpeed(_ enabled: Bool) async throws

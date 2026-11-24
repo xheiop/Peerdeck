@@ -234,6 +234,11 @@ public actor TransmissionClient: TorrentClient {
         return try decode(TRFileList.self, try await call("torrent-get", ["ids": target, "fields": ["id", "files", "fileStats"]])).model()
     }
 
+    public func peers(of id: String) async throws -> [Peer] {
+        let target = try Self.hashes([id])
+        return try decode(TRPeerList.self, try await call("torrent-get", ["ids": target, "fields": ["id", "peers"]])).model()
+    }
+
     public func setFilePriority(_ priority: FilePriority, files indices: [Int], of id: String) async throws {
         guard !indices.isEmpty else { return }
         var args: [String: Any] = ["ids": try Self.hashes([id])]

@@ -599,6 +599,10 @@ ZH = {
     'Several folders': '多个目录',
     'Only update the recorded path (for files you already moved).': '只改记录的路径（文件已经手动挪过时用）。',
     '%lld will be skipped: their client always moves files when changing the path.': '%lld 个会跳过：它们的下载器改路径时总会移动文件。',
+    'Peers (%@)': 'Peers（%@）',
+    'Unknown client': '未知客户端',
+    'The torrent is stopped, so no peers are connected.': '种子已停止，没有连接中的 peer。',
+    'No peers connected right now.': '现在没有连接中的 peer。',
 }
 
 # 其他字符串表：同一句英文在别的语境要不同中文时用（目前是分组标题）
@@ -632,7 +636,7 @@ PLURAL_EN = {
 
 # 不需要翻译的（产品名、协议名、格式串）
 NO_TRANSLATE = {
-    'API key', 'Peerdeck', 'Tracker', 'Transmission', 'qBittorrent',
+    'API key', 'Peerdeck', 'Peers', 'Tracker', 'Transmission', 'qBittorrent',
     'SHA256 %@', 'SHA256 %@…', 'https://nas.example.com/qb/',
     'http://192.168.1.2:8080', 'http://192.168.1.2:9091',
 }

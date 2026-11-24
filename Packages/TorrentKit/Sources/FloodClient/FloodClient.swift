@@ -345,6 +345,10 @@ public actor FloodClient: TorrentClient {
         return contents.map { $0.model(rootFolder: root) }
     }
 
+    public func peers(of id: String) async throws -> [Peer] {
+        try await get([FloodPeer].self, "api/torrents/\(id)/peers").map(\.model)
+    }
+
     public func setFilePriority(_ priority: FilePriority, files indices: [Int], of id: String) async throws {
         guard !indices.isEmpty else { return }
         let value: Int

@@ -321,6 +321,67 @@ public struct ContentFile: Sendable, Equatable, Identifiable {
     }
 }
 
+/// 种子当前连着的一个对端（peer）。各下载器给的字段不全一样，没有的是 nil
+public struct Peer: Sendable, Equatable {
+    public var address: String
+    /// Flood 不给端口，是 0
+    public var port: Int
+    /// 对方的客户端，比如「qBittorrent/5.3.0」「Transmission 4.1.4」
+    public var client: String
+    /// 对方的完成度，0…1
+    public var progress: Double
+    /// 字节/秒：我们从对方下载 / 上传给对方
+    public var downloadRate: Int64
+    public var uploadRate: Int64
+    /// 这次连接累计从对方下载 / 上传给对方的字节（qB、TR 4.1 起有；TR 4.0、Flood 没有）
+    public var downloaded: Int64?
+    public var uploaded: Int64?
+    /// 下载器原样给的标志（qB「U E P」，TR「DEI」）
+    public var flags: String
+    /// 标志的解释（只有 qB 给，每行一个）
+    public var flagsHelp: String?
+    /// 「BT」或「μTP」，Flood 不给
+    public var connection: String?
+    public var encrypted: Bool?
+    /// 对方连进来的（而不是我们连出去的）
+    public var incoming: Bool?
+    /// 两个字母的国家代码，qB 开了「解析国家」才有
+    public var countryCode: String?
+
+    /// 地址加端口，IPv6 加方括号。Flood 不给端口（port 是 0），只显示地址
+    public var endpoint: String {
+        guard port > 0 else { return address }
+        return address.contains(":") ? "[\(address)]:\(port)" : "\(address):\(port)"
+    }
+
+    public init(address: String, port: Int, client: String = "", progress: Double = 0, downloadRate: Int64 = 0, uploadRate: Int64 = 0,
+                downloaded: Int64? = nil, uploaded: Int64? = nil, flags: String = "", flagsHelp: String? = nil,
+                connection: String? = nil, encrypted: Bool? = nil, incoming: Bool? = nil, countryCode: String? = nil) {
+        self.address = address
+        self.port = port
+        self.client = client
+        self.progress = progress
+        self.downloadRate = downloadRate
+        self.uploadRate = uploadRate
+        self.downloaded = downloaded
+        self.uploaded = uploaded
+        self.flags = flags
+        self.flagsHelp = flagsHelp
+        self.connection = connection
+        self.encrypted = encrypted
+        self.incoming = incoming
+        self.countryCode = countryCode
+    }
+
+    /// 显示顺序：正在传数据的在前（按速度），然后按对方完成度
+    public static func displayOrder(_ a: Peer, _ b: Peer) -> Bool {
+        let ra = a.downloadRate + a.uploadRate, rb = b.downloadRate + b.uploadRate
+        if ra != rb { return ra > rb }
+        if a.progress != b.progress { return a.progress > b.progress }
+        return a.endpoint < b.endpoint
+    }
+}
+
 public struct Tracker: Sendable, Equatable {
     public var url: String
     public var tier: Int

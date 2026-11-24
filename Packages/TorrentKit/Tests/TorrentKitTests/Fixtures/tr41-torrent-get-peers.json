@@ -1,0 +1,81 @@
+{
+ "torrents": [
+  {
+   "hashString": "91bc1000e50fdddb97e0c954e7628f92ef35e05d",
+   "peers": [
+    {
+     "address": "192.168.107.4",
+     "bytes_to_client": 638976,
+     "bytes_to_peer": 0,
+     "clientIsChoked": false,
+     "clientIsInterested": true,
+     "clientName": "qBittorrent/4.6.7",
+     "flagStr": "DEI",
+     "isDownloadingFrom": true,
+     "isEncrypted": true,
+     "isIncoming": true,
+     "isUTP": false,
+     "isUploadingTo": false,
+     "peerIsChoked": true,
+     "peerIsInterested": false,
+     "peer_id": "LXFCNDY3MC1tXzFrN35YVyplcVA=",
+     "port": 49553,
+     "progress": 1.0,
+     "rateToClient": 40960,
+     "rateToPeer": 0
+    },
+    {
+     "address": "192.168.107.3",
+     "bytes_to_client": 0,
+     "bytes_to_peer": 0,
+     "clientIsChoked": false,
+     "clientIsInterested": false,
+     "clientName": "Transmission 4.0.6",
+     "flagStr": "K?EI",
+     "isDownloadingFrom": false,
+     "isEncrypted": true,
+     "isIncoming": true,
+     "isUTP": false,
+     "isUploadingTo": false,
+     "peerIsChoked": false,
+     "peerIsInterested": false,
+     "peer_id": "LVRSNDA2MC0zZmc3b2YxZmk5M2k=",
+     "port": 37789,
+     "progress": 0.0,
+     "rateToClient": 0,
+     "rateToPeer": 0
+    },
+    {
+     "address": "192.168.107.2",
+     "bytes_to_client": 1572864,
+     "bytes_to_peer": 0,
+     "clientIsChoked": false,
+     "clientIsInterested": true,
+     "clientName": "qBittorrent/5.3.0",
+     "flagStr": "D?EX",
+     "isDownloadingFrom": true,
+     "isEncrypted": true,
+     "isIncoming": false,
+     "isUTP": false,
+     "isUploadingTo": false,
+     "peerIsChoked": false,
+     "peerIsInterested": false,
+     "peer_id": "LXFCNTMwMC1MR0Nud29tLjVEWTU=",
+     "port": 6881,
+     "progress": 0.009999999776482582,
+     "rateToClient": 262144,
+     "rateToPeer": 0
+    }
+   ],
+   "peersFrom": {
+    "fromCache": 0,
+    "fromDht": 0,
+    "fromIncoming": 2,
+    "fromLpd": 0,
+    "fromLtep": 0,
+    "fromPex": 1,
+    "fromTracker": 0
+   }
+  }
+ ]
+}

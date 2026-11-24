@@ -1,0 +1,61 @@
+{
+ "full_update": true,
+ "peers": {
+  "192.168.107.2:6881": {
+   "client": "qBittorrent/5.3.0",
+   "connection": "μTP",
+   "country": "N/A",
+   "country_code": "",
+   "dl_speed": 0,
+   "downloaded": 0,
+   "files": "",
+   "flags": "U E P",
+   "flags_desc": "U = Interested (peer) and unchoked (local)\nE = Encrypted traffic\nP = μTP",
+   "ip": "192.168.107.2",
+   "peer_id_client": "-qB5300-",
+   "port": 6881,
+   "progress": 0.004999999888241291,
+   "relevance": 0,
+   "up_speed": 94894,
+   "uploaded": 2000196
+  },
+  "192.168.107.3:51413": {
+   "client": "Transmission 4.0.6",
+   "connection": "BT",
+   "country": "N/A",
+   "country_code": "",
+   "dl_speed": 0,
+   "downloaded": 0,
+   "files": "",
+   "flags": "U E",
+   "flags_desc": "U = Interested (peer) and unchoked (local)\nE = Encrypted traffic",
+   "ip": "192.168.107.3",
+   "peer_id_client": "-TR4060-",
+   "port": 51413,
+   "progress": 0,
+   "relevance": 0,
+   "up_speed": 22864,
+   "uploaded": 327680
+  },
+  "192.168.107.6:51413": {
+   "client": "Transmission 4.1.4",
+   "connection": "BT",
+   "country": "N/A",
+   "country_code": "",
+   "dl_speed": 0,
+   "downloaded": 0,
+   "files": "",
+   "flags": "U E",
+   "flags_desc": "U = Interested (peer) and unchoked (local)\nE = Encrypted traffic",
+   "ip": "192.168.107.6",
+   "peer_id_client": "-TR4140-",
+   "port": 51413,
+   "progress": 0.004999999888241291,
+   "relevance": 0,
+   "up_speed": 34700,
+   "uploaded": 604481
+  }
+ },
+ "rid": 1,
+ "show_flags": true
+}

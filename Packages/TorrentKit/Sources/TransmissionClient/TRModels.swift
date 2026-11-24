@@ -69,6 +69,40 @@ struct TRFileList: Decodable {
     }
 }
 
+/// torrent-get 的 peers 字段
+struct TRPeerList: Decodable {
+    struct Item: Decodable {
+        struct P: Decodable {
+            var address: String
+            var port: Int?
+            var clientName: String?
+            var progress: Double?
+            /// 字节/秒：对方发给我们 / 我们发给对方
+            var rateToClient: Int64?
+            var rateToPeer: Int64?
+            /// TR 4.1 起才有
+            var bytes_to_client: Int64?
+            var bytes_to_peer: Int64?
+            var flagStr: String?
+            var isUTP: Bool?
+            var isEncrypted: Bool?
+            var isIncoming: Bool?
+        }
+        var peers: [P]?
+    }
+    var torrents: [Item]
+
+    func model() -> [Peer] {
+        (torrents.first?.peers ?? []).map { p in
+            Peer(address: p.address, port: p.port ?? 0, client: p.clientName ?? "", progress: min(1, max(0, p.progress ?? 0)),
+                 downloadRate: p.rateToClient ?? 0, uploadRate: p.rateToPeer ?? 0,
+                 downloaded: p.bytes_to_client, uploaded: p.bytes_to_peer,
+                 flags: p.flagStr ?? "", connection: p.isUTP.map { $0 ? "μTP" : "BT" },
+                 encrypted: p.isEncrypted, incoming: p.isIncoming)
+        }
+    }
+}
+
 /// free-space 的返回（单位字节）
 struct TRFreeSpace: Decodable {
     var sizeBytes: Int64?

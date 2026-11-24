@@ -288,6 +288,11 @@ public actor QBittorrentClient: TorrentClient {
         return try JSONDecoder().decode([QBFile].self, from: data).enumerated().map { $1.model(at: $0) }
     }
 
+    public func peers(of id: String) async throws -> [Peer] {
+        let data = try await get("sync/torrentPeers", [URLQueryItem(name: "hash", value: id), URLQueryItem(name: "rid", value: "0")])
+        return try JSONDecoder().decode(QBPeerList.self, from: data).model()
+    }
+
     public func setFilePriority(_ priority: FilePriority, files indices: [Int], of id: String) async throws {
         guard !indices.isEmpty else { return }
         let value = switch priority {

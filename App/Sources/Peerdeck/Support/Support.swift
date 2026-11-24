@@ -39,6 +39,7 @@ private var debugPanels: [NSPanel] = []
 ///   TC_DEBUG_SELECT_FIRST=<秒> / TC_DEBUG_SELECT_ALL=<秒>   选中第一行 / 全选（检查详情和多选操作条）
 ///   TC_DEBUG_INSPECTOR=1        打开详情面板
 ///   TC_DEBUG_FILES=1            详情面板里默认展开文件列表
+///   TC_DEBUG_PEERS=1            详情面板里默认展开 Peers
 ///   TC_DEBUG_AUTOTRUST=<秒>      信任所有待确认的证书
 ///   TC_DEBUG_ADD=<文本>          打开添加面板并填入文本（\n 分行）
 ///   TC_DEBUG_CLEANUP=<秒>        打开「清理未注册」面板

@@ -17,6 +17,7 @@ import TransmissionClient
 //   swift run -c release tcli sync qb53 5      全量 + N 次增量的耗时和流量
 //   swift run -c release tcli bench 20000      合成数据的合并、过滤、排序耗时
 //   swift run -c release tcli files [目标…]     文件列表、文件优先级、剩余空间（加一个三文件的暂停种子，测完删掉）
+//   swift run -c release tcli peers <hash> [目标…]  打印这个种子当前的 peer（只读）。flood 目标是 Flood 测试环境的免登录实例，要先启动它
 
 let adminCreds = Credentials(username: "admin", password: "adminadmin")
 
@@ -32,6 +33,8 @@ let presets: [String: Target] = [
     "qbx": Target(name: "qbx", kind: .qbittorrent, endpoint: Endpoint(baseURL: URL(string: "http://127.0.0.1:18082")!)),
     "tr41": Target(name: "tr41", kind: .transmission, endpoint: Endpoint(baseURL: URL(string: "http://127.0.0.1:19091")!)),
     "tr40": Target(name: "tr40", kind: .transmission, endpoint: Endpoint(baseURL: URL(string: "http://127.0.0.1:19092")!)),
+    // Flood 测试环境（compose 项目 peerdeck-flood-test）的 flood-noauth，后端是 TR 4.1
+    "flood": Target(name: "flood", kind: .flood, endpoint: Endpoint(baseURL: URL(string: "http://127.0.0.1:13001/flood/")!)),
 ]
 
 func makeClient(_ t: Target, creds: Credentials = adminCreds) -> any TorrentClient {
@@ -458,6 +461,26 @@ func filesCheck(_ name: String) async {
     }
 }
 
+// MARK: - peers
+
+func peersCheck(_ name: String, hash: String) async {
+    guard let t = presets[name] else { print("未知目标 \(name)"); return }
+    let client = makeClient(t)
+    do {
+        let info = try await client.connect()
+        // Flood 的种子 ID 是大写 hash，直连的是小写
+        let id = t.kind == .flood ? hash.uppercased() : hash.lowercased()
+        let peers = try await client.peers(of: id).sorted(by: Peer.displayOrder)
+        print("===== \(name) \(info.version)：\(peers.count) 个 peer")
+        for p in peers {
+            let totals = [p.downloaded.map { "已下 \($0)" }, p.uploaded.map { "已上 \($0)" }].compactMap { $0 }.joined(separator: " ")
+            print("  \(pad(p.endpoint, 22)) \(pad(p.client, 22)) \(String(format: "%5.1f%%", p.progress * 100))  ↓\(p.downloadRate) ↑\(p.uploadRate)  [\(p.flags)] \(p.connection ?? "-") \(totals)")
+        }
+    } catch {
+        print("  ✗ \(name) 失败：\(error)")
+    }
+}
+
 // MARK: - main
 
 let args = Array(CommandLine.arguments.dropFirst())
@@ -469,6 +492,9 @@ case "ops":
     for n in (args.count > 1 ? Array(args.dropFirst()) : ["qb53", "qb46", "tr41", "tr40"]) { await ops(n) }
 case "files":
     for n in (args.count > 1 ? Array(args.dropFirst()) : ["qb53", "qb46", "tr41", "tr40"]) { await filesCheck(n) }
+case "peers":
+    guard args.count > 1 else { print("用法：tcli peers <hash> [目标…]"); break }
+    for n in (args.count > 2 ? Array(args.dropFirst(2)) : ["qb53", "qb46", "tr41", "tr40"]) { await peersCheck(n, hash: args[1]) }
 case "actions":
     for n in (args.count > 1 ? Array(args.dropFirst()) : ["qb53", "qb46", "tr41", "tr40"]) { await actions(n) }
 case "apikey":
