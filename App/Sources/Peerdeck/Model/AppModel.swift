@@ -29,6 +29,8 @@ enum ActiveSheet: Identifiable {
     case add(AddDraft)
     case delete(refs: [TorrentRef], cleanup: Bool)
     case retracker(RetrackerDraft)
+    /// 更改保存位置（qB setLocation / TR torrent-set-location / Flood move）
+    case setLocation(refs: [TorrentRef])
     case setup
     /// 清理「疑似未注册」：按原话分组，自动保留有辅种的
     case cleanup
@@ -38,9 +40,29 @@ enum ActiveSheet: Identifiable {
         case .add(let d): "add-\(d.id)"
         case .delete(let r, let c): "delete-\(c)-\(r.count)"
         case .retracker(let d): "retracker-\(d.id)"
+        case .setLocation(let r): "location-\(r.count)-\(r.first.map { "\($0.server.rawValue)/\($0.id)" } ?? "")"
         case .setup: "setup"
         case .cleanup: "cleanup"
         }
+    }
+}
+
+struct LocationContext {
+    var torrents: [Torrent]
+    /// 选中的种子都在同一个目录时是这个目录，否则是 nil
+    var commonPath: String?
+    var cross: Int
+    /// 「只改路径、不移动文件」时会被跳过的个数（qB，以及 Flood 后面不是 rTorrent / TR 的）
+    var cannotRelocate: Int
+
+    /// 面板打开时预填的路径：同一个目录就填它，否则填最近用过的
+    func initialPath(recent: [String]) -> String { commonPath ?? recent.first ?? "" }
+
+    func canApply(_ path: String, moveFiles: Bool) -> Bool {
+        let p = path.trimmingCharacters(in: .whitespaces)
+        guard !p.isEmpty, !torrents.isEmpty else { return false }
+        if p == commonPath { return false }
+        return moveFiles || cannotRelocate < torrents.count
     }
 }
 
@@ -350,6 +372,8 @@ final class AppModel {
     }
 
     func move(_ path: String, moveFiles: Bool, on refs: [TorrentRef]) {
+        let path = path.trimmingCharacters(in: .whitespaces)
+        guard !path.isEmpty else { return }
         Task {
             var n = 0, skipped = 0
             for (rt, client, refs) in grouped(refs) {
@@ -365,6 +389,20 @@ final class AppModel {
             if skipped > 0 { parts.append(L("skipped \(skipped) (the client always moves files when changing the path)")) }
             showToast(parts.joined(separator: L("; ")))
         }
+    }
+
+    func requestSetLocation(_ refs: some Collection<TorrentRef>) {
+        guard !refs.isEmpty else { return }
+        sheet = .setLocation(refs: Array(refs))
+    }
+
+    /// 更改保存位置面板要用的信息：当前路径、辅种数、哪些下载器不支持「只改路径」
+    func locationContext(_ refs: [TorrentRef]) -> LocationContext {
+        let all = refs.compactMap { store.torrent($0) }
+        let paths = Set(all.map(\.savePath))
+        let cannotRelocate = all.filter { server($0.ref.server.rawValue)?.info?.capabilities.contains(.relocateWithoutMove) != true }.count
+        return LocationContext(torrents: all, commonPath: paths.count == 1 ? paths.first : nil,
+                               cross: all.filter { store.cross[$0.ref] != nil }.count, cannotRelocate: cannotRelocate)
     }
 
     func rememberPath(_ path: String) {

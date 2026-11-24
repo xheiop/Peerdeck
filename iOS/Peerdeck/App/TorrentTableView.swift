@@ -137,6 +137,7 @@ struct TorrentTableView: UIViewRepresentable {
                     UIAction(title: L("Stop"), image: UIImage(systemName: "pause")) { _ in model.perform(.stop, on: [ref]) },
                     UIAction(title: L("Reannounce"), image: UIImage(systemName: "arrow.clockwise")) { _ in model.perform(.reannounce, on: [ref]); model.showToast(L("Reannounced")) },
                     UIAction(title: L("Recheck"), image: UIImage(systemName: "checkmark.arrow.trianglehead.counterclockwise")) { _ in model.perform(.recheck, on: [ref]) },
+                    UIAction(title: L("Set Location…"), image: UIImage(systemName: "folder")) { _ in model.requestSetLocation([ref]) },
                     UIMenu(options: .displayInline, children: [
                         UIAction(title: L("Show Only “\(model.siteName(model.store.siteID(of: t)))”"), image: UIImage(systemName: "globe")) { _ in model.store.sidebar = .site(model.store.siteID(of: t)) },
                         UIAction(title: L("Copy Name"), image: UIImage(systemName: "doc.on.doc")) { _ in UIPasteboard.general.string = t.name },

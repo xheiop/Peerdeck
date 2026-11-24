@@ -107,6 +107,7 @@ struct TorrentsScreen: View {
         Menu {
             Button { model.perform(.reannounce, on: refs); model.showToast(L("Reannounced \(Fmt.torrents(refs.count))")) } label: { Label("Reannounce", systemImage: "arrow.clockwise") }
             Button { model.perform(.recheck, on: refs) } label: { Label("Recheck", systemImage: "checkmark.arrow.trianglehead.counterclockwise") }
+            Button { model.requestSetLocation(refs) } label: { Label("Set Location…", systemImage: "folder") }
         } label: { Label("More", systemImage: "ellipsis.circle") }
             .disabled(refs.isEmpty)
         Spacer()

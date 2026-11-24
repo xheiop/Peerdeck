@@ -78,6 +78,10 @@ private struct TorrentDetail: View {
                         if !t.tags.isEmpty { kv(L("Tags"), t.tags.joined(separator: ", ")) }
                         if t.uploadLimit > 0 { kv(L("Upload Limit"), Fmt.speed(t.uploadLimit)) }
                         kv(L("Save Path"), t.savePath)
+                        GridRow {
+                            Color.clear.gridCellUnsizedAxes([.horizontal, .vertical])
+                            Button("Set Location…") { model.requestSetLocation([t.ref]) }.controlSize(.small)
+                        }
                         kv("Hash", t.infoHashV1, mono: true)
                     }
                     .padding(.top, 4)

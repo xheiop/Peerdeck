@@ -18,6 +18,7 @@ struct RootView: View {
             case .add(let d): AddTorrentSheet(model: model, draft: d)
             case .delete(let refs, let cleanup): DeleteSheet(model: model, refs: refs, cleanup: cleanup)
             case .retracker(let d): RetrackerSheet(model: model, draft: d)
+            case .setLocation(let refs): SetLocationSheet(model: model, refs: refs)
             case .setup: SetupSheet(model: model)
             case .cleanup: DeleteSheet(model: model, refs: model.store.order, cleanup: true)
             }

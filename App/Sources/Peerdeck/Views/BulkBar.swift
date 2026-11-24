@@ -7,8 +7,6 @@ struct BulkBar: View {
     @State private var tagsText = ""
     @State private var tagMode: TagMode = .add
     @State private var limitKB = "1024"
-    @State private var movePath = "/downloads/"
-    @State private var moveFiles = true
     @State private var newCategory = ""
     @State private var pop: String?
 
@@ -62,25 +60,7 @@ struct BulkBar: View {
                         }
                     } apply: { model.setUploadLimit((Int64(limitKB) ?? 0) * 1024, on: refs) }
                 }
-            Button { pop = "move" } label: { Label("Move", systemImage: "folder") }
-                .popover(isPresented: binding("move"), arrowEdge: .top) {
-                    form(L("Move · \(Fmt.torrents(sel.count))")) {
-                        HStack {
-                            TextField("Save Path", text: $movePath).frame(width: 240)
-                            if !model.prefs.recentPaths.isEmpty {
-                                Menu("Recent") { ForEach(model.prefs.recentPaths, id: \.self) { p in Button(p) { movePath = p } } }.fixedSize()
-                            }
-                        }
-                        Toggle("Move files too", isOn: $moveFiles)
-                        Text(moveFiles ? "The client moves the files on the server." : "Only update the recorded path (for files you already moved). Not supported by qBittorrent, or by Flood with clients other than rTorrent and Transmission; those will be skipped.")
-                            .font(.caption).foregroundStyle(.secondary).frame(width: 300, alignment: .leading)
-                        let cross = sel.filter { model.store.cross[$0.ref] != nil }.count
-                        if cross > 0, moveFiles {
-                            Label("\(cross) of them are cross-seeded: after moving files, the other torrents won’t find the data.", systemImage: "exclamationmark.triangle")
-                                .font(.caption).foregroundStyle(.orange).frame(width: 300, alignment: .leading)
-                        }
-                    } apply: { model.move(movePath, moveFiles: moveFiles, on: refs) }
-                }
+            Button { model.requestSetLocation(refs) } label: { Label("Set Location", systemImage: "folder") }
             Button {
                 let site = sel.first.map { model.store.siteID(of: $0) }
                 model.sheet = .retracker(RetrackerDraft(model: model, siteID: site, selection: refs, scope: .selection))

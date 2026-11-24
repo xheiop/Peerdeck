@@ -756,6 +756,16 @@
         }
       }
     },
+    "%lld will be skipped: their client always moves files when changing the path.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 个会跳过：它们的下载器改路径时总会移动文件。"
+          }
+        }
+      }
+    },
     "(magnet has no name)": {
       "localizations": {
         "zh-Hans": {
@@ -2890,32 +2900,12 @@
         }
       }
     },
-    "Move": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "移动"
-          }
-        }
-      }
-    },
     "Move files too": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "同时移动文件"
-          }
-        }
-      }
-    },
-    "Move · %@": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "移动 · %@"
           }
         }
       }
@@ -3016,6 +3006,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "新建分类…"
+          }
+        }
+      }
+    },
+    "New Path": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新路径"
           }
         }
       }
@@ -3450,12 +3450,12 @@
         }
       }
     },
-    "Only update the recorded path (for files you already moved). Not supported by qBittorrent, or by Flood with clients other than rTorrent and Transmission; those will be skipped.": {
+    "Only update the recorded path (for files you already moved).": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "只改记录的路径（文件已经手动挪过时用）。qBittorrent，以及 Flood 后面不是 rTorrent / Transmission 的不支持，会跳过。"
+            "value": "只改记录的路径（文件已经手动挪过时用）。"
           }
         }
       }
@@ -4349,6 +4349,36 @@
         }
       }
     },
+    "Set Location": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更改保存位置"
+          }
+        }
+      }
+    },
+    "Set Location · %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更改保存位置 · %@"
+          }
+        }
+      }
+    },
+    "Set Location…": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更改保存位置…"
+          }
+        }
+      }
+    },
     "Set upload limit of %@ to %@": {
       "localizations": {
         "zh-Hans": {
@@ -4395,6 +4425,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "设置…"
+          }
+        }
+      }
+    },
+    "Several folders": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "多个目录"
           }
         }
       }

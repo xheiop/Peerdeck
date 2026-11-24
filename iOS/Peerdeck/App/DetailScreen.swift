@@ -143,7 +143,10 @@ struct TorrentDetailScreen: View {
             Spacer()
             Button { model.perform(.reannounce, on: [ref]); model.showToast(L("Reannounced")) } label: { Label("Reannounce", systemImage: "arrow.clockwise") }
             Spacer()
-            Button { model.perform(.recheck, on: [ref]) } label: { Label("Recheck", systemImage: "checkmark.arrow.trianglehead.counterclockwise") }
+            Menu {
+                Button { model.perform(.recheck, on: [ref]) } label: { Label("Recheck", systemImage: "checkmark.arrow.trianglehead.counterclockwise") }
+                Button { model.requestSetLocation([ref]) } label: { Label("Set Location…", systemImage: "folder") }
+            } label: { Label("More", systemImage: "ellipsis.circle") }
             Spacer()
             Button { model.requestDelete([ref]) } label: { Label("Delete…", systemImage: "trash") }
         }

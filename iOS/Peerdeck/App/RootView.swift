@@ -18,6 +18,7 @@ struct IOSRootView: View {
             case .add(let d): AddTorrentScreen(model: model, draft: d)
             case .delete(let refs, let cleanup):
                 if cleanup { CleanupScreen(model: model) } else { DeleteScreen(model: model, refs: refs) }
+            case .setLocation(let refs): SetLocationScreen(model: model, refs: refs)
             case .setup: SetupScreen(model: model)
             case .cleanup: CleanupScreen(model: model)
             case .retracker:

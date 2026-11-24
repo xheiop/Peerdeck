@@ -43,6 +43,7 @@ private var debugPanels: [NSPanel] = []
 ///   TC_DEBUG_ADD=<文本>          打开添加面板并填入文本（\n 分行）
 ///   TC_DEBUG_CLEANUP=<秒>        打开「清理未注册」面板
 ///   TC_DEBUG_RETRACKER=<秒>      对当前站点打开「替换 tracker」面板
+///   TC_DEBUG_LOCATION=<秒>       对选中的种子（没选就是前 3 行）打开「更改保存位置」面板
 ///   TC_DEBUG_SETTINGS=<标签>     打开设置窗口（servers|general|notify|sites），TC_DEBUG_SETTINGS_SERVER=<id> 选中服务器
 ///   TC_DEBUG_BACKUP=export       设置里「备份」一节出现时打开导出选项（配合 TC_DEBUG_SETTINGS=general）
 ///   TC_DEBUG_ABOUT=1             2 秒后打开「关于 Peerdeck」面板
@@ -92,6 +93,10 @@ enum DebugHooks {
         after("TC_DEBUG_CLEANUP") {
             let refs = model.store.order
             model.requestDelete(refs, cleanup: true)
+        }
+        after("TC_DEBUG_LOCATION") {
+            let sel = Array(model.store.selection)
+            model.requestSetLocation(sel.isEmpty ? Array(model.store.order.prefix(3)) : sel)
         }
         after("TC_DEBUG_RETRACKER") {
             if case .site(let sid) = model.store.sidebar {

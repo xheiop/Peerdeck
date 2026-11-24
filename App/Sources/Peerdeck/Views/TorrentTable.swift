@@ -318,6 +318,7 @@ struct TorrentTable: NSViewRepresentable {
             add(L("Reannounce"), #selector(reannounce))
             add(L("Recheck"), #selector(recheck))
             add(L("Replace Tracker…"), #selector(retracker))
+            add(L("Set Location…"), #selector(setLocation))
             menu.addItem(.separator())
             if refs.count == 1, let t = store.torrent(refs[0]) {
                 add(L("Show Only “\(model.siteName(store.siteID(of: t)))”"), #selector(showSite))
@@ -333,6 +334,7 @@ struct TorrentTable: NSViewRepresentable {
         @objc func recheck() { model.perform(.recheck, on: targetRefs) }
         @objc func reannounce() { model.perform(.reannounce, on: targetRefs); model.showToast(L("Reannounced \(Fmt.torrents(targetRefs.count))")) }
         @objc func delete() { model.requestDelete(targetRefs) }
+        @objc func setLocation() { model.requestSetLocation(targetRefs) }
         @objc func retracker() {
             let refs = targetRefs
             let site = refs.first.flatMap { store.torrent($0) }.map { store.siteID(of: $0) }
