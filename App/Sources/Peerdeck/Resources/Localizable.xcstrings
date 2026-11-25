@@ -1570,6 +1570,16 @@
         }
       }
     },
+    "Close": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "关闭"
+          }
+        }
+      }
+    },
     "Columns in problem views": {
       "localizations": {
         "zh-Hans": {
@@ -3939,6 +3949,16 @@
         }
       }
     },
+    "Poster": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "海报"
+          }
+        }
+      }
+    },
     "Private": {
       "localizations": {
         "zh-Hans": {
@@ -6269,6 +6289,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "查看"
+          }
+        }
+      }
+    },
+    "View Poster": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看海报"
           }
         }
       }

@@ -11,6 +11,9 @@ enum MediaDebug {
         ProcessInfo.processInfo.environment["TC_DEBUG_MEDIA_PREVIEW"].map { $0.split(separator: "|").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty } }
     }
 
+    /// TC_DEBUG_POSTER=1：详情里的影视卡片匹配到后直接打开海报大图
+    static var openPoster: Bool { ProcessInfo.processInfo.environment["TC_DEBUG_POSTER"] == "1" }
+
     static func torrents(_ names: [String]) -> [Torrent] {
         names.enumerated().map { i, name in
             var t = Torrent(ref: TorrentRef(server: ServerID("debug"), id: "media-\(i)"))

@@ -9,6 +9,7 @@ struct MediaCard: View {
     let torrent: Torrent
     @State private var expanded = false
     @State private var matching = false
+    @State private var zoom: PosterZoom?
 
     var body: some View {
         Group {
@@ -30,10 +31,20 @@ struct MediaCard: View {
             try? await Task.sleep(for: .milliseconds(300))
             guard !Task.isCancelled else { return }
             await media.load(torrent)
+            // 调试：TC_DEBUG_POSTER=1 时匹配到就打开大图（截图用）
+            if MediaDebug.openPoster, case .found(let e)? = media.state(for: torrent) {
+                let path = e.season.flatMap { e.details.season($0) }?.posterPath ?? e.details.posterPath
+                if let full = TMDBImage.url(path, size: "original") { zoom = PosterZoom(thumb: TMDBImage.url(path, size: "w185"), full: full) }
+            }
         }
         .sheet(isPresented: $matching) {
             MediaMatchSheet(torrent: torrent)
         }
+        #if os(macOS)
+        .sheet(item: $zoom) { PosterViewer(poster: $0) }
+        #else
+        .fullScreenCover(item: $zoom) { PosterViewer(poster: $0) }
+        #endif
     }
 
     private var loading: some View {
@@ -73,7 +84,7 @@ struct MediaCard: View {
         let d = e.details
         let season = e.season.flatMap { d.season($0) }
         return HStack(alignment: .top, spacing: 12) {
-            PosterImage(url: TMDBImage.url(season?.posterPath ?? d.posterPath, size: "w185"))
+            poster(season?.posterPath ?? d.posterPath)
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline) {
                     (Text(d.title).font(.headline) + Text(verbatim: d.year.map { "  \($0)" } ?? "").foregroundStyle(.secondary))
@@ -111,6 +122,21 @@ struct MediaCard: View {
                 }
                 links(d).padding(.top, 2)
             }
+        }
+    }
+
+    /// 有海报时可以点开看大图
+    @ViewBuilder private func poster(_ path: String?) -> some View {
+        let thumb = TMDBImage.url(path, size: "w185")
+        if let full = TMDBImage.url(path, size: "original") {
+            Button { zoom = PosterZoom(thumb: thumb, full: full) } label: { PosterImage(url: thumb) }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text("View Poster"))
+                #if os(macOS)
+                .help(Text("View Poster"))
+                #endif
+        } else {
+            PosterImage(url: thumb)
         }
     }
 
