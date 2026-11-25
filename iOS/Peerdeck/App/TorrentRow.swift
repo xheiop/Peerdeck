@@ -34,6 +34,8 @@ struct TorrentRow: View {
             case .waiting:
                 Text(t.state == .checking ? L("Checking \(Fmt.percent(t.progress))") : Fmt.state(t.state)).foregroundStyle(.secondary)
             case .error:
+                // 下载器本地出错时这里是报错原文（TR 的 "No data found!…"），前面加红色标记
+                LocalErrorMark.view
                 Text(t.errorMessage.isEmpty ? L("Error") : t.errorMessage).lineLimit(1)
             case nil:
                 Text(Fmt.state(t.state)).foregroundStyle(.secondary)

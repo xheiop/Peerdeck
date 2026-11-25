@@ -23,6 +23,14 @@ private extension UIColor {
     }
 }
 
+/// 下载器本地出错（文件丢失、磁盘满等，和 tracker 无关）：红色带叹号的三角，和「被拒绝」的实心三角区分开
+enum LocalErrorMark {
+    static var view: some View {
+        Image(systemName: "exclamationmark.triangle.fill").font(.system(size: 11)).foregroundStyle(Color.healthRejected)
+            .accessibilityLabel(Text(LocalErrorCopy.title))
+    }
+}
+
 /// 健康度的小形状：琥珀菱形 = 疑似未注册，红三角 = 被拒绝，空心圆 = tracker 超时。形状和颜色一起表达，色弱也分得开
 enum HealthMark {
     case unregistered, rejected, timeout

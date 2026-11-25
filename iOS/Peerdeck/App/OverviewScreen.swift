@@ -160,6 +160,10 @@ struct OverviewScreen: View {
         LedgerHeader(title: L("Torrents")).padding(.bottom, 2)
         NavigationLink(value: OverviewPage.attention) { row(problems, L("Needs Attention")) }
             .buttonStyle(.plain)
+        if tri.localError > 0 {
+            InsetSeparator()
+            Button { model.showTorrents(.state(.error)) } label: { row(tri.localError, LocalErrorCopy.title, localError: true) }.buttonStyle(.plain)
+        }
         InsetSeparator()
         Button { model.showTorrents(.active) } label: { row(tri.active, L("Active")) }.buttonStyle(.plain)
         InsetSeparator()
@@ -170,8 +174,9 @@ struct OverviewScreen: View {
         Button { model.showTorrents(.state(.stopped)) } label: { row(tri.stopped, L("Stopped")) }.buttonStyle(.plain)
     }
 
-    private func row(_ n: Int, _ title: String) -> some View {
+    private func row(_ n: Int, _ title: String, localError: Bool = false) -> some View {
         HStack(spacing: 10) {
+            if localError { LocalErrorMark.view }
             Text(title).font(.subheadline)
             Spacer(minLength: 6)
             Text(Fmt.count(n)).font(.system(.subheadline, design: .monospaced)).foregroundStyle(n == 0 ? .tertiary : .secondary)

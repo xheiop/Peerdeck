@@ -83,6 +83,17 @@ struct ProblemRules: Sendable {
     }
 
     func isProblem(_ t: Torrent) -> Bool { isRejected(t) || t.trackerHealth == .unreachable }
+
+    /// 下载器本地出错（文件丢失、磁盘满、没权限）。和 tracker 无关，不进问题视图和清理，
+    /// 但列表和详情要标出来。例：TR 的 "No data found! Ensure your drives are connected…"
+    func isLocalError(_ t: Torrent) -> Bool { t.state == .error }
+}
+
+enum LocalErrorCopy {
+    static var title: String { L("Local Error") }
+    static var explanation: String {
+        L("The downloader can’t use this torrent’s files: the drive may be disconnected, the files moved or deleted, or the disk full. Fix it on the server, then use Set Location or Recheck.")
+    }
 }
 
 /// 表格的列

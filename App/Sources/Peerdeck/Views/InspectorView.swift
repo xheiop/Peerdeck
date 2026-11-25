@@ -65,6 +65,7 @@ private struct TorrentDetail: View {
                 Text(t.name).font(.headline).textSelection(.enabled)
                     .contextMenu { if model.supportsRename(t.ref) { Button("Rename…") { model.requestRename(t.ref) } } }
 
+                if rules.isLocalError(t) { localErrorCard(t) }
                 if rules.isProblem(t) { problemCard(t) }
                 if let n = store.cross[t.ref] { crossCard(t, n) }
                 MediaCard(torrent: t)
@@ -263,6 +264,29 @@ private struct TorrentDetail: View {
         case .normal: L("Normal Priority")
         case .high: L("High Priority")
         }
+    }
+
+    /// 下载器本地出错（文件丢失、磁盘满等），和 tracker 问题分开
+    private func localErrorCard(_ t: Torrent) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Label(LocalErrorCopy.title, systemImage: "exclamationmark.triangle.fill")
+                .font(.headline)
+                .labelStyle(TintedIconLabel(color: .red))
+            if !t.errorMessage.isEmpty {
+                Text(t.errorMessage).font(.callout.monospaced()).textSelection(.enabled)
+                    .padding(6).frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 6))
+            }
+            Text(LocalErrorCopy.explanation).font(.caption).foregroundStyle(.secondary)
+            HStack {
+                Button("Set Location…") { model.requestSetLocation([t.ref]) }
+                Button("Recheck") { model.perform(.recheck, on: [t.ref]) }
+            }
+            .controlSize(.small)
+        }
+        .padding(10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: 9).stroke(Color.red.opacity(0.45)))
     }
 
     @ViewBuilder private func problemCard(_ t: Torrent) -> some View {

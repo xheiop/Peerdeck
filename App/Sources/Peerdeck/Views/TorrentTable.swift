@@ -148,7 +148,8 @@ struct TorrentTable: NSViewRepresentable {
                 s.addAttribute(.paragraphStyle, value: paragraph(key), range: NSRange(location: 0, length: s.length))
                 tf.attributedStringValue = s
             }
-            cell.textField?.toolTip = key == .name ? t.name : key == .message ? t.errorMessage : nil
+            cell.textField?.toolTip = key == .name ? t.name
+                : key == .message || (key == .status && t.state == .error && !t.errorMessage.isEmpty) ? t.errorMessage : nil
             return cell
         }
 

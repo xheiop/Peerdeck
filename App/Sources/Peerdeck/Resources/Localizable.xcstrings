@@ -2893,6 +2893,16 @@
         }
       }
     },
+    "Local Error": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本地出错"
+          }
+        }
+      }
+    },
     "Local Errors": {
       "localizations": {
         "zh-Hans": {
@@ -5405,6 +5415,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "剪贴板里有 %lld 个链接"
+          }
+        }
+      }
+    },
+    "The downloader can’t use this torrent’s files: the drive may be disconnected, the files moved or deleted, or the disk full. Fix it on the server, then use Set Location or Recheck.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下载器用不了这个种子的文件：可能是硬盘没挂上、文件被移走或删了，或者磁盘满了。在服务器上处理好以后，用「更改保存位置」或「重新校验」。"
           }
         }
       }

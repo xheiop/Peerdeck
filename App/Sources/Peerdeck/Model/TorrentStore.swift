@@ -45,6 +45,8 @@ struct Triage: Equatable, Sendable {
     /// 已清理过、因为有辅种保留下来的疑似未注册
     var kept = 0
     var downloading = 0, seeding = 0, stopped = 0, other = 0
+    /// 下载器本地出错（文件丢失等），不算 tracker 问题，总览里单独一行
+    var localError = 0
     /// 正在上传或下载的（速度不为 0），和上面的状态分堆有重叠
     var active = 0
     var downloadSpeed: Int64 = 0, uploadSpeed: Int64 = 0
@@ -387,6 +389,7 @@ final class TorrentStore {
                 case .downloading: tri.downloading += 1
                 case .seeding: tri.seeding += 1
                 case .stopped: tri.stopped += 1
+                case .error: tri.localError += 1
                 default: tri.other += 1
                 }
             }

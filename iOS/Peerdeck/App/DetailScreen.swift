@@ -21,6 +21,7 @@ struct TorrentDetailScreen: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     header(t).padding(.horizontal, 20).padding(.bottom, 18)
+                    if store.rules.isLocalError(t) { localError(t).padding(.horizontal, 20).padding(.bottom, 22) }
                     if store.rules.isProblem(t) { problem(t).padding(.horizontal, 20).padding(.bottom, 22) }
                     MediaCard(torrent: t).padding(.horizontal, 20).padding(.bottom, 22)
                     LedgerHeader(title: L("Overview")).padding(.bottom, 4)
@@ -77,6 +78,20 @@ struct TorrentDetailScreen: View {
             }
             .font(.data)
             if t.progress < 1 { ProgressBar(value: t.progress, dim: t.downloadSpeed == 0) }
+        }
+    }
+
+    /// 下载器本地出错：报错原文（TR 的 "No data found!…"）+ 怎么处理。处理入口在底栏「更多」
+    private func localError(_ t: Torrent) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 7) {
+                LocalErrorMark.view
+                Text(LocalErrorCopy.title).font(.subheadline.weight(.medium))
+            }
+            if !t.errorMessage.isEmpty {
+                Text(t.errorMessage).font(.quote).textSelection(.enabled)
+            }
+            Text(LocalErrorCopy.explanation).font(.footnote).foregroundStyle(.secondary)
         }
     }
 
