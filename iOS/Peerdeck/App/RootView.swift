@@ -85,6 +85,7 @@ struct IOSTabs: View {
         tabs
             .minimizeTabBarOnScroll()
             .tint(Color.ink) // v3：选中态和操作用墨色，不用系统蓝
+            .toggleStyle(InkSwitchStyle())
             .modifier(UndoAccessoryModifier(model: model))
             .onAppear {
                 if let t = DebugHooks.tab { model.selectedTab = t }

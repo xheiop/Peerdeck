@@ -18,6 +18,7 @@ final class ShareViewController: UIViewController {
                 self?.finish(added)
             }
             .tint(Color.ink)
+            .toggleStyle(InkSwitchStyle())
             let host = UIHostingController(rootView: root)
             addChild(host)
             host.view.frame = view.bounds

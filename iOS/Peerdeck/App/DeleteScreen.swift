@@ -42,7 +42,7 @@ struct DeleteScreen: View {
                                     .font(.footnote).foregroundStyle(.secondary)
                             }
                         }
-                        .tint(Color.ink)
+                        .tint(Color.switchOn)
                         .padding(.horizontal, 20).padding(.vertical, 12).padding(.top, 12)
                     }
                 }

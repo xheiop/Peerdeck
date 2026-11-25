@@ -49,6 +49,7 @@ struct PeerdeckIOSApp: App {
                 }
                 // v3：操作、开关、选中态一律墨色（面板也继承），颜色只留给 tracker 健康度
                 .tint(Color.ink)
+                .toggleStyle(InkSwitchStyle()) // 开关深色下不能用墨色（白），见 Color.switchOn
                 // magnet: 链接，以及从「文件」或别的 app 打开的 .torrent
                 .onOpenURL { model.handleOpen([$0]) }
         }

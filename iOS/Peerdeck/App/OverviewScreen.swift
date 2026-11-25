@@ -357,7 +357,7 @@ struct ServerLedgerRow: View {
                     Text(L("Alternative speed limits for \(rt.config.name)"))
                 }
                 .labelsHidden()
-                .tint(Color.ink)
+                .tint(Color.switchOn)
             }
         }
         .padding(.horizontal, 20)

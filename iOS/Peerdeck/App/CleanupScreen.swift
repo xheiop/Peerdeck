@@ -37,7 +37,7 @@ struct CleanupScreen: View {
                                 Text("Only remove from the client; files on disk stay").font(.footnote).foregroundStyle(.secondary)
                             }
                         }
-                        .tint(Color.ink)
+                        .tint(Color.switchOn)
                         .padding(.horizontal, 20).padding(.vertical, 12).padding(.top, 12)
                     } else {
                         Text(L("Files can’t be deleted while \(blockers.joined(separator: L(", "))) is unavailable: its torrents might use the same files."))

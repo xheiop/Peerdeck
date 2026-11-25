@@ -15,6 +15,16 @@ extension Color {
     /// 主操作的墨色填充，以及上面的字色
     static let ink = Color.primary
     static let onInk = Color(uiColor: .systemBackground)
+    /// 开关打开时的轨道色。浅色用墨色；深色下墨色是白的，和系统固定的白色滑块混成一片、看不出是开关，
+    /// 所以深色改用系统绿（开关的系统默认色）
+    static let switchOn = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark ? .systemGreen : .label })
+}
+
+/// 全局开关样式：只换开关的 tint，其余控件仍继承外层的墨色 tint
+struct InkSwitchStyle: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Toggle(configuration).toggleStyle(.switch).tint(Color.switchOn)
+    }
 }
 
 private extension UIColor {
