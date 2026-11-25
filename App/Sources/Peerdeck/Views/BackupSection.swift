@@ -28,7 +28,7 @@ struct BackupSection: View {
         } header: {
             Text("Backup")
         } footer: {
-            Text("Exports servers, sites and the “Likely Unregistered” keywords, for moving them to another Mac or iPhone, for example through iCloud Drive. Importing adds and updates; nothing already here is removed.")
+            Text("Exports servers, sites, the “Likely Unregistered” keywords and the Movie & TV Info settings, for moving them to another Mac or iPhone, for example through iCloud Drive. Importing adds and updates; nothing already here is removed.")
                 .footnoteStyle()
         }
         .alert(message ?? "", isPresented: Binding(get: { message != nil }, set: { if !$0 { message = nil } })) {
@@ -135,6 +135,8 @@ private struct PendingImport {
             L("Sites: \(s.addedSites) new, \(s.updatedSites) changed."),
         ]
         if s.addedKeywords > 0 { lines.append(L("Keywords: \(s.addedKeywords) new.")) }
+        if let m = s.mediaInfo { lines.append(m ? L("Movie & TV info will be turned on.") : L("Movie & TV info will be turned off.")) }
+        if s.tmdbKeyChanged { lines.append(L("Your TMDB key will be replaced with the one in the file.")) }
         if !s.includesSecrets {
             lines.append(L("This file has no passwords. Servers already here keep theirs; enter the passwords for new servers in Settings."))
         }
@@ -196,7 +198,7 @@ private struct ExportOptionsSheet: View {
                     if includeSecrets {
                         Text("The file is encrypted with this password (at least \(ConfigBackup.minPassphrase) characters). You’ll need it to import the file; it can’t be recovered.")
                     } else {
-                        Text("Passwords, API keys, reverse proxy passwords and custom header values are left out. Enter them again after importing.")
+                        Text("Passwords, API keys, reverse proxy passwords, custom header values and your TMDB key are left out. Enter them again after importing.")
                     }
                 }
                 .footnoteStyle()

@@ -20,6 +20,10 @@ enum ConfigBackup {
         var longUnreachableHours: Int
         /// false：密码这些已经清空，导入时保留本机同一台服务器的
         var includesSecrets: Bool
+        /// 影视信息开关。旧版本导出的文件里没有（nil），导入时不动本机的
+        var mediaInfo: Bool? = nil
+        /// 用户自己填的 TMDB 密钥。只在带密码（加密）的导出里有
+        var tmdbKey: String? = nil
     }
 
     struct Sealed: Codable {
@@ -68,6 +72,7 @@ enum ConfigBackup {
         } else {
             var c = content
             c.servers = c.servers.map(stripped)
+            c.tmdbKey = nil
             c.includesSecrets = false
             file.content = c
         }
@@ -102,12 +107,17 @@ enum ConfigBackup {
         var addedSites = 0, updatedSites = 0
         var addedKeywords = 0
         var includesSecrets = true
-        var isEmpty: Bool { addedServers + updatedServers + addedSites + updatedSites + addedKeywords == 0 }
+        /// 影视信息开关会变成这个值（nil：不变）
+        var mediaInfo: Bool?
+        /// 会换成文件里的 TMDB 密钥
+        var tmdbKeyChanged = false
+        var isEmpty: Bool { addedServers + updatedServers + addedSites + updatedSites + addedKeywords == 0 && mediaInfo == nil && !tmdbKeyChanged }
     }
 
     /// 合并进本机：同一个 id 的服务器和站点用文件里的，没有的加上，本机多出来的不删。
     /// 关键词取并集，阈值用文件里的。文件不带密码时，同一台服务器保留本机的密码。
-    static func merge(_ content: Content, into servers: [ServerConfig], prefs: AppPrefs) -> (servers: [ServerConfig], prefs: AppPrefs, summary: Summary) {
+    /// 影视信息开关用文件里的；TMDB 密钥只在文件里有（带密码导出）时换成文件里的，返回的 tmdbKey 为 nil 表示不变
+    static func merge(_ content: Content, into servers: [ServerConfig], prefs: AppPrefs, tmdbKey: String = "") -> (servers: [ServerConfig], prefs: AppPrefs, tmdbKey: String?, summary: Summary) {
         var summary = Summary(includesSecrets: content.includesSecrets)
         var result = servers
         for var incoming in content.servers {
@@ -133,7 +143,16 @@ enum ConfigBackup {
             summary.addedKeywords += 1
         }
         p.longUnreachableHours = content.longUnreachableHours
-        return (result, p, summary)
+        if let m = content.mediaInfo, m != p.mediaInfo {
+            p.mediaInfo = m
+            summary.mediaInfo = m
+        }
+        var newKey: String?
+        if content.includesSecrets, let k = content.tmdbKey, !k.isEmpty, k != tmdbKey {
+            newKey = k
+            summary.tmdbKeyChanged = true
+        }
+        return (result, p, newKey, summary)
     }
 
     // MARK: - 内部
@@ -208,18 +227,24 @@ extension AppModel {
             sites: prefs.sites,
             unregisteredKeywords: prefs.unregisteredKeywords,
             longUnreachableHours: prefs.longUnreachableHours,
-            includesSecrets: true)
+            includesSecrets: true,
+            mediaInfo: prefs.mediaInfo,
+            tmdbKey: tmdbKey.isEmpty ? nil : tmdbKey)
     }
 
     func importPreview(_ content: ConfigBackup.Content) -> ConfigBackup.Summary {
-        ConfigBackup.merge(content, into: servers.map(\.config), prefs: prefs).summary
+        ConfigBackup.merge(content, into: servers.map(\.config), prefs: prefs, tmdbKey: tmdbKey).summary
     }
 
     func applyImport(_ content: ConfigBackup.Content) {
-        let merged = ConfigBackup.merge(content, into: servers.map(\.config), prefs: prefs)
+        let merged = ConfigBackup.merge(content, into: servers.map(\.config), prefs: prefs, tmdbKey: tmdbKey)
         let current = Dictionary(servers.map { ($0.id, $0.config) }, uniquingKeysWith: { a, _ in a })
         for c in merged.servers where current[c.id] != c { upsert(c) }
         prefs = merged.prefs
+        if let k = merged.tmdbKey {
+            TMDBKeyStore.save(k)
+            tmdbKey = k
+        }
         Log.info("导入配置：\(merged.summary)")
     }
 }

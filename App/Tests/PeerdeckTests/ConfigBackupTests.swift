@@ -63,6 +63,42 @@ import TorrentKit
         #expect(s.endpoints[0].baseURL.host() == "nas.example.test")
     }
 
+    @Test func mediaSettingsAndTMDBKey() throws {
+        var content = Self.content()
+        content.mediaInfo = true
+        content.tmdbKey = "tmdb-secret-key"
+        // 不带密码：密钥被清掉，开关保留
+        let plain = try ConfigBackup.export(content, passphrase: nil)
+        #expect(!String(decoding: plain, as: UTF8.self).contains("tmdb-secret-key"))
+        let p = try ConfigBackup.read(plain, passphrase: nil)
+        #expect(p.mediaInfo == true && p.tmdbKey == nil)
+        let mp = ConfigBackup.merge(p, into: [], prefs: AppPrefs(), tmdbKey: "local-key")
+        #expect(mp.prefs.mediaInfo && mp.tmdbKey == nil && mp.summary.mediaInfo == true && !mp.summary.tmdbKeyChanged)
+
+        // 带密码：密钥加密带上，导入时换成文件里的
+        let sealed = try ConfigBackup.export(content, passphrase: "correct horse")
+        #expect(!String(decoding: sealed, as: UTF8.self).contains("tmdb-secret-key"))
+        let back = try ConfigBackup.read(sealed, passphrase: "correct horse")
+        #expect(back.tmdbKey == "tmdb-secret-key")
+        let m = ConfigBackup.merge(back, into: [], prefs: AppPrefs(), tmdbKey: "local-key")
+        #expect(m.tmdbKey == "tmdb-secret-key" && m.summary.tmdbKeyChanged)
+        // 本机已经是同一个密钥、开关也一样：没有变化
+        var on = AppPrefs()
+        on.mediaInfo = true
+        let same = ConfigBackup.merge(back, into: [], prefs: on, tmdbKey: "tmdb-secret-key")
+        #expect(same.tmdbKey == nil && same.summary.mediaInfo == nil && !same.summary.tmdbKeyChanged)
+    }
+
+    @Test func olderFileWithoutMediaSettings() throws {
+        // 0.3 导出的文件没有这两个字段：不动本机的开关和密钥
+        let data = try ConfigBackup.export(Self.content(), passphrase: nil)
+        let back = try ConfigBackup.read(data, passphrase: nil)
+        var prefs = AppPrefs()
+        prefs.mediaInfo = true
+        let m = ConfigBackup.merge(back, into: [], prefs: prefs, tmdbKey: "local-key")
+        #expect(m.prefs.mediaInfo && m.tmdbKey == nil && m.summary.mediaInfo == nil)
+    }
+
     @Test func notABackup() {
         #expect(throws: ConfigBackup.Failure.notBackup) { try ConfigBackup.read(Data("{}".utf8), passphrase: nil) }
         #expect(throws: ConfigBackup.Failure.notBackup) { try ConfigBackup.read(Data("not json".utf8), passphrase: nil) }
