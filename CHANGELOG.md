@@ -9,6 +9,18 @@ and used as its GitHub Release notes.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-25
+
+### macOS and iOS
+
+- Tap a poster to see it full size
+- Open the Douban page of a movie or TV show directly
+- Flag torrents with local errors such as missing files
+
+### iOS
+
+- Make switches visible in dark mode
+
 ## [0.4.0] - 2026-11-25
 
 ### macOS and iOS
@@ -79,7 +91,8 @@ First preview release.
 - Self-signed HTTPS certificates can be trusted by fingerprint.
 - Passwords are stored in the Keychain.
 
-[Unreleased]: ../../compare/v0.4.0...HEAD
+[Unreleased]: ../../compare/v0.5.0...HEAD
+[0.5.0]: ../../compare/v0.4.0...v0.5.0
 [0.4.0]: ../../compare/v0.3.0...v0.4.0
 [0.3.0]: ../../compare/v0.2.0...v0.3.0
 [0.2.0]: ../../compare/v0.1.0...v0.2.0
