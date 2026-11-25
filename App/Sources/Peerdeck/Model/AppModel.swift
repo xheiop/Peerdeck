@@ -76,6 +76,8 @@ final class AppModel {
     let store = TorrentStore()
     private(set) var servers: [ServerRuntime] = []
     var prefs = AppPrefs() { didSet { prefsChanged() } }
+    /// 用户自己填的 TMDB 密钥（Keychain）。分享扩展用不到，不读
+    var tmdbKey = ""
     var sheet: ActiveSheet?
     var toast: Toast?
     var alert: String?
@@ -122,6 +124,7 @@ final class AppModel {
     // MARK: - 加载
 
     func load() {
+        if !lightweight { tmdbKey = TMDBKeyStore.load() }
         var loaded = AppData.load("prefs.json", as: AppPrefs.self) ?? AppPrefs()
         // 站点名猜法改过（a.b.c 取 b）：名字还是旧猜法自动起的就换成新的，用户改过的不动
         for i in loaded.sites.indices {

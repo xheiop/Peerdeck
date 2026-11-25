@@ -5,6 +5,8 @@ import TorrentKit
 @main
 struct PeerdeckIOSApp: App {
     @State private var model: AppModel
+    @State private var media: MediaLibrary
+    @State private var mediaPreview = false
     @Environment(\.scenePhase) private var phase
 
     init() {
@@ -27,12 +29,24 @@ struct PeerdeckIOSApp: App {
         (store as? KeychainConfigStore)?.moveToDefaultGroup()
         let model = AppModel(configStore: store)
         _model = State(initialValue: model)
+        _media = State(initialValue: MediaLibrary(model: model))
         DispatchQueue.main.async { model.load() }
     }
 
     var body: some Scene {
         WindowGroup {
             IOSRootView(model: model)
+                .environment(media)
+                // 调试：TC_DEBUG_MEDIA_PREVIEW（见 MediaDebug）
+                .sheet(isPresented: $mediaPreview) {
+                    MediaPreviewList(torrents: MediaDebug.torrents(MediaDebug.names ?? [])).environment(media)
+                }
+                .task {
+                    guard MediaDebug.names != nil else { return }
+                    try? await Task.sleep(for: .seconds(1))
+                    media.enabled = true
+                    mediaPreview = true
+                }
                 // v3：操作、开关、选中态一律墨色（面板也继承），颜色只留给 tracker 健康度
                 .tint(Color.ink)
                 // magnet: 链接，以及从「文件」或别的 app 打开的 .torrent

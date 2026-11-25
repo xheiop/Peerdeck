@@ -62,6 +62,8 @@ struct AppPrefs: Codable, Sendable {
     var lastUpdateCheck: Date?
     /// 自动检查提醒过的版本：同一个版本只提醒一次
     var notifiedVersion: String?
+    /// 在详情里显示影视信息（查 TMDB）。默认关：开了以后种子名会发给 TMDB
+    var mediaInfo = false
 
     init() {}
 
@@ -84,6 +86,7 @@ struct AppPrefs: Codable, Sendable {
         autoCheckUpdates = (try? c.decode(Bool.self, forKey: .autoCheckUpdates)) ?? d.autoCheckUpdates
         lastUpdateCheck = try? c.decode(Date.self, forKey: .lastUpdateCheck)
         notifiedVersion = try? c.decode(String.self, forKey: .notifiedVersion)
+        mediaInfo = (try? c.decode(Bool.self, forKey: .mediaInfo)) ?? d.mediaInfo
     }
 }
 

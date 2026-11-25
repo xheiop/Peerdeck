@@ -1,6 +1,7 @@
 import CryptoKit
 import FloodClient
 import Foundation
+import MediaKit
 
 func CC_SHA1_shim(_ buf: UnsafeRawBufferPointer, _ out: inout [UInt8]) {
     out = Array(Insecure.SHA1.hash(data: Data(buf)))
@@ -534,6 +535,29 @@ func peersCheck(_ name: String, hash: String) async {
     }
 }
 
+// MARK: - 影视信息
+
+/// tcli media [--lang zh-CN|en-US] <种子名>…：打印解析结果、TMDB 匹配和详情。密钥从环境变量 TMDB_API_KEY 读
+func mediaCheck(_ names: [String], language: String) async {
+    guard let key = ProcessInfo.processInfo.environment["TMDB_API_KEY"], !key.isEmpty else { print("要先设置 TMDB_API_KEY"); return }
+    let client = TMDBClient(credential: key)
+    let resolver = MediaResolver(client: client)
+    for name in names {
+        let r = ReleaseName.parse(name)
+        print("===== \(name)")
+        print("  解析：中文 \(r.cnTitle ?? "-") / 英文 \(r.enTitle ?? "-") · 年份 \(r.year.map(String.init) ?? "-") · \(r.kind.rawValue) · 季 \(r.seasons.map { "\($0)" } ?? "-") · 集 \(r.episodes.map { "\($0)" } ?? "-") · 像影视 \(r.looksLikeVideo)")
+        guard r.looksLikeVideo else { continue }
+        do {
+            guard let m = try await resolver.resolve(r, language: language) else { print("  没找到"); continue }
+            let d = try await client.details(m.kind, id: m.result.id, language: language)
+            print("  匹配：\(m.kind.rawValue) \(m.result.id) \(m.result.displayTitle)（\(m.result.year.map(String.init) ?? "-")）分数 \(String(format: "%.2f", m.score)) \(m.confident ? "确定" : "不确定")")
+            print("  详情：\(d.title) / \(d.originalTitle) · \(d.genres.joined(separator: "、")) · ★\(d.voteAverage) · IMDb \(d.imdbID ?? "-") · 简介 \(d.overview.isEmpty ? "（空）" : String(d.overview.prefix(30)) + "…")")
+        } catch {
+            print("  ✗ \(error)")
+        }
+    }
+}
+
 // MARK: - main
 
 let args = Array(CommandLine.arguments.dropFirst())
@@ -560,6 +584,11 @@ case "apikey":
         let d = try await c.fetchChanges()
         print("API key 连接成功：\(info.version)，\(d.upserts.count) 个种子")
     } catch { print("API key 连接失败：\(error)") }
+case "media":
+    var rest = Array(args.dropFirst())
+    var lang = "zh-CN"
+    if rest.first == "--lang", rest.count > 1 { lang = rest[1]; rest.removeFirst(2) }
+    await mediaCheck(rest, language: lang)
 case "bench": await bench(args.count > 1 ? Int(args[1]) ?? 20_000 : 20_000)
 default: print("用法：tcli probe [目标…] | net | sync <目标> [次数] | bench [数量]")
 }

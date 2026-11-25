@@ -33,6 +33,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 struct PeerdeckApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
     @State private var model: AppModel
+    @State private var media: MediaLibrary
 
     init() {
         // 注意：这里不要碰 NSApplication.shared（M0 实测会导致 WindowGroup 不开窗口）
@@ -45,6 +46,9 @@ struct PeerdeckApp: App {
         }
         let model = AppModel(configStore: store)
         _model = State(initialValue: model)
+        let media = MediaLibrary(model: model)
+        _media = State(initialValue: media)
+        MediaDebug.installIfNeeded(media)
         // 等 run loop 起来再加载，避免启动时同步读 Keychain 卡住首帧
         DispatchQueue.main.async {
             model.load()
@@ -62,6 +66,7 @@ struct PeerdeckApp: App {
     var body: some Scene {
         Window("Peerdeck", id: "main") {
             RootView(model: model)
+                .environment(media)
                 .frame(minWidth: 900, minHeight: 500)
                 .onAppear { delegate.attach(model) }
         }
@@ -84,6 +89,7 @@ struct PeerdeckApp: App {
 
         Settings {
             SettingsView(model: model)
+                .environment(media)
         }
 
         MenuBarExtra {

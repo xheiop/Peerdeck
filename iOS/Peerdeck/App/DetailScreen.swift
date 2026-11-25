@@ -22,6 +22,7 @@ struct TorrentDetailScreen: View {
                 VStack(alignment: .leading, spacing: 0) {
                     header(t).padding(.horizontal, 20).padding(.bottom, 18)
                     if store.rules.isProblem(t) { problem(t).padding(.horizontal, 20).padding(.bottom, 22) }
+                    MediaCard(torrent: t).padding(.horizontal, 20).padding(.bottom, 22)
                     LedgerHeader(title: L("Overview")).padding(.bottom, 4)
                     VStack(alignment: .leading, spacing: 0) { facts(t) }
                     NavigationLink { FilesScreen(model: model, torrent: t) } label: {

@@ -76,10 +76,15 @@ jobs:
       - name: Test TorrentKit
         run: swift test --package-path Packages/TorrentKit --scratch-path "$TC_BUILD_DIR/spm-kit-test"
 
+      # 内置的 TMDB 密钥（仓库的 Actions secret：TMDB_API_KEY）。没设置时构建照常，只是用户得自己填密钥
       - name: Build dmg
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
         run: scripts/build-dmg.sh "${{ steps.version.outputs.version }}" "${{ steps.version.outputs.build }}"
 
       - name: Build ipa
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
         run: scripts/build-ipa.sh "${{ steps.version.outputs.version }}" "${{ steps.version.outputs.build }}"
 
       - name: Build AltStore source and Homebrew cask

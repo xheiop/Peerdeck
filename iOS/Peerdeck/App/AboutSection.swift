@@ -31,7 +31,11 @@ struct AboutSection: View {
         } header: {
             Text("About")
         } footer: {
-            Text("Peerdeck is free and open source, licensed under GPL-3.0-only.")
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Peerdeck is free and open source, licensed under GPL-3.0-only.")
+                // TMDB 的使用条款要求注明来源
+                TMDBAttribution()
+            }
         }
         .alert(outcome?.title ?? "", isPresented: Binding(get: { outcome != nil }, set: { if !$0 { outcome = nil } }), presenting: outcome) { o in
             if case .available(let release, _) = o {

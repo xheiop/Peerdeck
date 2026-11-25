@@ -18,6 +18,7 @@ let package = Package(
                 .product(name: "TransmissionClient", package: "TorrentKit"),
                 .product(name: "FloodClient", package: "TorrentKit"),
                 .product(name: "SyncEngine", package: "TorrentKit"),
+                .product(name: "MediaKit", package: "TorrentKit"),
             ],
             // Info.plist 和 *.xcstrings 都由 scripts/build-mac.sh 放进 .app（xcstrings 用 xcstringstool 编译），不走 SwiftPM 资源
             exclude: ["Resources"]

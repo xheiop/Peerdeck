@@ -67,6 +67,7 @@ private struct TorrentDetail: View {
 
                 if rules.isProblem(t) { problemCard(t) }
                 if let n = store.cross[t.ref] { crossCard(t, n) }
+                MediaCard(torrent: t)
 
                 DisclosureGroup("Overview", isExpanded: $showInfo) {
                     Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 4) {

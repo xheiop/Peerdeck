@@ -66,12 +66,21 @@ targets:
     templates: [Shared]
     sources:
       - path: Peerdeck/App
+      # 影视信息（只有 app 用，分享扩展不编）
+      - path: ../App/Sources/Peerdeck/Media
+        group: Shared (mac + iOS)
+      # TMDB 的 logo（官方 SVG，见 Assets.xcassets/TMDBLogo.imageset）
+      - path: ../App/Sources/Peerdeck/Resources/Assets.xcassets
+        group: Shared (mac + iOS)
+        buildPhase: resources
       # 图标源文件（Icon Composer 格式），和 mac 共用一份
       - path: ../App/AppIcon.icon
         type: file
         buildPhase: resources
     dependencies:
       - target: PeerdeckShare
+      - package: TorrentKit
+        product: MediaKit
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.peerdeck.ios
@@ -91,6 +100,9 @@ targets:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDevelopmentRegion: en
         CFBundleLocalizations: [en, zh-Hans]
+        # 内置的 TMDB 密钥：取环境变量 TMDB_API_KEY（xcodebuild 会把环境变量当成优先级最低的构建设置），没有就是空的。
+        # 发布时由 CI 从 secret 注入。不要在这里或 settings 里给它写默认值：那样会盖过环境变量
+        PeerdeckTMDBKey: $(TMDB_API_KEY)
         UILaunchScreen: {}
         UIApplicationSupportsMultipleScenes: false
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]

@@ -10,6 +10,7 @@ let package = Package(
         .library(name: "TransmissionClient", targets: ["TransmissionClient"]),
         .library(name: "FloodClient", targets: ["FloodClient"]),
         .library(name: "SyncEngine", targets: ["SyncEngine"]),
+        .library(name: "MediaKit", targets: ["MediaKit"]),
         .executable(name: "tcli", targets: ["tcli"]),
         .executable(name: "listbench", targets: ["listbench"]),
     ],
@@ -19,9 +20,11 @@ let package = Package(
         .target(name: "TransmissionClient", dependencies: ["TorrentKit"]),
         .target(name: "FloodClient", dependencies: ["TorrentKit"]),
         .target(name: "SyncEngine", dependencies: ["TorrentKit"]),
+        // 影视信息：种子名解析、TMDB 客户端、匹配。不依赖 TorrentKit
+        .target(name: "MediaKit"),
         .executableTarget(
             name: "tcli",
-            dependencies: ["TorrentKit", "QBittorrentClient", "TransmissionClient", "FloodClient", "SyncEngine"]
+            dependencies: ["TorrentKit", "QBittorrentClient", "TransmissionClient", "FloodClient", "SyncEngine", "MediaKit"]
         ),
         .executableTarget(name: "listbench", dependencies: ["TorrentKit", "SyncEngine"]),
         .testTarget(
@@ -29,5 +32,6 @@ let package = Package(
             dependencies: ["TorrentKit", "QBittorrentClient", "TransmissionClient", "FloodClient", "SyncEngine"],
             resources: [.copy("Fixtures")]
         ),
+        .testTarget(name: "MediaKitTests", dependencies: ["MediaKit"], resources: [.copy("Fixtures")]),
     ]
 )

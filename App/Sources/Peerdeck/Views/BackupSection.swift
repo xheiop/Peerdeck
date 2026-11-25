@@ -229,7 +229,7 @@ private struct ExportOptionsSheet: View {
     }
 }
 
-private extension View {
+extension View {
     /// 表单脚注：mac 的分组表单不给脚注套样式，多行时还会靠右，按设置页其他说明文字的样子来；iOS 用系统的
     @ViewBuilder func footnoteStyle() -> some View {
         #if os(macOS)
