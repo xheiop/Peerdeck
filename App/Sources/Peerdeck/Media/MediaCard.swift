@@ -6,6 +6,7 @@ import TorrentKit
 /// mac 详情栏和 iOS 详情页共用；没开、没密钥、不像影视时什么都不显示
 struct MediaCard: View {
     @Environment(MediaLibrary.self) private var media
+    @Environment(\.openURL) private var openURL
     let torrent: Torrent
     @State private var expanded = false
     @State private var matching = false
@@ -153,9 +154,30 @@ struct MediaCard: View {
         HStack(spacing: 12) {
             Link("TMDB", destination: d.tmdbURL)
             if let imdb = d.imdbURL { Link("IMDb", destination: imdb) }
-            if MediaLibrary.isChineseUI, let douban = d.doubanURL { Link("Douban", destination: douban) }
+            if MediaLibrary.isChineseUI, let search = d.doubanURL { doubanLink(d, fallback: search) }
         }
         .font(.caption)
+        .task(id: d.imdbID) {
+            guard MediaLibrary.isChineseUI, let imdb = d.imdbID else { return }
+            await media.loadDouban(imdbID: imdb, kind: d.kind)
+        }
+    }
+
+    /// 查到豆瓣条目时直达条目：iOS 先打开豆瓣 app，没装就开网页；mac 开网页。
+    /// 还没查到、查不到、查询失败时用 IMDb 编号搜索（原来的做法）
+    @ViewBuilder private func doubanLink(_ d: TMDBDetails, fallback: URL) -> some View {
+        let subject = d.imdbID.flatMap { media.doubanSubject(imdbID: $0) }
+        #if os(iOS)
+        if let subject, let app = subject.appURL {
+            Button("Douban") {
+                openURL(app) { accepted in if !accepted { openURL(subject.webURL) } }
+            }
+        } else {
+            Link("Douban", destination: subject?.webURL ?? fallback)
+        }
+        #else
+        Link("Douban", destination: subject?.webURL ?? fallback)
+        #endif
     }
 
     private func menu(_ e: MediaLibrary.Entry) -> some View {

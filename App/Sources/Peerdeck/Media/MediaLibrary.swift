@@ -27,14 +27,22 @@ final class MediaLibrary {
         var season: Int?
     }
 
+    /// 豆瓣条目（按 IMDb 编号）。nil = 还没查；.none = 查不到或请求失败，用搜索链接兜底
+    enum DoubanState: Equatable {
+        case found(DoubanSubject)
+        case none
+    }
+
     let model: AppModel
     private(set) var states: [String: State] = [:]
+    private(set) var doubanStates: [String: DoubanState] = [:]
     /// 用户自己填的密钥（Keychain，由 AppModel 读写：配置导入也会改它）
     var userKey: String { model.tmdbKey }
     let builtInKey: String?
 
     @ObservationIgnored private var cache: Cache
     @ObservationIgnored private var inFlight: [String: Task<Void, Never>] = [:]
+    @ObservationIgnored private var doubanInFlight: Set<String> = []
     @ObservationIgnored private var saveTask: Task<Void, Never>?
     @ObservationIgnored private var releases: [String: ReleaseName] = [:]
 
@@ -134,6 +142,34 @@ final class MediaLibrary {
         return d
     }
 
+    // MARK: 豆瓣
+
+    /// 豆瓣链接要用的条目。查到了返回条目；还没查、查不到、失败都返回 nil（卡片用搜索链接）
+    func doubanSubject(imdbID: String) -> DoubanSubject? {
+        if case .found(let s)? = doubanStates[imdbID] { return s }
+        return nil
+    }
+
+    /// 卡片出现时调用（只在中文界面）。查到的缓存 30 天，查不到的 7 天；请求失败不缓存，这次运行里不再重试
+    func loadDouban(imdbID: String, kind: MediaKind) async {
+        guard !imdbID.isEmpty, doubanStates[imdbID] == nil, !doubanInFlight.contains(imdbID) else { return }
+        if let r = cache.douban[imdbID], Date().timeIntervalSince(r.at) < (r.subject == nil ? 7 : 30) * 86400 {
+            doubanStates[imdbID] = r.subject.map { .found($0) } ?? DoubanState.none
+            return
+        }
+        doubanInFlight.insert(imdbID)
+        defer { doubanInFlight.remove(imdbID) }
+        do {
+            let subject = try await DoubanClient().subject(imdbID: imdbID, kind: kind)
+            cache.douban[imdbID] = DoubanRecord(subject: subject, at: Date())
+            scheduleSave()
+            doubanStates[imdbID] = subject.map { .found($0) } ?? DoubanState.none
+        } catch {
+            Log.info("豆瓣查询失败（\(imdbID)），用搜索链接：\(error)")
+            doubanStates[imdbID] = DoubanState.none
+        }
+    }
+
     // MARK: 手动改正
 
     /// 匹配面板里搜索
@@ -176,6 +212,7 @@ final class MediaLibrary {
     func clearCache() {
         cache = Cache(matches: cache.matches.filter { $0.value.manual }, details: [:])
         states = [:]
+        doubanStates = [:]
         PosterCache.shared.clear()
         scheduleSave()
     }
@@ -214,9 +251,31 @@ final class MediaLibrary {
         var at: Date
     }
 
+    struct DoubanRecord: Codable {
+        /// nil = 豆瓣查不到
+        var subject: DoubanSubject?
+        var at: Date
+    }
+
     struct Cache: Codable {
         var matches: [String: MatchRecord] = [:]
         var details: [String: DetailRecord] = [:]
+        /// 键是 IMDb 编号
+        var douban: [String: DoubanRecord] = [:]
+
+        init(matches: [String: MatchRecord] = [:], details: [String: DetailRecord] = [:], douban: [String: DoubanRecord] = [:]) {
+            self.matches = matches
+            self.details = details
+            self.douban = douban
+        }
+
+        /// 旧版本的缓存文件没有 douban，不能因此整个读不出来（里面有手动改正）
+        init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            matches = try c.decodeIfPresent([String: MatchRecord].self, forKey: .matches) ?? [:]
+            details = try c.decodeIfPresent([String: DetailRecord].self, forKey: .details) ?? [:]
+            douban = (try? c.decodeIfPresent([String: DoubanRecord].self, forKey: .douban)) ?? [:]
+        }
     }
 
     private func scheduleSave() {

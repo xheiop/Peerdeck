@@ -83,7 +83,7 @@ public struct TMDBDetails: Codable, Sendable, Equatable {
 
     public var tmdbURL: URL { URL(string: "https://www.themoviedb.org/\(kind.rawValue)/\(id)")! }
     public var imdbURL: URL? { imdbID.flatMap { $0.isEmpty ? nil : URL(string: "https://www.imdb.com/title/\($0)/") } }
-    /// 豆瓣没有开放 API，用 IMDb 编号在豆瓣搜索跳转
+    /// 用 IMDb 编号在豆瓣搜索。app 先用 DoubanClient 查条目直达，查不到或失败时才用这个
     public var doubanURL: URL? {
         guard let imdbID, !imdbID.isEmpty else { return nil }
         return URL(string: "https://search.douban.com/movie/subject_search?search_text=\(imdbID)")
