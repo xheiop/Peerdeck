@@ -1,0 +1,36 @@
+# README 截图用的演示环境：一台 qB 5.3.0（127.0.0.1:18090，admin / adminadmin）和假 tracker。
+# 和 ../compose.yaml 的开发环境分开，互不影响。
+#
+#   cd dev/demo && docker compose up -d && python3 -I seed_demo.py   # 加 12 个名字像真实发布的种子
+#   dev/demo/shoot-mac.sh zh <输出前缀> TC_DEBUG_INSPECTOR=1 TC_DEBUG_SELECT_FIRST=6
+#   dev/demo/shoot-ios.sh zh <输出.png> 16 TC_DEBUG_TAB=torrents TC_DEBUG_OPEN_FIRST=5
+#   swift scripts/frame-screenshot.swift mac|ios <截图> <输出> "<标题>" "<说明>"
+#
+# 种子的数据是容器卷里的稀疏文件（全零，piece 哈希也按全零算），校验通过后就是做种状态，几乎不占磁盘。
+# 第一次校验约 400 GB 的稀疏数据要几分钟。用完 docker compose stop。
+name: peerdeck-demo
+services:
+  tracker:
+    image: python:3.13-alpine
+    command: ["python", "-u", "/app/fake_tracker.py"]
+    volumes:
+      - ../fake_tracker.py:/app/fake_tracker.py:ro
+    networks:
+      default:
+        # 三个假站点
+        aliases: [tracker.aurora.test, tracker.nebula.test, tracker.orbit.test]
+  qb:
+    image: lscr.io/linuxserver/qbittorrent:5.3.0
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Asia/Shanghai
+      WEBUI_PORT: "18090"
+    volumes:
+      - qb-config:/config
+      - qb-downloads:/downloads
+    ports:
+      - "127.0.0.1:18090:18090"
+volumes:
+  qb-config:
+  qb-downloads:

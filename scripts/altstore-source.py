@@ -26,7 +26,7 @@ import zipfile
 
 APP = "Payload/Peerdeck.app/"
 TINT = "#B25000"  # 图标里的琥珀色菱形
-SCREENSHOTS = ["ios-overview.png", "ios-attention.png", "ios-sites.png", "ios-overview-dark.png"]
+SCREENSHOTS = ["altstore/torrents.png", "altstore/detail.png", "altstore/attention.png", "altstore/torrents-dark.png"]
 
 
 def fail(message):

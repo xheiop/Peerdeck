@@ -19,14 +19,12 @@ Manage your qBittorrent, Transmission and Flood servers from your Mac, iPhone or
 
 Peerdeck puts the torrents from all your servers in one list, so you can watch speeds, filter, add, pause and delete in one place instead of switching between web UIs. It connects straight to the clients you already run, with no server in between, and doesn't download or seed by itself.
 
-<img src="assets/screenshots/mac.png" alt="Likely unregistered torrents on macOS" />
+<img src="assets/screenshots/en/mac.png" alt="Peerdeck on macOS: torrents from every server in one list, with movie info from TMDB in the details" />
 
 <table>
   <tr>
-    <td><img src="assets/screenshots/ios-overview.png" alt="Overview" /></td>
-    <td><img src="assets/screenshots/ios-sites.png" alt="Sites" /></td>
-    <td><img src="assets/screenshots/ios-attention.png" alt="Needs Attention" /></td>
-    <td><img src="assets/screenshots/ios-overview-dark.png" alt="Overview in dark mode" /></td>
+    <td><img src="assets/screenshots/en/ios-torrents.png" alt="Torrent list on iPhone" /></td>
+    <td><img src="assets/screenshots/en/ios-detail.png" alt="Torrent details with movie info on iPhone" /></td>
   </tr>
 </table>
 
@@ -57,6 +55,13 @@ Peerdeck puts the torrents from all your servers in one list, so you can watch s
 - Start, pause, recheck, reannounce and delete in bulk.
 - See each server's speed and free space, and toggle alternative speed limits.
 - Add magnet links, `.torrent` files and URLs, and choose which files to download once they're added.
+
+### Know what each torrent is
+
+- Open a torrent's details to see which movie or show it is, worked out from its name: poster, plot, rating and genres, plus the season for TV.
+- Info comes from TMDB in the app's language, with links to TMDB and IMDb (and Douban in Chinese).
+- Fix a wrong match by searching yourself; torrents with the same name, cross-seeds included, follow the fix.
+- Off by default. When on, torrent names are sent to TMDB to look them up, using the built-in key or your own.
 
 ### Also on the Mac
 

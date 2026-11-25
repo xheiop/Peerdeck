@@ -1,0 +1,12 @@
+[
+  {
+    "apiKey" : "",
+    "enabled" : true,
+    "endpoints" : [ { "baseURL" : "http://127.0.0.1:18090", "headers" : {}, "kind" : "lan", "timeout" : 10, "useSystemProxy" : false } ],
+    "id" : "nas",
+    "kind" : "qbittorrent",
+    "name" : "NAS",
+    "password" : "adminadmin",
+    "username" : "admin"
+  }
+]

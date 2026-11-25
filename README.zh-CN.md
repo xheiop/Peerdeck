@@ -19,14 +19,12 @@
 
 几台下载器的种子合在一张列表里，看速度、筛选、添加、暂停、删除都在一个地方做完，不用在几个网页之间来回切。Peerdeck 直接连接你已经在运行的下载器，不经过中间服务器，自己不下载也不做种。
 
-<img src="assets/screenshots/mac.png" alt="macOS 上可能已失联的种子" />
+<img src="assets/screenshots/zh/mac.png" alt="macOS 上的 Peerdeck：所有服务器的种子在一张列表里，详情里有来自 TMDB 的影视信息" />
 
 <table>
   <tr>
-    <td><img src="assets/screenshots/ios-overview.png" alt="总览" /></td>
-    <td><img src="assets/screenshots/ios-sites.png" alt="站点" /></td>
-    <td><img src="assets/screenshots/ios-attention.png" alt="需要注意" /></td>
-    <td><img src="assets/screenshots/ios-overview-dark.png" alt="深色模式总览" /></td>
+    <td><img src="assets/screenshots/zh/ios-torrents.png" alt="iPhone 上的种子列表" /></td>
+    <td><img src="assets/screenshots/zh/ios-detail.png" alt="iPhone 上带影视信息的种子详情" /></td>
   </tr>
 </table>
 
@@ -57,6 +55,13 @@
 - 批量开始、暂停、重新校验、重新汇报、删除。
 - 看每台服务器的速度和剩余空间，切换备用限速。
 - 添加磁力链接、`.torrent` 文件和 URL，添加后选择要下载哪些文件。
+
+### 认出是哪部影视
+
+- 打开种子详情时，按种子名认出是哪部电影或剧集，显示海报、简介、评分和类型；剧集会显示是第几季。
+- 资料来自 TMDB，界面是中文时显示中文资料，可以跳到 TMDB、IMDb 和豆瓣。
+- 认错了可以手动搜索改正，同名的种子一起改。
+- 默认关闭。开启后种子名会发给 TMDB 查询，可以用内置的密钥，也可以填你自己的。
 
 ### Mac 上还可以
 
