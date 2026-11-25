@@ -10,6 +10,7 @@ struct SettingsView: View {
             GeneralTab(model: model).tabItem { Label("General", systemImage: "gearshape") }.tag("general")
             NotifyTab(model: model).tabItem { Label("Notifications", systemImage: "bell") }.tag("notify")
             SitesTab(model: model).tabItem { Label(String(localized: "Sites", table: "Groups"), systemImage: "globe") }.tag("sites")
+            AboutTab().tabItem { Label("About", systemImage: "info.circle") }.tag("about")
         }
         .frame(width: 820, height: 580)
     }
@@ -346,6 +347,26 @@ private struct LanguageRow: View {
         } catch {
             Log.info("重启失败：\(error)")
         }
+    }
+}
+
+/// 「关于」：图标、名字、版权，下面是和 iOS 共用的 AboutSection（版本、检查更新、仓库、许可证、TMDB 署名）
+private struct AboutTab: View {
+    var body: some View {
+        Form {
+            Section {
+                HStack(spacing: 16) {
+                    Image(nsImage: NSApp.applicationIconImage).resizable().frame(width: 64, height: 64)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(verbatim: "Peerdeck").font(.title2.weight(.semibold))
+                        Text(verbatim: "Copyright © 2026 xheiop").font(.callout).foregroundStyle(.secondary)
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+            AboutSection()
+        }
+        .formStyle(.grouped)
     }
 }
 

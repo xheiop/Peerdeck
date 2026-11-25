@@ -1240,6 +1240,16 @@
         }
       }
     },
+    "Cache cleared.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "缓存已清除。"
+          }
+        }
+      }
+    },
     "Cancel": {
       "localizations": {
         "zh-Hans": {
@@ -1340,6 +1350,16 @@
         }
       }
     },
+    "Change Match…": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更改匹配…"
+          }
+        }
+      }
+    },
     "Change domain": {
       "localizations": {
         "zh-Hans": {
@@ -1366,6 +1386,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "已把 %@ 的路径改成 %@"
+          }
+        }
+      }
+    },
+    "Change…": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更改…"
           }
         }
       }
@@ -1520,6 +1550,16 @@
         }
       }
     },
+    "Clear Movie Info Cache": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除影视信息缓存"
+          }
+        }
+      }
+    },
     "Cleared the category of %@": {
       "localizations": {
         "zh-Hans": {
@@ -1660,6 +1700,16 @@
         }
       }
     },
+    "Correct": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没错"
+          }
+        }
+      }
+    },
     "Couldn’t Check for Updates": {
       "localizations": {
         "zh-Hans": {
@@ -1686,6 +1736,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "GitHub 上找不到已发布的版本。"
+          }
+        }
+      }
+    },
+    "Couldn’t load movie info": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "影视信息加载失败"
           }
         }
       }
@@ -1990,6 +2050,16 @@
         }
       }
     },
+    "Douban": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "豆瓣"
+          }
+        }
+      }
+    },
     "Download": {
       "localizations": {
         "zh-Hans": {
@@ -2140,12 +2210,12 @@
         }
       }
     },
-    "Exports servers, sites and the “Likely Unregistered” keywords, for moving them to another Mac or iPhone, for example through iCloud Drive. Importing adds and updates; nothing already here is removed.": {
+    "Exports servers, sites, the “Likely Unregistered” keywords and the Movie & TV Info settings, for moving them to another Mac or iPhone, for example through iCloud Drive. Importing adds and updates; nothing already here is removed.": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "导出服务器、站点和「疑似未注册」关键词，用来搬到另一台 Mac 或 iPhone，比如经过 iCloud 云盘。导入只会新增和更新，不会删掉这里已有的。"
+            "value": "导出服务器、站点、「疑似未注册」关键词和影视信息设置，用来搬到另一台 Mac 或 iPhone，比如经过 iCloud 云盘。导入只会新增和更新，不会删掉这里已有的。"
           }
         }
       }
@@ -2500,6 +2570,16 @@
         }
       }
     },
+    "Get a Key…": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "获取密钥…"
+          }
+        }
+      }
+    },
     "GitHub returned HTTP %lld.": {
       "localizations": {
         "zh-Hans": {
@@ -2549,6 +2629,9 @@
           }
         }
       }
+    },
+    "IMDb": {
+      "shouldTranslate": false
     },
     "IP banned by the client: %@": {
       "localizations": {
@@ -2690,6 +2773,16 @@
         }
       }
     },
+    "Key saved.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密钥已保存。"
+          }
+        }
+      }
+    },
     "Keychain error %lld: %@": {
       "localizations": {
         "zh-Hans": {
@@ -2756,6 +2849,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "留空用服务器默认"
+          }
+        }
+      }
+    },
+    "Leave the key empty to use the built-in one.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密钥留空则使用内置密钥。"
           }
         }
       }
@@ -2830,6 +2933,16 @@
         }
       }
     },
+    "Looking up on TMDB…": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在查询 TMDB…"
+          }
+        }
+      }
+    },
     "Looks for a new version on GitHub once a day. You can also choose Peerdeck › Check for Updates….": {
       "localizations": {
         "zh-Hans": {
@@ -2880,12 +2993,42 @@
         }
       }
     },
+    "Match": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匹配"
+          }
+        }
+      }
+    },
+    "Match Movie or TV Show": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匹配电影或剧集"
+          }
+        }
+      }
+    },
     "Matches: %@": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "%@ 个匹配"
+          }
+        }
+      }
+    },
+    "Match…": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手动匹配…"
           }
         }
       }
@@ -2936,6 +3079,56 @@
           "stringUnit": {
             "state": "translated",
             "value": "已把 %@ 归到 %@"
+          }
+        }
+      }
+    },
+    "Movie": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "电影"
+          }
+        }
+      }
+    },
+    "Movie & TV Info": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "影视信息"
+          }
+        }
+      }
+    },
+    "Movie & TV info will be turned off.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "会关闭影视信息。"
+          }
+        }
+      }
+    },
+    "Movie & TV info will be turned on.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "会打开影视信息。"
+          }
+        }
+      }
+    },
+    "Movie Info Options": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "影视信息选项"
           }
         }
       }
@@ -3090,6 +3283,16 @@
         }
       }
     },
+    "No TMDB key": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有 TMDB 密钥"
+          }
+        }
+      }
+    },
     "No Torrents Rejected by Trackers": {
       "localizations": {
         "zh-Hans": {
@@ -3140,6 +3343,16 @@
         }
       }
     },
+    "No movie or TV show found": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有认出是哪部影视"
+          }
+        }
+      }
+    },
     "No network connection": {
       "localizations": {
         "zh-Hans": {
@@ -3156,6 +3369,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "现在没有连接中的 peer。"
+          }
+        }
+      }
+    },
+    "No results": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有结果"
           }
         }
       }
@@ -3220,6 +3443,16 @@
         }
       }
     },
+    "Not a Movie or TV Show": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这不是影视"
+          }
+        }
+      }
+    },
     "Not a magnet or http(s) link, will be skipped": {
       "localizations": {
         "zh-Hans": {
@@ -3270,12 +3503,32 @@
         }
       }
     },
+    "Not found on TMDB": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TMDB 上找不到"
+          }
+        }
+      }
+    },
     "Not supported: %@": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
             "value": "不支持：%@"
+          }
+        }
+      }
+    },
+    "Not sure this is the right one.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不确定是不是这部。"
           }
         }
       }
@@ -3600,12 +3853,12 @@
         }
       }
     },
-    "Passwords, API keys, reverse proxy passwords and custom header values are left out. Enter them again after importing.": {
+    "Passwords, API keys, reverse proxy passwords, custom header values and your TMDB key are left out. Enter them again after importing.": {
       "localizations": {
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "不导出密码、API key、反代密码和附加请求头的值，导入后要重新填。"
+            "value": "不导出密码、API key、反代密码、附加请求头的值和你的 TMDB 密钥，导入后要重新填。"
           }
         }
       }
@@ -4302,6 +4555,16 @@
         }
       }
     },
+    "Save Key": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存密钥"
+          }
+        }
+      }
+    },
     "Save Path": {
       "localizations": {
         "zh-Hans": {
@@ -4598,6 +4861,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "只看「%@」"
+          }
+        }
+      }
+    },
+    "Show movie and TV info in torrent details": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在种子详情里显示影视信息"
           }
         }
       }
@@ -4965,6 +5238,29 @@
         }
       }
     },
+    "TMDB": {
+      "shouldTranslate": false
+    },
+    "TMDB is limiting requests. Try again later.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TMDB 限制了请求频率，请稍后再试。"
+          }
+        }
+      }
+    },
+    "TV Show": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "剧集"
+          }
+        }
+      }
+    },
     "Tags": {
       "localizations": {
         "zh-Hans": {
@@ -4985,6 +5281,16 @@
         }
       }
     },
+    "Test": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "测试"
+          }
+        }
+      }
+    },
     "Test Connection": {
       "localizations": {
         "zh-Hans": {
@@ -5001,6 +5307,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "地址里要替换的文本"
+          }
+        }
+      }
+    },
+    "The TMDB key was rejected": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TMDB 密钥无效"
           }
         }
       }
@@ -5099,6 +5415,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "文件会用这个密码加密（至少 %lld 个字符）。导入时要输入它，忘了找不回来。"
+          }
+        }
+      }
+    },
+    "The key works.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密钥可用。"
           }
         }
       }
@@ -5223,6 +5549,16 @@
         }
       }
     },
+    "This build has no built-in key, so enter your own (free at themoviedb.org).": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这个版本没有内置密钥，需要填写你自己的（在 themoviedb.org 免费申请）。"
+          }
+        }
+      }
+    },
     "This client always moves files when changing the path": {
       "localizations": {
         "zh-Hans": {
@@ -5331,6 +5667,16 @@
         }
       }
     },
+    "This product uses the TMDB API but is not endorsed or certified by TMDB.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本产品使用了 TMDB API，但未经 TMDB 认可或认证。"
+          }
+        }
+      }
+    },
     "This torrent is cross-seeded: after renaming, the other torrents won’t find this data.": {
       "localizations": {
         "zh-Hans": {
@@ -5367,6 +5713,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "超时"
+          }
+        }
+      }
+    },
+    "Title": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "片名"
           }
         }
       }
@@ -5587,6 +5943,16 @@
         }
       }
     },
+    "Unexpected reply from TMDB: %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TMDB 返回了无法识别的内容：%@"
+          }
+        }
+      }
+    },
     "Unexpected server response: %@": {
       "localizations": {
         "zh-Hans": {
@@ -5707,6 +6073,16 @@
         }
       }
     },
+    "Updates": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更新"
+          }
+        }
+      }
+    },
     "Updating": {
       "localizations": {
         "zh-Hans": {
@@ -5777,6 +6153,16 @@
         }
       }
     },
+    "Use Automatic Match": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "改回自动匹配"
+          }
+        }
+      }
+    },
     "Use system proxy": {
       "localizations": {
         "zh-Hans": {
@@ -5823,6 +6209,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "在家时自动走内网，连不上再用这条。"
+          }
+        }
+      }
+    },
+    "Using the built-in key.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在使用内置密钥。"
           }
         }
       }
@@ -5883,6 +6279,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "警告"
+          }
+        }
+      }
+    },
+    "When on, torrent names are sent to TMDB to look up posters and plots.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开启后，种子名会发送给 TMDB，用来查询海报和简介。"
           }
         }
       }
@@ -5957,6 +6363,26 @@
         }
       }
     },
+    "Year": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年份"
+          }
+        }
+      }
+    },
+    "Year (optional)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年份（可选）"
+          }
+        }
+      }
+    },
     "You can switch back to the original URLs afterwards": {
       "localizations": {
         "zh-Hans": {
@@ -6017,6 +6443,26 @@
         }
       }
     },
+    "Your TMDB API key": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的 TMDB API 密钥"
+          }
+        }
+      }
+    },
+    "Your TMDB key will be replaced with the one in the file.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的 TMDB 密钥会换成文件里的。"
+          }
+        }
+      }
+    },
     "You’re Up to Date": {
       "localizations": {
         "zh-Hans": {
@@ -6056,6 +6502,9 @@
           }
         }
       }
+    },
+    "github.com/xheiop/Peerdeck": {
+      "shouldTranslate": false
     },
     "https://nas.example.com/qb/": {
       "shouldTranslate": false
@@ -6273,6 +6722,9 @@
       }
     },
     "↓%@ ↑%@": {
+      "shouldTranslate": false
+    },
+    "★ %@": {
       "shouldTranslate": false
     },
     "✓ Categories and tags": {

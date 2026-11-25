@@ -46,7 +46,7 @@ private var debugPanels: [NSPanel] = []
 ///   TC_DEBUG_RETRACKER=<秒>      对当前站点打开「替换 tracker」面板
 ///   TC_DEBUG_RENAME=<秒>         对选中的种子（没选就是第一行）打开「改名」面板
 ///   TC_DEBUG_LOCATION=<秒>       对选中的种子（没选就是前 3 行）打开「更改保存位置」面板
-///   TC_DEBUG_SETTINGS=<标签>     打开设置窗口（servers|general|notify|sites），TC_DEBUG_SETTINGS_SERVER=<id> 选中服务器
+///   TC_DEBUG_SETTINGS=<标签>     打开设置窗口（servers|general|notify|sites|about），TC_DEBUG_SETTINGS_SERVER=<id> 选中服务器
 ///   TC_DEBUG_BACKUP=export       设置里「备份」一节出现时打开导出选项（配合 TC_DEBUG_SETTINGS=general）
 ///   TC_DEBUG_ABOUT=1             2 秒后打开「关于 Peerdeck」面板
 ///   TC_DEBUG_UPDATE_JSON=<文件>   检查更新时读这个文件当作 GitHub 的回应，不联网；开发配置（TC_CONFIG_FILE）下只有给了它才会自动检查

@@ -69,6 +69,9 @@ targets:
       # 影视信息（只有 app 用，分享扩展不编）
       - path: ../App/Sources/Peerdeck/Media
         group: Shared (mac + iOS)
+      # 「关于」（mac 设置的「关于」标签页也用它）
+      - path: ../App/Sources/Peerdeck/Views/AboutSection.swift
+        group: Shared (mac + iOS)
       # TMDB 的 logo（官方 SVG，见 Assets.xcassets/TMDBLogo.imageset）
       - path: ../App/Sources/Peerdeck/Resources/Assets.xcassets
         group: Shared (mac + iOS)
