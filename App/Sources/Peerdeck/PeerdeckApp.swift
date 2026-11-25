@@ -37,6 +37,7 @@ struct PeerdeckApp: App {
     init() {
         // 注意：这里不要碰 NSApplication.shared（M0 实测会导致 WindowGroup 不开窗口）
         let env = ProcessInfo.processInfo.environment
+        _ = AppLanguage.atLaunch
         let store: any ConfigStore = if let path = env["TC_CONFIG_FILE"] {
             FileConfigStore(url: URL(fileURLWithPath: path))
         } else {

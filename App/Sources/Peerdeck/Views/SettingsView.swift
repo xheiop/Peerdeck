@@ -292,6 +292,7 @@ private struct GeneralTab: View {
 
     var body: some View {
         Form {
+            LanguageRow()
             Picker("Refresh interval (foreground)", selection: $model.prefs.refreshForeground) { ForEach([1, 2, 5], id: \.self) { Text("\($0) s").tag($0) } }
             Picker("Refresh interval (background)", selection: $model.prefs.refreshBackground) { ForEach([10, 30, 60], id: \.self) { Text("\($0) s").tag($0) } }
             Text("The background interval is used when only the menu bar is open.").font(.caption).foregroundStyle(.secondary)
@@ -310,6 +311,39 @@ private struct GeneralTab: View {
         let url = Bundle.main.bundleURL
         NSWorkspace.shared.setDefaultApplication(at: url, toOpenURLsWithScheme: "magnet") { err in
             Task { @MainActor in model.showToast(err == nil ? L("Now the default app for magnet links") : L("Failed: \(err!.localizedDescription)")) }
+        }
+    }
+}
+
+/// 界面语言。写进 app 的 AppleLanguages，重启后生效，所以改了以后给个「立即重启」
+private struct LanguageRow: View {
+    @State private var language = AppLanguage.saved
+
+    var body: some View {
+        Picker("Language", selection: $language) {
+            Text("Same as System").tag(AppLanguage.system)
+            ForEach(AppLanguage.allCases.filter { $0 != .system }) { Text(verbatim: $0.nativeName ?? "").tag($0) }
+        }
+        .onChange(of: language) { _, v in AppLanguage.save(v) }
+        if language != AppLanguage.atLaunch {
+            LabeledContent {
+                Button("Restart Now") { relaunch() }
+            } label: {
+                Text("Restart Peerdeck to use the new language.").font(.caption).foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    /// 等自己退出后再用 open 重新打开（直接 open 会被 LaunchServices 当成激活已在运行的这个）
+    private func relaunch() {
+        let p = Process()
+        p.executableURL = URL(fileURLWithPath: "/bin/sh")
+        p.arguments = ["-c", "while kill -0 \(ProcessInfo.processInfo.processIdentifier) 2>/dev/null; do sleep 0.2; done; exec /usr/bin/open \"$0\"", Bundle.main.bundlePath]
+        do {
+            try p.run()
+            NSApp.terminate(nil)
+        } catch {
+            Log.info("重启失败：\(error)")
         }
     }
 }

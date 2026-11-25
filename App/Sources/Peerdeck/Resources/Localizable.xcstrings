@@ -2730,6 +2730,16 @@
         }
       }
     },
+    "Language": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "语言"
+          }
+        }
+      }
+    },
     "Later": {
       "localizations": {
         "zh-Hans": {
@@ -3746,6 +3756,16 @@
         }
       }
     },
+    "Quit and reopen Peerdeck to use the new language.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "退出并重新打开 Peerdeck 后切换到新语言。"
+          }
+        }
+      }
+    },
     "Ratio": {
       "localizations": {
         "zh-Hans": {
@@ -4186,6 +4206,26 @@
         }
       }
     },
+    "Restart Now": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "立即重启"
+          }
+        }
+      }
+    },
+    "Restart Peerdeck to use the new language.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重启 Peerdeck 后切换到新语言。"
+          }
+        }
+      }
+    },
     "Restore Defaults": {
       "localizations": {
         "zh-Hans": {
@@ -4241,6 +4281,16 @@
     },
     "SHA256 %@…": {
       "shouldTranslate": false
+    },
+    "Same as System": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "跟随系统"
+          }
+        }
+      }
     },
     "Save": {
       "localizations": {

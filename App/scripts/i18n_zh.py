@@ -614,6 +614,12 @@ ZH = {
     'Transmission also renames the top-level file or folder on disk.': 'Transmission 会同时改磁盘上的顶层文件或目录。',
     'This torrent is cross-seeded: after renaming, the other torrents won’t find this data.': '这个种子有辅种：改名后，其他种子会找不到这份数据。',
     'Flood can’t rename torrents': 'Flood 不能给种子改名',
+    # 界面语言
+    "Language": "语言",
+    "Same as System": "跟随系统",
+    "Restart Now": "立即重启",
+    "Restart Peerdeck to use the new language.": "重启 Peerdeck 后切换到新语言。",
+    "Quit and reopen Peerdeck to use the new language.": "退出并重新打开 Peerdeck 后切换到新语言。",
 }
 
 # 其他字符串表：同一句英文在别的语境要不同中文时用（目前是分组标题）

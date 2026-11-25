@@ -7,6 +7,7 @@ struct SettingsScreen: View {
     @State private var path: [String] = []
     /// 设置本身是弹出的面板，再从根视图弹添加服务器会被忽略，所以在这里自己弹
     @State private var adding = false
+    @State private var language = AppLanguage.saved
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -18,10 +19,20 @@ struct SettingsScreen: View {
                     }
                     Button { adding = true } label: { Label("Add Server…", systemImage: "plus.circle") }
                 }
-                Section("General") {
+                Section {
+                    Picker("Language", selection: $language) {
+                        Text("Same as System").tag(AppLanguage.system)
+                        ForEach(AppLanguage.allCases.filter { $0 != .system }) { Text(verbatim: $0.nativeName ?? "").tag($0) }
+                    }
+                    .onChange(of: language) { _, v in AppLanguage.save(v) }
                     Picker("Refresh interval (foreground)", selection: $model.prefs.refreshForeground) {
                         ForEach([1, 2, 5], id: \.self) { Text("\($0) s").tag($0) }
                     }
+                } header: {
+                    Text("General")
+                } footer: {
+                    // iOS 不能自己重启，只能提示
+                    if language != AppLanguage.atLaunch { Text("Quit and reopen Peerdeck to use the new language.") }
                 }
                 Section {
                     NavigationLink("Sites") { IOSSitesScreen(model: model) }

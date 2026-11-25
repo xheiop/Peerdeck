@@ -9,6 +9,7 @@ struct PeerdeckIOSApp: App {
 
     init() {
         let env = ProcessInfo.processInfo.environment
+        AppLanguage.shareWithExtension()
         // 调试：把一份 JSON 配置写进 Keychain（验证 Keychain 共享组能读写），之后照常从 Keychain 读。
         // 同时给了 TC_DEBUG_KEYCHAIN_GROUP 时，先删掉所有组里的这一条，再只写进那个组，模拟旧版本存的配置（验证下面的搬迁）
         if let path = env["TC_DEBUG_IMPORT_TO_KEYCHAIN"], let configs = try? FileConfigStore(url: URL(fileURLWithPath: path)).load() {
